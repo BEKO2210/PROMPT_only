@@ -5,6 +5,8 @@ import Hero from '@sections/Hero.astro';
 import TrustStrip from '@sections/TrustStrip.astro';
 import Problem from '@sections/Problem.astro';
 import Approach from '@sections/Approach.astro';
+import Services from '@sections/Services.astro';
+import Samples from '@sections/Samples.astro';
 ---
 
 <Base
@@ -18,26 +20,26 @@ import Approach from '@sections/Approach.astro';
     <TrustStrip />
     <Problem />
     <Approach />
+    <Services />
+    <Samples />
 
     <!-- ============================================================
-         Phase 4 adds: Services Grid + Sample Showcase
          Phase 5 adds: Process Timeline + Pricing Tiers
          Phase 6 adds: About + FAQ + Final-CTA + Footer
          Phase 7: animation polish, perf, a11y, SEO, prod build test
          ============================================================ -->
 
-    <section id="services" class="section">
+    <section id="prozess" class="section">
       <div class="container-page">
         <div class="reveal mb-4 inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-xs text-ink-300">
           <span class="h-1.5 w-1.5 rounded-full bg-accent-400 animate-pulse-glow"></span>
-          Build status · Phase 3/7 shipped — Foundation + Hero + Trust + Problem + Approach
+          Build status · Phase 4/7 shipped — + Services + Sample Showcase
         </div>
-        <h2 class="reveal text-display-lg font-display mb-4">Phase 4 — Services + Samples folgt.</h2>
+        <h2 class="reveal text-display-lg font-display mb-4">Phase 5 — Prozess + Preise folgt.</h2>
         <p class="reveal text-lg text-ink-300 max-w-prose-tight">
-          Phase 4 zeigt 9 Service-Cards mit Hover-Choreography +
-          interaktiven Sample-Viewer der 10 redaktierten Deliverables.
-          Phase 5 Timeline + Pricing-Tiers. Phase 6 schließt mit
-          FAQ + Footer + Final-CTA.
+          Phase 5 zeigt scroll-driven Process-Timeline (Discovery → Proposal → Deliver → Handover)
+          und Pricing-Tiers mit Anker-Design.
+          Phase 6 schließt mit About + FAQ + Final-CTA + Footer.
         </p>
       </div>
     </section>
