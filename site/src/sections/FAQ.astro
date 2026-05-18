@@ -1,0 +1,113 @@
+---
+// FAQ — the 7 buying-blocker questions every prospect asks before
+// signing. Uses native <details> for accessibility + zero-JS state.
+
+interface QA {
+  q: string;
+  a: string;
+}
+
+const faqs: QA[] = [
+  {
+    q: 'Wie lange dauert ein typisches Engagement?',
+    a: 'Single Engagements: 5–10 Werktage von Kick-off bis Übergabe. Bundles 10–30 Werktage. Retainer-Engagements liefern monatlich auf festem Cadence. Konkrete Timeline-Bandbreite pro Service findest du in der Services-Sektion oben.',
+  },
+  {
+    q: 'Was ist im Preis enthalten — und was nicht?',
+    a: 'Inkludiert: Tier-2-Deliverable als PDF + JSON wo applicable, Executive Summary, verbatim Limitations-Klausel, 1 Review-Round (2 bei Bundles). Nicht inkludiert: zusätzliche Review-Rounds, vor-Ort-Termine außerhalb DACH, ad-hoc Beratung außerhalb Scope (separates Engagement). Scope-Änderungen während Engagement laufen über Change-Order — kein Scope-Creep, keine Überraschungs-Rechnung.',
+  },
+  {
+    q: 'Wie wird Qualität sichergestellt?',
+    a: 'Jeder A-Tier-Workflow hat eine Quality-Gate-Checkliste mit 6–7 verifizierbaren Items: jede file:line-Zitation existiert, Severity-Ratings folgen dokumentiertem Schema, Disclaimer verbatim, Executive Summary in Non-Tech-Sprache und unter Längen-Budget. Vor jeder Auslieferung wird diese Checkliste abgearbeitet — du bekommst sie auf Wunsch mit dem Deliverable.',
+  },
+  {
+    q: 'Was passiert, wenn der Output nicht passt?',
+    a: '1 Review-Round (Bundle: 2) ist inkludiert. Falls nach Review fundamentale Scope-Verfehlungen vorliegen (nicht: subjektive Stil-Präferenzen), wird der betroffene Abschnitt neu produziert. Bei klaren Liefer-Mängeln nach Review-Round wird der entsprechende Anteil refundet. Engagement-spezifisch — Details im Angebot.',
+  },
+  {
+    q: 'Was unterscheidet diese Methodik von Big-4-Consulting?',
+    a: 'Geschwindigkeit (Werktage statt Wochen), Preis (Faktor 5–20 niedriger), Transparenz (Sample-Outputs sichtbar vor Vertragsabschluss), Wiederholbarkeit (jede Audit-Iteration läuft identisch). Was Big-4 dafür bietet: tiefes Branchen-Netzwerk, regulatorische Beziehungen, Versicherungs-Tiefe für 8-stellige Engagement-Volumen. Bei Engagements bis ~€100k bietet diese Methodik durchgehend besseres Preis-Leistungs-Verhältnis.',
+  },
+  {
+    q: 'Wer hat schon mit der Bibliothek gearbeitet?',
+    a: 'Die Bibliothek selbst ist Open-Source auf GitHub einsehbar — kein Black-Box. Engagement-Referenzen baue ich gerade auf (Pre-Launch-Phase). Erste Kunden erhalten Engagement zu 60–70 % der stated-range Preise im Austausch für anonymisierte Case-Study + Testimonial. Wenn du zu den ersten 3 Engagements gehören willst, ist das dein Moment.',
+  },
+  {
+    q: 'Wie ist mit Confidentiality / NDA?',
+    a: 'NDA wird vor jedem Engagement unterzeichnet. Standard ist 5-Jahres-Vertraulichkeit für nicht-öffentliche Geschäftsinformationen. Klient-Code wird nach Engagement-Ende gelöscht (oder per Vereinbarung im Treuhand-Repository archiviert). Eigene Methodik und Workflows bleiben Eigentum des Beraters — Engagement-Output (Reports, Empfehlungen) gehört dem Klienten nach Schlusszahlung.',
+  },
+  {
+    q: 'Kann ich die Bibliothek selbst kaufen?',
+    a: 'Die 78 Prompts sind Open-Source auf GitHub (MIT-Lizenz-äquivalent — nutze, fork, modifiziere). Die Methodik — wann welcher Workflow für welchen Klienten richtig ist, wie Findings priorisiert werden, wie Disclaimer rechtlich tragen — kommt mit der Engagement-Begleitung. Die Bibliothek ist das Werkzeug, die Beratung ist die Anwendung.',
+  },
+];
+---
+
+<section id="faq" class="section relative">
+  <div class="container-page">
+    <div class="grid lg:grid-cols-12 gap-12 items-start">
+
+      <!-- LEFT: section header -->
+      <div class="lg:col-span-5 lg:sticky lg:top-32">
+        <div class="reveal text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-3 font-medium">
+          FAQ
+        </div>
+        <h2 class="reveal text-display-lg font-display tracking-tight mb-5">
+          Häufige Fragen vor dem ersten Engagement.
+        </h2>
+        <p class="reveal text-lg text-ink-300 leading-snug mb-6">
+          Wenn deine Frage hier nicht beantwortet ist, ist sie genau die
+          richtige für ein 30-Minuten-Erstgespräch.
+        </p>
+        <a href="#kontakt" class="reveal btn-ghost inline-flex items-center gap-2 no-tap">
+          Frage direkt stellen
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- RIGHT: accordion -->
+      <div class="lg:col-span-7">
+        <div class="space-y-3">
+          {faqs.map((f, i) => (
+            <details
+              class="reveal group rounded-2xl border border-white/10 bg-ink-900/50 backdrop-blur-xl
+                     overflow-hidden transition-colors duration-300
+                     hover:border-white/20
+                     open:border-accent-500/40 open:bg-ink-900/70"
+              style={`animation-delay: ${i * 40}ms`}
+            >
+              <summary class="cursor-pointer select-none px-5 py-4 lg:px-6 lg:py-5 flex items-start justify-between gap-4 list-none no-tap focus-visible:ring-accent-300 rounded-2xl">
+                <span class="font-display text-base lg:text-lg text-ink-50 leading-snug pr-2">
+                  {f.q}
+                </span>
+                <span
+                  class="shrink-0 mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/5 border border-white/10 transition-transform duration-300 group-open:rotate-45 group-open:bg-accent-500/15 group-open:border-accent-500/40 group-open:text-accent-300"
+                  aria-hidden="true"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                </span>
+              </summary>
+              <div class="px-5 pb-5 lg:px-6 lg:pb-6 -mt-1">
+                <p class="text-sm lg:text-base text-ink-200 leading-relaxed">
+                  {f.a}
+                </p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Remove default disclosure marker on Safari */
+  details > summary { list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+</style>

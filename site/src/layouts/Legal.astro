@@ -1,0 +1,60 @@
+---
+import Base from './Base.astro';
+import Nav from '@components/Nav.astro';
+import Footer from '@components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+
+<Base title={title} description={description} noIndex={false}>
+  <Nav />
+
+  <main id="main" class="pt-28 pb-section">
+    <article class="container-page max-w-3xl">
+      <slot />
+    </article>
+  </main>
+
+  <Footer />
+</Base>
+
+<style is:global>
+  /* Typography for legal text only — comfortable reading rhythm */
+  .container-page article > h1 {
+    @apply text-display-md font-display tracking-tight text-ink-50 mb-3;
+  }
+  .container-page article > h2 {
+    @apply text-2xl font-display text-ink-50 mt-12 mb-4;
+  }
+  .container-page article > h3 {
+    @apply text-lg font-display text-ink-100 mt-8 mb-3;
+  }
+  .container-page article > p,
+  .container-page article > ul,
+  .container-page article > ol {
+    @apply text-base text-ink-200 leading-relaxed mb-4;
+  }
+  .container-page article > ul,
+  .container-page article > ol {
+    @apply pl-5;
+  }
+  .container-page article > ul > li {
+    @apply list-disc mb-1.5;
+  }
+  .container-page article > ol > li {
+    @apply list-decimal mb-1.5;
+  }
+  .container-page article a {
+    @apply text-accent-300 hover:text-accent-200 underline-offset-4 hover:underline;
+  }
+  .container-page article > .meta {
+    @apply text-xs text-ink-400 mb-10;
+  }
+  .container-page article hr {
+    @apply border-white/10 my-10;
+  }
+</style>

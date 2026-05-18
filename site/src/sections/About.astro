@@ -1,0 +1,178 @@
+---
+// About — owner profile + library credibility stats with count-up.
+// Establishes 'who you're hiring' alongside the methodology.
+
+// Library stats — single source of truth from the actual library audit
+const stats = [
+  { value: 78,  label: 'Production-grade Prompts', sub: 'kuratiert · versioniert · getestet' },
+  { value: 10,  label: 'Sample Deliverables',      sub: 'redaktiert · mit Honorar-Indikation' },
+  { value: 20,  label: 'A-Tier mit Quality-Gate',  sub: 'verifizierbar pro Output' },
+  { value: 7,   label: 'Kanonische Disclaimer',    sub: 'haftungs-bewusst · jurisdiktional' },
+  { value: 8,   label: 'Bundle-Pakete',            sub: 'Fintech · Healthtech · M&A · AI · ...' },
+  { value: 5,   label: 'Compliance-Frameworks',    sub: 'AI Act · DORA · GDPR · HIPAA · PCI' },
+];
+---
+
+<section id="about" class="section relative">
+  <div class="container-page">
+    <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+
+      <!-- LEFT: bio -->
+      <div class="lg:col-span-5">
+        <div class="reveal text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-3 font-medium">
+          Über
+        </div>
+        <h2 class="reveal text-display-lg font-display tracking-tight mb-6">
+          Belkis Aslani
+        </h2>
+
+        <p class="reveal text-lg text-ink-200 leading-relaxed mb-5">
+          Senior-Consulting für regulierte Software-Engagements —
+          EU AI Act, DSGVO, DORA, ISO 27001 — gefahren mit einer
+          eigens kuratierten 78-Workflow-Bibliothek.
+        </p>
+
+        <p class="reveal text-base text-ink-300 leading-relaxed mb-8">
+          Ich liefere Audit-, Compliance- und Due-Diligence-Reports auf
+          Beratungsklasse-Niveau in einem Bruchteil der üblichen
+          Engagement-Zeit. Jeder Workflow durchläuft Quality-Gates,
+          jede Aussage zitiert <span class="font-mono text-sm text-ink-200">file:line</span>,
+          jeder Bericht enthält verbatim-Disclaimer, die rechtlich tragen.
+        </p>
+
+        <!-- Location + contact strip -->
+        <div class="reveal space-y-3 mb-8">
+          <div class="flex items-center gap-3 text-sm text-ink-300">
+            <svg class="text-ink-500" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Freiberg am Neckar · Stuttgart-Region
+          </div>
+          <div class="flex items-center gap-3 text-sm text-ink-300">
+            <svg class="text-ink-500" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <a href="mailto:belkis.aslani@gmail.com" class="hover:text-accent-300 transition-colors">
+              belkis.aslani@gmail.com
+            </a>
+          </div>
+          <div class="flex items-center gap-3 text-sm text-ink-300">
+            <svg class="text-ink-500" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+            Remote-first · Vor-Ort in DACH nach Vereinbarung
+          </div>
+        </div>
+
+        <!-- CTA cluster -->
+        <div class="reveal flex flex-wrap gap-3">
+          <a href="#kontakt" class="btn-primary no-tap">
+            Erstgespräch buchen
+          </a>
+          <a href="https://github.com/beko2210/PROMPT_only" rel="noopener" class="btn-secondary no-tap">
+            Library auf GitHub
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"/>
+              <polyline points="7 7 17 7 17 17"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT: library stats with count-up -->
+      <div class="lg:col-span-7">
+        <div class="reveal text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-5 font-medium">
+          Die Bibliothek in Zahlen
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4 lg:gap-5">
+          {stats.map((s, i) => (
+            <article
+              class="reveal card-spotlight glass rounded-2xl p-5 lg:p-6"
+              style={`animation-delay: ${i * 50}ms`}
+              data-stat
+              data-target={s.value}
+            >
+              <div
+                class="text-display-md font-display text-gradient tabular-nums leading-none"
+                data-stat-value
+              >0</div>
+              <div class="text-sm font-medium text-ink-100 mt-2">{s.label}</div>
+              <div class="text-xs text-ink-400 mt-1 leading-snug">{s.sub}</div>
+            </article>
+          ))}
+        </div>
+
+        <!-- Library quality note -->
+        <div class="reveal mt-8 glass rounded-2xl p-5 lg:p-6 border-l-4 border-accent-500">
+          <div class="flex gap-4">
+            <svg class="shrink-0 text-accent-400 mt-1" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+            <div>
+              <p class="text-sm text-ink-100 leading-snug">
+                Bibliothek durchlief externes Multi-Modell-Review
+                (Kimi 2.6, Gemini, Google), interne adversariale Review
+                gegen 4 Reviewer-Personas, und einen brutally-honest
+                Library-Audit mit 9-Punkt-Action-Plan.
+              </p>
+              <a href="https://github.com/beko2210/PROMPT_only/blob/main/LIBRARY-AUDIT.md" rel="noopener" class="inline-flex items-center gap-1.5 mt-3 text-xs text-accent-300 hover:text-accent-200">
+                Audit-Bericht auf GitHub
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"/>
+                  <polyline points="7 7 17 7 17 17"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    if (typeof window === 'undefined') return;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const animate = (el) => {
+      const target = parseInt(el.getAttribute('data-target') || '0', 10);
+      const valueEl = el.querySelector('[data-stat-value]');
+      if (!valueEl) return;
+      if (reduce) { valueEl.textContent = String(target); return; }
+
+      const start = performance.now();
+      const dur = 1200;
+      const ease = (t) => 1 - Math.pow(1 - t, 3);
+      const tick = (now) => {
+        const p = Math.min((now - start) / dur, 1);
+        valueEl.textContent = String(Math.round(ease(p) * target));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const wire = () => {
+      const stats = document.querySelectorAll('[data-stat]:not([data-stat-wired])');
+      if (!stats.length) return;
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          animate(e.target);
+          io.unobserve(e.target);
+        }
+      }, { threshold: 0.3 });
+      stats.forEach(s => {
+        s.setAttribute('data-stat-wired', 'true');
+        io.observe(s);
+      });
+    };
+    wire();
+    document.addEventListener('astro:after-swap', wire);
+  })();
+</script>

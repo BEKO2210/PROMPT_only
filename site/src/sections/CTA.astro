@@ -1,0 +1,118 @@
+---
+// CTA — Final conversion section. The page's last chance.
+// Two paths: book a discovery call (primary) or email direct (secondary).
+// Calendly / Cal.com embed slot reserved; mailto fallback always works.
+---
+
+<section id="kontakt" class="section relative overflow-hidden">
+  <!-- Decorative background -->
+  <div class="absolute inset-0 -z-10 pointer-events-none" aria-hidden="true">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[1000px] rounded-full bg-accent-500/15 blur-[140px]"></div>
+    <div class="absolute top-1/4 right-1/4 h-[300px] w-[300px] rounded-full bg-amber-500/10 blur-[100px] animate-float" style="animation-duration: 15s"></div>
+  </div>
+
+  <div class="container-page">
+    <div class="max-w-4xl mx-auto text-center">
+      <!-- Eyebrow -->
+      <div class="reveal text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-4 font-medium">
+        Lass uns reden
+      </div>
+
+      <!-- Headline -->
+      <h2 class="reveal text-display-xl font-display tracking-tightest mb-6">
+        <span class="block">30 Minuten Erstgespräch.</span>
+        <span class="block text-gradient">Kein Verkaufs-Pitch.</span>
+      </h2>
+
+      <p class="reveal text-lg lg:text-xl text-ink-200 leading-snug mb-12 max-w-2xl mx-auto">
+        Du erzählst, was bei dir gerade brennt. Ich sage ehrlich, ob
+        diese Methodik passt — oder ob du anders besser bedient bist.
+      </p>
+
+      <!-- Action cluster -->
+      <div class="reveal grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto mb-12">
+        <!-- Primary: Cal.com / Calendly placeholder -->
+        <a
+          href="mailto:belkis.aslani@gmail.com?subject=Erstgespräch%20PROMPT_only&body=Hallo%20Belkis%2C%0A%0Aich%20interessiere%20mich%20für%20ein%2030-Min-Erstgespräch%20zu%20folgendem%20Thema%3A%0A%0A%5BKurze%20Beschreibung%20der%20Anforderung%5D%0A%0AMögliche%20Termine%3A%0A%0AViele%20Grüße"
+          class="group relative overflow-hidden rounded-2xl bg-accent-500 text-ink-950 px-6 py-5 font-semibold text-base
+                 transition-all duration-300 hover:bg-accent-400 hover:shadow-glow-accent hover:-translate-y-0.5
+                 active:scale-[0.98] no-tap focus-visible:ring-accent-300"
+        >
+          <div class="flex items-center justify-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            Erstgespräch anfragen
+            <svg class="transition-transform duration-300 group-hover:translate-x-1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </div>
+          <div class="text-xs font-normal opacity-80 mt-1">
+            E-Mail öffnet mit Template
+          </div>
+        </a>
+
+        <!-- Secondary: GitHub library link -->
+        <a
+          href="https://github.com/beko2210/PROMPT_only"
+          rel="noopener"
+          class="group relative overflow-hidden rounded-2xl bg-white/5 text-ink-100 border border-white/10 px-6 py-5 font-semibold text-base
+                 transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:-translate-y-0.5
+                 active:scale-[0.98] no-tap"
+        >
+          <div class="flex items-center justify-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            Library ansehen
+            <svg class="transition-transform duration-300 group-hover:translate-x-1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"/>
+              <polyline points="7 7 17 7 17 17"/>
+            </svg>
+          </div>
+          <div class="text-xs font-normal opacity-80 mt-1">
+            78 Prompts · Open Source
+          </div>
+        </a>
+      </div>
+
+      <!-- Direct email row -->
+      <div class="reveal flex items-center justify-center gap-3 text-ink-300 text-sm">
+        <span>Oder direkt:</span>
+        <a
+          href="mailto:belkis.aslani@gmail.com"
+          class="font-mono text-base text-accent-300 hover:text-accent-200 underline-offset-4 hover:underline transition-colors"
+        >
+          belkis.aslani@gmail.com
+        </a>
+      </div>
+
+      <!-- Response-time commitment -->
+      <div class="reveal flex flex-wrap items-center justify-center gap-4 lg:gap-6 mt-10 text-xs text-ink-400">
+        <div class="flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-success animate-pulse"></span>
+          Antwort innerhalb 24 Stunden
+        </div>
+        <div class="flex items-center gap-2 text-ink-500">·</div>
+        <div class="flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0110 0v4"/>
+          </svg>
+          NDA vor erstem Gespräch verfügbar
+        </div>
+        <div class="flex items-center gap-2 text-ink-500">·</div>
+        <div class="flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Erstgespräch immer kostenfrei
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
