@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://beko2210.github.io/prompt_only/sitemap-index.xml
+Sitemap: https://beko2210.github.io/PROMPT_only/sitemap-index.xml
