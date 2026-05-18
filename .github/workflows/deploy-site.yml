@@ -29,26 +29,48 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      # Detect whether site/package-lock.json exists. setup-node@v4's
+      # built-in `cache: 'npm'` errors if the lockfile path doesn't
+      # resolve, so we gate caching on actual presence.
+      - name: Detect lockfile
+        id: lockfile
+        run: |
+          if [ -f site/package-lock.json ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Lockfile present — will use npm ci with cache."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "No lockfile — will use npm install without cache."
+          fi
+
+      # Two variants of setup-node; only one runs per job.
+      - name: Setup Node.js (with cache)
+        if: steps.lockfile.outputs.exists == 'true'
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: site/package-lock.json
+
+      - name: Setup Node.js (no cache)
+        if: steps.lockfile.outputs.exists == 'false'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
       - name: Install dependencies
         working-directory: ./site
         run: |
           if [ -f package-lock.json ]; then
-            npm ci
+            npm ci --no-audit --no-fund
           else
-            npm install
+            npm install --no-audit --no-fund
           fi
 
       - name: Type check
         working-directory: ./site
         run: npm run check
-        continue-on-error: true   # warn but don't block until phases settle
+        continue-on-error: true   # warn but don't block while phases settle
 
       - name: Build
         working-directory: ./site
@@ -80,7 +102,7 @@ jobs:
     name: Lighthouse CI (informational)
     needs: deploy
     runs-on: ubuntu-latest
-    if: false  # enable once site has real content
+    if: false   # enable once site has real content (Phase 7)
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -88,10 +110,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Run Lighthouse CI
         run: |
-          npm install -g @lhci/cli@0.13.x
+          npm install -g @lhci/cli@0.14.x
           lhci autorun --collect.url=${{ needs.deploy.outputs.page_url }}
         continue-on-error: true

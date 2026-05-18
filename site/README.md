@@ -18,14 +18,20 @@ consultant's portfolio. Deployed via GitHub Actions to GitHub Pages.
 
 ```bash
 cd site
-npm install
+npm install          # generates package-lock.json on first run — commit it!
 npm run dev          # local dev server at http://localhost:4321
 npm run build        # production build → dist/
 npm run preview      # preview production build locally
 npm run check        # Astro type-check
 ```
 
-Requirements: Node 20+.
+Requirements: Node 22+.
+
+**First-run note:** the CI workflow auto-detects whether
+`package-lock.json` exists. Until you run `npm install` locally and
+commit the resulting lockfile, the workflow runs `npm install` (no
+cache, ~30 s slower per build). After the first lockfile commit, it
+uses `npm ci` with cache (~10 s rebuilds).
 
 ## Structure
 
