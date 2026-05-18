@@ -1,8 +1,12 @@
+/* Tailwind directives — required because applyBaseStyles is false in
+   astro.config.mjs so this file owns the injection point. Custom
+   @layer blocks below extend Tailwind's layers. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ===========================================================================
-   DESIGN TOKENS + CUSTOM LAYERS — Tailwind base/components/utilities are
-   injected automatically by @astrojs/tailwind (applyBaseStyles: true in
-   astro.config.mjs). This file only adds the design tokens and custom
-   layers on top.
+   DESIGN TOKENS — global CSS layer for things Tailwind config doesn't capture
    =========================================================================== */
 
 @layer base {

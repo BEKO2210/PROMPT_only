@@ -25,13 +25,13 @@ export default defineConfig({
     defaultStrategy: 'viewport',
   },
   integrations: [
-    // applyBaseStyles: true — let the integration inject Tailwind's
-    // base/components/utilities automatically. Our global.css then
-    // only adds CUSTOM layers (components, utilities) without needing
-    // to import @tailwind directives ourselves. This is the most
-    // robust setup; the previous "false + manual import" combo
-    // silently failed when the path alias didn't resolve at build.
-    tailwind({ applyBaseStyles: true }),
+    // applyBaseStyles: false — global.css owns the @tailwind injection
+    // point (so our @layer base/components/utilities extensions resolve
+    // correctly). The previous import failure was caused by the path
+    // alias (@styles/) which Vite didn't resolve — now fixed by using
+    // a relative path in Base.astro AND mirroring tsconfig paths in
+    // the Vite resolve.alias config below.
+    tailwind({ applyBaseStyles: false }),
     sitemap(),
   ],
   vite: {
