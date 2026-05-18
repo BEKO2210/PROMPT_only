@@ -3,6 +3,40 @@
 Material changes to the library. Per-prompt versioning lives at the
 bottom of each prompt file (in a `## Version` section).
 
+## 2026-05-18 — Operational playbook (CONSULTANT-PLAYBOOK.md)
+
+Added the operational layer the library was missing: how to actually
+make money from these 78 prompts. Sequences existing prompts into a
+concrete 90-day consulting playbook with:
+
+- Phase 1 (Week 1): Pick ONE specialism from a ranked-by-market-urgency
+  table (AI Act, Schrems-II/DSGVO, LLM-security, M&A TDD, PCI/DORA, CRO)
+- Phase 2 (Days 8-30): Source first 3 clients via existing network +
+  LinkedIn warm outreach (DISCOVERY.md) + communities + partners.
+  Pricing at 60-70% of stated range for reference customers in
+  exchange for case study + testimonial.
+- Phase 3 (Days 30-90): Build ONE distribution channel
+  (NEWSLETTER / SOCIAL-CALENDAR / PODCAST-PITCH / WEBINAR-PLAN —
+  not all four).
+- Phase 4 (Day 60+): Convert to recurring via RETAINER, AGENT-BUILDER
+  productisation, or content-engine subscriptions.
+
+Plus:
+- Service catalog mapped from existing prompts to packaged offerings
+- Rate card with anchored pricing per engagement type
+- 90-day milestone targets with diagnostic if missed
+- Anti-patterns list (scope creep without SCOPE-CHANGE, undercharging
+  methodology, generalising too early, skipping CASE-STUDY)
+- Year-1 honest revenue model: €80-170k realistic, exiting at
+  €10-15k MRR with one specialism + consistent execution
+- Year-2 trajectory + diagnostic order if it doesn't work
+
+Library now ships with both the toolkit (78 prompts) and the
+operating instructions (playbook) — the missing layer between
+"I have prompts" and "I have €10k MRR".
+
+README updated with prominent pointer to the playbook.
+
 ## 2026-05-18 — Adversarial self-roleplay review on 5 sample prompts
 
 Self-roleplay multi-reviewer stress test applied to the 5 A-tier prompts

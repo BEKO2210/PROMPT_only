@@ -200,6 +200,21 @@ For ARCH.md (Mermaid diagrams), install
 
 ---
 
+## Operational manual — how to actually make money from this library
+
+If you've read this far and thought "great library, now what?", the
+answer is [`CONSULTANT-PLAYBOOK.md`](./CONSULTANT-PLAYBOOK.md).
+
+It sequences the 78 prompts into a concrete 90-day operating plan:
+which specialism to pick, how to source the first 3 clients, which
+prompt to use at which stage of the engagement, how to convert to
+recurring revenue, and an honest year-1 revenue model (€80–170k
+realistic for solo full-time execution with one specialism).
+
+The library is the toolkit. The playbook is the assembly instructions.
+
+---
+
 ## Sample outputs
 
 The [`samples/`](./samples/) folder contains redacted, realistic worked
