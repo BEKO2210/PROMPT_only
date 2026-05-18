@@ -59,8 +59,10 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content="Belkis Aslani — Software Compliance & Audit" />
 
-    <!-- Favicon (SVG, scales beautifully) -->
-    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <!-- Favicon (PNG with embedded logo for scalability across platforms) -->
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon-logo.svg`} />
+    <link rel="icon" type="image/png" sizes="32x32" href={`${import.meta.env.BASE_URL}favicon-32.png`} />
+    <link rel="icon" type="image/png" sizes="192x192" href={`${import.meta.env.BASE_URL}logo-256.png`} />
     <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}apple-touch-icon.png`} />
 
     <!-- PWA manifest -->

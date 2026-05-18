@@ -512,3 +512,21 @@ html.cursor-custom * {
   opacity: 0.55 !important;
   filter: blur(70px) !important;
 }
+
+/* ===========================================================================
+   HERO LOGO — subtle continuous breath + halo pulse (the brand should
+   never feel static, but never distract)
+   =========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-logo-img {
+    animation: hero-logo-breathe 6s ease-in-out infinite;
+    transform-origin: center;
+    will-change: transform;
+  }
+}
+@keyframes hero-logo-breathe {
+  0%, 100% { transform: translateY(0) rotate(0); filter: drop-shadow(0 0 0 transparent); }
+  25%       { transform: translateY(-4px) rotate(-1.5deg); filter: drop-shadow(0 0 12px rgba(0,179,240,0.4)); }
+  50%       { transform: translateY(0) rotate(0); filter: drop-shadow(0 0 6px rgba(0,179,240,0.25)); }
+  75%       { transform: translateY(2px) rotate(1deg); filter: drop-shadow(0 0 12px rgba(88,223,255,0.35)); }
+}

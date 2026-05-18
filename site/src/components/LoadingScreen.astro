@@ -1,8 +1,10 @@
 ---
 // LoadingScreen — first-visit brand reveal.
-// BA monogram strokes in, fills, expands; overlay fades out.
+// Planet logo zooms in from scale 0.4 + blur to settled state, then halo
+// pulses, then overlay fades out.
 // Only shows on first visit per session (sessionStorage flag).
 // Skip-on-click + auto-dismiss after 1.6 s + Esc-key skip.
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <div
@@ -11,40 +13,23 @@
   aria-hidden="true"
   data-loading-screen
 >
-  <svg
-    width="120"
-    height="120"
-    viewBox="0 0 120 120"
-    class="block"
-    aria-hidden="true"
-  >
-    <defs>
-      <linearGradient id="loadGradient" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#00b3f0"/>
-        <stop offset="1" stop-color="#58dfff"/>
-      </linearGradient>
-    </defs>
-    <!-- Outer cube (drawn first) -->
-    <rect
-      x="10" y="10" width="100" height="100" rx="20"
-      fill="none" stroke="url(#loadGradient)" stroke-width="2"
-      pathLength="100"
-      stroke-dasharray="100"
-      stroke-dashoffset="100"
-      class="cube-stroke"
-    />
-    <!-- BA text (fades in after stroke) -->
-    <text
-      x="60" y="80"
-      font-family="Inter Tight, Inter, system-ui, sans-serif"
-      font-size="48" font-weight="800"
-      text-anchor="middle"
-      fill="url(#loadGradient)"
-      class="ba-fill"
-      opacity="0"
-      letter-spacing="-2"
-    >BA</text>
-  </svg>
+  <div class="logo-loader relative">
+    <!-- Halo behind logo -->
+    <div class="logo-loader-halo absolute inset-0 rounded-full blur-3xl"></div>
+
+    <picture>
+      <source srcset={`${baseUrl}logo-256.webp`} type="image/webp" />
+      <img
+        src={`${baseUrl}logo-256.png`}
+        alt="Belkis Aslani Logo"
+        width="180"
+        height="180"
+        class="logo-loader-img relative block"
+        decoding="async"
+        fetchpriority="high"
+      />
+    </picture>
+  </div>
 
   <!-- Skip hint -->
   <button
@@ -57,33 +42,53 @@
 </div>
 
 <style>
-  /* Stroke animation: outer cube draws in */
-  .cube-stroke {
-    animation: cube-draw 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  .logo-loader {
+    width: 180px;
+    height: 180px;
   }
-  @keyframes cube-draw {
-    to { stroke-dashoffset: 0; }
+  .logo-loader-img {
+    width: 180px;
+    height: 180px;
+    transform: scale(0.4);
+    opacity: 0;
+    filter: blur(20px);
+    animation: logo-enter 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
-
-  /* Fill fades in after stroke complete */
-  .ba-fill {
-    animation: ba-fade 0.5s ease-out 0.7s forwards;
+  .logo-loader-halo {
+    background: radial-gradient(circle, rgba(0,179,240,0.55), transparent 65%);
+    transform: scale(0.6);
+    opacity: 0;
+    animation: halo-enter 1.3s ease-out 0.2s forwards,
+               halo-pulse 2s ease-in-out 1.5s infinite;
   }
-  @keyframes ba-fade {
-    to { opacity: 1; }
+  @keyframes logo-enter {
+    to { transform: scale(1); opacity: 1; filter: blur(0); }
   }
-
-  /* Reduced motion: skip all animations, show instantly */
+  @keyframes halo-enter {
+    to { transform: scale(1.4); opacity: 1; }
+  }
+  @keyframes halo-pulse {
+    0%, 100% { transform: scale(1.4); opacity: 1; }
+    50%       { transform: scale(1.55); opacity: 0.6; }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .cube-stroke { stroke-dashoffset: 0; animation: none; }
-    .ba-fill { opacity: 1; animation: none; }
+    .logo-loader-img {
+      animation: none;
+      transform: none;
+      opacity: 1;
+      filter: none;
+    }
+    .logo-loader-halo {
+      animation: none;
+      transform: scale(1.4);
+      opacity: 0.8;
+    }
   }
-
-  /* When dismissed: fade overlay out, scale slightly */
+  /* Dismiss state */
   #loading-screen.dismissed {
     pointer-events: none;
-    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     opacity: 0;
     transform: scale(1.05);
   }
@@ -96,7 +101,6 @@
     const screen = document.getElementById('loading-screen');
     if (!screen) return;
 
-    // If already shown in this session, dismiss immediately
     try {
       if (sessionStorage.getItem(SS_KEY) === '1') {
         screen.style.display = 'none';
@@ -104,23 +108,20 @@
       }
     } catch {}
 
-    // Mark shown
     try { sessionStorage.setItem(SS_KEY, '1'); } catch {}
 
-    // Lock body scroll while overlay is up
     document.documentElement.style.overflow = 'hidden';
 
     const dismiss = () => {
       if (screen.classList.contains('dismissed')) return;
       screen.classList.add('dismissed');
       document.documentElement.style.overflow = '';
-      setTimeout(() => screen.remove(), 600);
+      setTimeout(() => screen.remove(), 650);
     };
 
-    // Auto-dismiss after 1.6 s
-    setTimeout(dismiss, 1600);
+    // Auto-dismiss after 1.7 s (giving logo entrance time + brief settle)
+    setTimeout(dismiss, 1700);
 
-    // Skip button + click anywhere + Esc key
     screen.addEventListener('click', dismiss);
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') dismiss();
