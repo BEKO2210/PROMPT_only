@@ -1,7 +1,9 @@
 ---
 import Logo from './Logo.astro';
+import FrameworkStrip from './FrameworkStrip.astro';
 
 const year = new Date().getFullYear();
+const buildDate = new Date().toISOString().slice(0, 10);
 
 const baseUrl = import.meta.env.BASE_URL;
 const linkGroups = [
@@ -33,7 +35,18 @@ const linkGroups = [
 ];
 ---
 
-<footer class="relative border-t border-white/10 mt-section">
+<footer class="relative border-t border-white/10 mt-section overflow-hidden">
+  <!-- Subtle gradient + grid frame -->
+  <div class="absolute inset-0 -z-10 pointer-events-none" aria-hidden="true">
+    <div class="absolute inset-0 mission-grid opacity-30"></div>
+    <div class="absolute -bottom-40 left-1/2 -translate-x-1/2 h-[300px] w-[600px] rounded-full bg-accent-500/5 blur-[120px]"></div>
+  </div>
+
+  <!-- Top: framework strip — branded chip rail -->
+  <div class="border-b border-white/5 py-6 bg-ink-vacuum/40">
+    <FrameworkStrip tone="subtle" />
+  </div>
+
   <div class="container-page py-12 lg:py-16">
 
     <!-- Top: brand + links -->
@@ -94,6 +107,17 @@ const linkGroups = [
 
     <!-- Hairline -->
     <div class="hairline my-10"></div>
+
+    <!-- Mission-status row — gives the foot a "live" feel, mirrors hero -->
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-3 mb-6 text-[10px] uppercase tracking-[0.2em] font-mono text-ink-400">
+      <span class="mission-tag">
+        <span>Build · {buildDate}</span>
+      </span>
+      <span class="text-ink-600">/</span>
+      <span>Stuttgart-Region · DACH · Remote-first</span>
+      <span class="text-ink-600">/</span>
+      <span class="text-accent-300/80">Open-Source · MIT-äquivalent</span>
+    </div>
 
     <!-- Bottom: legal info -->
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 text-xs text-ink-400">

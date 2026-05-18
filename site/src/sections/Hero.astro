@@ -10,7 +10,6 @@
 // Alt copy preserved in HEADLINE_ALT for easy A/B swap.
 
 import ThreeHeroCore from '@components/ThreeHeroCore.astro';
-import FrameworkStrip from '@components/FrameworkStrip.astro';
 import CinematicHeading from '@components/CinematicHeading.astro';
 import MagneticButton from '@components/MagneticButton.astro';
 import LiquidBg from '@components/LiquidBg.astro';
@@ -159,14 +158,6 @@ const isoDate = now.toISOString().slice(0, 10);
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Framework strip — bottom edge -->
-  <div
-    data-hero-anim="6"
-    class="opacity-0 absolute bottom-16 left-0 right-0 z-10"
-  >
-    <FrameworkStrip tone="subtle" />
   </div>
 
   <!-- Scroll cue -->

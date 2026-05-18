@@ -45,27 +45,27 @@ const frameworks: string[] = [
         </div>
       ))}
     </div>
+  </div>
 
-    <!-- Methodology marquee -->
-    <div class="reveal mt-12 lg:mt-16">
-      <div class="text-center text-[11px] uppercase tracking-[0.2em] text-ink-400 mb-5">
-        Frameworks & Standards · gemappt im Library
-      </div>
+  <!-- Methodology marquee — FULL-BLEED, escapes the container -->
+  <div class="reveal mt-12 lg:mt-16">
+    <div class="container-page text-center text-[11px] uppercase tracking-[0.2em] text-ink-400 mb-5">
+      Frameworks & Standards · gemappt im Library
+    </div>
 
-      <!-- Marquee container with edge fades -->
-      <div class="relative overflow-hidden" style="--gap: 3rem">
-        <!-- Gradient edge masks -->
-        <div class="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-ink-950 to-transparent z-10"></div>
-        <div class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-ink-950 to-transparent z-10"></div>
+    <!-- Full-bleed marquee container with edge fades -->
+    <div class="relative overflow-hidden" style="--gap: 3rem">
+      <!-- Gradient edge masks -->
+      <div class="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-ink-950 to-transparent z-10"></div>
+      <div class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-ink-950 to-transparent z-10"></div>
 
-        <!-- Two duplicated tracks for seamless infinite scroll -->
-        <div class="flex gap-[var(--gap)] w-max animate-marquee" style="animation-duration: 40s">
-          {[...frameworks, ...frameworks].map((f) => (
-            <span class="shrink-0 text-base lg:text-lg font-display font-medium text-ink-200/80 hover:text-accent-300 transition-colors cursor-default whitespace-nowrap">
-              {f}
-            </span>
-          ))}
-        </div>
+      <!-- Two duplicated tracks for seamless infinite scroll -->
+      <div class="flex gap-[var(--gap)] w-max animate-marquee" style="animation-duration: 40s">
+        {[...frameworks, ...frameworks].map((f) => (
+          <span class="shrink-0 text-base lg:text-lg font-display font-medium text-ink-200/80 hover:text-accent-300 transition-colors cursor-default whitespace-nowrap">
+            {f}
+          </span>
+        ))}
       </div>
     </div>
   </div>

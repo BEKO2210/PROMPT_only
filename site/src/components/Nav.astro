@@ -107,35 +107,125 @@ const links: NavLink[] = [
       </div>
     </div>
 
-    <div
-      id="mobile-menu"
-      class="md:hidden hidden mt-2 rounded-2xl glass overflow-hidden"
-      role="dialog"
-      aria-modal="false"
+  </div>
+
+  <!-- ========== Mobile drawer — full-screen cinematic overlay ========== -->
+  <div
+    id="mobile-menu"
+    class="mobile-drawer md:hidden fixed inset-0 z-[60]
+           bg-ink-vacuum/95 backdrop-blur-2xl
+           opacity-0 pointer-events-none transition-opacity duration-500"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Hauptnavigation"
+  >
+    <!-- Ambient glow + grid -->
+    <div class="absolute inset-0 mission-grid opacity-50 pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 h-[420px] w-[420px] rounded-full bg-accent-500/12 blur-[140px] pointer-events-none" aria-hidden="true"></div>
+
+    <!-- Close button -->
+    <button
+      type="button"
+      id="mobile-close"
+      class="absolute top-5 right-5 z-10 inline-flex h-12 w-12 items-center justify-center
+             rounded-full glass border border-white/15 text-ink-100
+             active:scale-95 transition-transform no-tap focus-visible:ring-accent-300"
+      aria-label="Menü schließen"
     >
-      <nav class="flex flex-col p-2" aria-label="Mobile navigation">
-        {links.map(l => (
-          <a
-            href={l.href}
-            class="rounded-xl px-4 py-3 text-base font-medium text-ink-100
-                   hover:bg-white/5 transition-colors no-tap"
-            data-mobile-link
-          >
-            {l.label}
-          </a>
-        ))}
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="6" y1="6" x2="18" y2="18"/>
+        <line x1="6" y1="18" x2="18" y2="6"/>
+      </svg>
+    </button>
+
+    <!-- Top corner: mission tag -->
+    <div class="absolute top-6 left-6 z-10 mobile-drawer-tag opacity-0">
+      <span class="mission-tag">
+        <span data-mobile-mission>LIVE · DE</span>
+      </span>
+    </div>
+
+    <!-- Links — big, stacked, cinematic -->
+    <nav class="absolute inset-0 flex flex-col items-start justify-center px-8 gap-1.5">
+      {links.map((l, i) => (
         <a
-          href={`${baseUrl}kontakt`}
-          class="mt-2 rounded-xl bg-accent-500 px-4 py-3 text-base font-semibold
-                 text-ink-950 text-center no-tap"
+          href={l.href}
           data-mobile-link
+          data-link-index={i}
+          class="mobile-drawer-link group relative block py-2.5 text-4xl sm:text-5xl
+                 font-display font-bold tracking-tightest text-ink-100
+                 opacity-0 -translate-x-4
+                 transition-all duration-500 ease-out
+                 hover:text-accent-300 no-tap focus-visible:ring-accent-300 rounded-md"
         >
-          Gespräch buchen
+          <span class="font-mono text-[10px] text-accent-400/80 tracking-[0.2em] uppercase block mb-0.5">
+            0{i + 1}
+          </span>
+          {l.label}
+          <span
+            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-accent-400 to-transparent group-hover:w-2/3 transition-all duration-400"
+            aria-hidden="true"
+          ></span>
         </a>
-      </nav>
+      ))}
+    </nav>
+
+    <!-- Bottom: primary CTA + email -->
+    <div class="absolute bottom-0 inset-x-0 p-6 pb-9 mobile-drawer-foot opacity-0">
+      <a
+        href={`${baseUrl}kontakt`}
+        data-mobile-link
+        class="block w-full rounded-2xl bg-accent-500 text-ink-950
+               px-6 py-4 font-semibold text-lg text-center
+               shadow-glow-accent active:scale-[0.98] transition-transform no-tap btn-magnetic"
+      >
+        30-Min Erstgespräch buchen →
+      </a>
+      <a
+        href="mailto:belkis.aslani@gmail.com"
+        class="block mt-4 text-center text-sm text-ink-400 font-mono
+               hover:text-accent-300 transition-colors no-tap"
+      >
+        belkis.aslani@gmail.com
+      </a>
     </div>
   </div>
 </header>
+
+<style>
+  /* Mobile drawer transitions — body lock + reveal stagger */
+  body.mobile-menu-open { overflow: hidden; }
+
+  .mobile-drawer.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .mobile-drawer.is-open .mobile-drawer-link {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .mobile-drawer.is-open .mobile-drawer-tag,
+  .mobile-drawer.is-open .mobile-drawer-foot {
+    opacity: 1;
+  }
+
+  /* Stagger each link via per-index transition-delay */
+  .mobile-drawer.is-open .mobile-drawer-link[data-link-index="0"] { transition-delay: 80ms; }
+  .mobile-drawer.is-open .mobile-drawer-link[data-link-index="1"] { transition-delay: 140ms; }
+  .mobile-drawer.is-open .mobile-drawer-link[data-link-index="2"] { transition-delay: 200ms; }
+  .mobile-drawer.is-open .mobile-drawer-link[data-link-index="3"] { transition-delay: 260ms; }
+  .mobile-drawer.is-open .mobile-drawer-link[data-link-index="4"] { transition-delay: 320ms; }
+  .mobile-drawer.is-open .mobile-drawer-tag  { transition: opacity 400ms 380ms ease-out; }
+  .mobile-drawer.is-open .mobile-drawer-foot { transition: opacity 400ms 440ms ease-out; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-drawer,
+    .mobile-drawer-link,
+    .mobile-drawer-tag,
+    .mobile-drawer-foot { transition: none !important; }
+    .mobile-drawer.is-open .mobile-drawer-link { transition-delay: 0ms !important; }
+  }
+</style>
 
 <script is:inline>
   (() => {
@@ -173,29 +263,53 @@ const links: NavLink[] = [
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
 
+    const closeBtn = document.getElementById('mobile-close');
+    const missionTag = document.querySelector('[data-mobile-mission]');
+
     if (toggle && menu && iconOpen && iconClose) {
       const closeMenu = () => {
-        menu.classList.add('hidden');
+        menu.classList.remove('is-open');
+        document.body.classList.remove('mobile-menu-open');
         toggle.setAttribute('aria-expanded', 'false');
         toggle.setAttribute('aria-label', 'Menü öffnen');
         iconOpen.classList.remove('hidden');
         iconClose.classList.add('hidden');
       };
       const openMenu = () => {
-        menu.classList.remove('hidden');
+        menu.classList.add('is-open');
+        document.body.classList.add('mobile-menu-open');
         toggle.setAttribute('aria-expanded', 'true');
         toggle.setAttribute('aria-label', 'Menü schließen');
         iconOpen.classList.add('hidden');
         iconClose.classList.remove('hidden');
+        // Update mission tag live time on open
+        if (missionTag) {
+          const d = new Date();
+          const hh = String(d.getUTCHours()).padStart(2, '0');
+          const mm = String(d.getUTCMinutes()).padStart(2, '0');
+          missionTag.textContent = 'LIVE · DE · ' + hh + ':' + mm + ' UTC';
+        }
+        // Focus first link for keyboard nav
+        const first = menu.querySelector('[data-mobile-link]');
+        if (first) first.focus();
       };
       toggle.addEventListener('click', () => {
-        if (menu.classList.contains('hidden')) openMenu(); else closeMenu();
+        if (menu.classList.contains('is-open')) closeMenu(); else openMenu();
       });
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
       menu.querySelectorAll('[data-mobile-link]').forEach(el => {
         el.addEventListener('click', closeMenu);
       });
+      // Click on backdrop area closes
+      menu.addEventListener('click', (e) => {
+        if (e.target === menu) closeMenu();
+      });
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !menu.classList.contains('hidden')) closeMenu();
+        if (e.key === 'Escape' && menu.classList.contains('is-open')) closeMenu();
+      });
+      // Close menu on view-transition swap (so it doesn't leak across pages)
+      document.addEventListener('astro:before-swap', () => {
+        if (menu.classList.contains('is-open')) closeMenu();
       });
     }
   })();

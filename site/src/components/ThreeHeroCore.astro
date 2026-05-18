@@ -29,55 +29,142 @@ const { size = 480, label = 'Audit-Core: kompiliert die Library zu Reports' } = 
     aria-hidden="true"
   ></canvas>
 
-  <!-- SVG fallback — always rendered, hidden when WebGL takes over -->
+  <!-- SVG fallback — krasser cinematic orb. Multi-layer:
+       - 4 pulsing halo rings at staggered offsets (energy aura)
+       - Multi-stop core gradient with chrome highlight crescent
+       - 5 orbiting elliptical rings at different angles + speeds
+       - 12 particle dots orbiting at 3 different radii
+       - Inner light pinch (specular spot)
+       - Whole orb slowly rotates -->
   <svg
     data-hero-core-fallback
-    viewBox="0 0 200 200"
+    viewBox="0 0 240 240"
     class="hero-core-fallback absolute inset-0 w-full h-full transition-opacity duration-700"
     aria-hidden="true"
   >
     <defs>
-      <radialGradient id="hcCore" cx="50%" cy="50%" r="50%">
-        <stop offset="0%"  stop-color="#58dfff" stop-opacity="0.95"/>
-        <stop offset="45%" stop-color="#00b3f0" stop-opacity="0.85"/>
-        <stop offset="100%" stop-color="#001e3c" stop-opacity="1"/>
+      <!-- Core: deep ocean to electric cyan to bright rim -->
+      <radialGradient id="hcCore" cx="42%" cy="38%" r="60%">
+        <stop offset="0%"   stop-color="#c9f5ff" stop-opacity="0.95"/>
+        <stop offset="22%"  stop-color="#58dfff" stop-opacity="0.95"/>
+        <stop offset="55%"  stop-color="#00b3f0" stop-opacity="0.90"/>
+        <stop offset="82%"  stop-color="#003d5c" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#001020" stop-opacity="1"/>
       </radialGradient>
-      <radialGradient id="hcHalo" cx="50%" cy="50%" r="50%">
-        <stop offset="60%" stop-color="#1ccaff" stop-opacity="0"/>
-        <stop offset="85%" stop-color="#1ccaff" stop-opacity="0.45"/>
+
+      <!-- Halo: bright ring fading out -->
+      <radialGradient id="hcHalo1" cx="50%" cy="50%" r="50%">
+        <stop offset="55%" stop-color="#58dfff" stop-opacity="0"/>
+        <stop offset="78%" stop-color="#58dfff" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#58dfff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="hcHalo2" cx="50%" cy="50%" r="50%">
+        <stop offset="65%" stop-color="#00b3f0" stop-opacity="0"/>
+        <stop offset="85%" stop-color="#00b3f0" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#00b3f0" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="hcHalo3" cx="50%" cy="50%" r="50%">
+        <stop offset="75%" stop-color="#1ccaff" stop-opacity="0"/>
+        <stop offset="92%" stop-color="#1ccaff" stop-opacity="0.20"/>
         <stop offset="100%" stop-color="#1ccaff" stop-opacity="0"/>
       </radialGradient>
-      <filter id="hcBlur"><feGaussianBlur stdDeviation="4"/></filter>
+
+      <!-- Chrome highlight gradient -->
+      <radialGradient id="hcSpec" cx="38%" cy="32%" r="22%">
+        <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.85"/>
+        <stop offset="40%" stop-color="#ffffff" stop-opacity="0.30"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+
+      <filter id="hcBlur">  <feGaussianBlur stdDeviation="3"/></filter>
+      <filter id="hcBlurLg"><feGaussianBlur stdDeviation="8"/></filter>
+      <filter id="hcGlow">
+        <feGaussianBlur stdDeviation="2.5" result="g"/>
+        <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
     </defs>
 
-    <!-- Outer halo -->
-    <circle cx="100" cy="100" r="92" fill="url(#hcHalo)" filter="url(#hcBlur)">
-      <animate attributeName="r" values="92;96;92" dur="6s" repeatCount="indefinite"/>
+    <!-- Halo layers — pulse staggered for depth -->
+    <circle cx="120" cy="120" r="112" fill="url(#hcHalo3)" filter="url(#hcBlurLg)">
+      <animate attributeName="r" values="112;118;112" dur="6.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="6.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="120" cy="120" r="104" fill="url(#hcHalo2)" filter="url(#hcBlur)">
+      <animate attributeName="r" values="104;110;104" dur="5s" begin="-1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="5s" begin="-1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="120" cy="120" r="96" fill="url(#hcHalo1)" filter="url(#hcBlur)">
+      <animate attributeName="r" values="96;100;96" dur="4s" begin="-2.5s" repeatCount="indefinite"/>
     </circle>
 
-    <!-- Orbiting rings (decorative, hint at the 3D nature) -->
-    <ellipse cx="100" cy="100" rx="85" ry="22"
-             fill="none" stroke="rgba(88,223,255,0.25)" stroke-width="0.8"
-             transform="rotate(15 100 100)">
-      <animateTransform attributeName="transform" type="rotate"
-                        from="15 100 100" to="375 100 100"
-                        dur="32s" repeatCount="indefinite"/>
-    </ellipse>
-    <ellipse cx="100" cy="100" rx="80" ry="28"
-             fill="none" stroke="rgba(0,179,240,0.2)" stroke-width="0.6"
-             transform="rotate(-25 100 100)">
-      <animateTransform attributeName="transform" type="rotate"
-                        from="-25 100 100" to="-385 100 100"
-                        dur="44s" repeatCount="indefinite"/>
+    <!-- Whole orbit-rig: rotates slowly. Orbiting rings + particle dots -->
+    <g style="transform-origin: 120px 120px; animation: hc-spin 60s linear infinite;">
+      <!-- 5 orbiting elliptical rings -->
+      <ellipse cx="120" cy="120" rx="98" ry="22"
+               fill="none" stroke="rgba(88,223,255,0.30)" stroke-width="0.7"
+               transform="rotate(15 120 120)"/>
+      <ellipse cx="120" cy="120" rx="92" ry="34"
+               fill="none" stroke="rgba(88,223,255,0.20)" stroke-width="0.6"
+               transform="rotate(-25 120 120)"/>
+      <ellipse cx="120" cy="120" rx="100" ry="14"
+               fill="none" stroke="rgba(0,179,240,0.28)" stroke-width="0.55"
+               transform="rotate(75 120 120)"/>
+      <ellipse cx="120" cy="120" rx="88" ry="42"
+               fill="none" stroke="rgba(28,202,255,0.16)" stroke-width="0.5"
+               transform="rotate(55 120 120)"/>
+      <ellipse cx="120" cy="120" rx="96" ry="28"
+               fill="none" stroke="rgba(201,245,255,0.18)" stroke-width="0.4"
+               transform="rotate(-65 120 120)"/>
+    </g>
+
+    <!-- Counter-rotating particle dots -->
+    <g style="transform-origin: 120px 120px; animation: hc-spin-rev 22s linear infinite;" filter="url(#hcGlow)">
+      <!-- inner radius ~75 -->
+      <circle cx="195" cy="120" r="1.6" fill="#c9f5ff"/>
+      <circle cx="84"  cy="194" r="1.4" fill="#58dfff"/>
+      <circle cx="45"  cy="120" r="1.5" fill="#58dfff"/>
+      <circle cx="84"  cy="46"  r="1.6" fill="#c9f5ff"/>
+      <!-- mid radius ~90 -->
+      <circle cx="210" cy="120" r="1.2" fill="#1ccaff"/>
+      <circle cx="120" cy="30"  r="1.3" fill="#1ccaff"/>
+      <circle cx="30"  cy="120" r="1.1" fill="#1ccaff"/>
+      <circle cx="120" cy="210" r="1.4" fill="#1ccaff"/>
+    </g>
+    <g style="transform-origin: 120px 120px; animation: hc-spin 38s linear infinite;" filter="url(#hcGlow)">
+      <!-- outer radius ~105 -->
+      <circle cx="225" cy="120" r="1.4" fill="#58dfff"/>
+      <circle cx="167" cy="225" r="1.2" fill="#00b3f0"/>
+      <circle cx="15"  cy="120" r="1.3" fill="#00b3f0"/>
+      <circle cx="73"  cy="15"  r="1.5" fill="#c9f5ff"/>
+    </g>
+
+    <!-- Core sphere — large enough to dominate, with pulse -->
+    <circle cx="120" cy="120" r="74" fill="url(#hcCore)">
+      <animate attributeName="r" values="74;76;74" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Inner chrome specular highlight -->
+    <ellipse cx="100" cy="92" rx="34" ry="18" fill="url(#hcSpec)" filter="url(#hcBlur)"/>
+
+    <!-- Hair-thin equator line that hints at rotation -->
+    <ellipse cx="120" cy="120" rx="74" ry="9"
+             fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="0.6">
+      <animate attributeName="ry" values="9;13;9" dur="8s" repeatCount="indefinite"/>
     </ellipse>
 
-    <!-- Core sphere -->
-    <circle cx="100" cy="100" r="62" fill="url(#hcCore)"/>
-
-    <!-- Chrome highlight crescent -->
-    <path d="M 60 70 Q 100 50 140 75 Q 110 60 80 80 Z"
-          fill="rgba(255,255,255,0.18)" filter="url(#hcBlur)"/>
+    <!-- Subtle bottom shadow band for grounding -->
+    <ellipse cx="120" cy="200" rx="80" ry="10" fill="rgba(0,0,0,0.55)" filter="url(#hcBlurLg)"/>
   </svg>
+
+  <style>
+    @keyframes hc-spin     { to { transform: rotate(360deg);  } }
+    @keyframes hc-spin-rev { to { transform: rotate(-360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-core-fallback g[style*="hc-spin"] {
+        animation: none !important;
+      }
+    }
+  </style>
 
   <!-- Floating audit panels — orbit the core (desktop only; on mobile
        they'd collide with the orb fallback + screen edge) -->
