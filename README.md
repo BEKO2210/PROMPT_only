@@ -23,6 +23,8 @@ Two tiers:
 | [`REVIEW.md`](./REVIEW.md) | Review a PR / diff | ≤60-line output, `file:line` for every claim, style nits explicitly deferred to linter |
 | [`REFACTOR.md`](./REFACTOR.md) | Change structure without changing behaviour | Witness-test gate; PROOF must be bit-identical pre vs. post |
 | [`TRIM.md`](./TRIM.md) | Audit tech debt with ROI | Each item: real file + recurring cost in hours/year, ranked by payback |
+| [`TEST-PLAN.md`](./TEST-PLAN.md) | Risk-based test strategy for an area | P0/P1/P2 ranking by catch-value ÷ effort; explicit out-of-scope |
+| [`DEAD-CODE.md`](./DEAD-CODE.md) | Find truly unused code safely | HIGH / MEDIUM / LOW confidence tiers; staged removal with deprecation window |
 
 ---
 
@@ -45,7 +47,7 @@ Markdown to PDF directly.
 | [`MIGRATE.md`](./MIGRATE.md) | Phased Migration Roadmap with effort ranges + rollback per phase | **€5 000 – 30 000** | Anyone facing a stack change (Python 2→3, monolith→services, on-prem→cloud) |
 | [`DD.md`](./DD.md) | Technical Due Diligence (R/A/G ratings, deal-term recommendations) | **€10 000 – 100 000+** | PE / VC / strategic acquirers; M&A counsel |
 
-### Compliance & operations
+### Compliance & operations — General
 
 | Prompt | Deliverable | Realistic price | Regulatory hook / buyer |
 |---|---|---|---|
@@ -54,6 +56,25 @@ Markdown to PDF directly.
 | [`API-DOC.md`](./API-DOC.md) | OpenAPI 3.1 spec + Postman collection + Markdown reference | **€1 000 – 5 000** / API | Every startup with an undocumented public API |
 | [`GDPR.md`](./GDPR.md) | DSGVO assessment: PII inventory + data-flow map + Article 30 RoPA | **€2 000 – 10 000** | Every EU-facing controller / processor; especially Schrems-II exposure |
 | [`POSTMORTEM.md`](./POSTMORTEM.md) | Blameless incident RCA (timeline, root cause, SMART action items) | **€1 000 – 5 000** / incident | Enterprise SLAs requiring RCAs after SEV1 / SEV2; SRE practice |
+| [`SEO.md`](./SEO.md) | Technical SEO audit (crawl, index, CWV, schema, internal linking) | **€1 000 – 5 000** | Every public-facing site competing on organic traffic |
+| [`THREATMODEL.md`](./THREATMODEL.md) | STRIDE threat model with DFD, control mapping, residual risk | **€3 000 – 12 000** | ISO 27001 §A.8.27 / SOC2 CC7.1 evidence; mature security teams |
+| [`COST.md`](./COST.md) | Cloud cost optimisation from IaC with ROI-ranked savings | **€3 000 – 15 000** | Anyone with a cloud bill that's growing faster than revenue; often + success-fee |
+| [`RUNBOOK.md`](./RUNBOOK.md) | Production operations runbook bundle for handover | **€3 000 – 12 000** | M&A integration, outsourcing, team-transition, on-call standardisation |
+| [`OBSERVABILITY.md`](./OBSERVABILITY.md) | Telemetry audit ranked by debug-time saved + cost optimisation | **€3 000 – 12 000** | Teams drowning in alerts or blind during incidents |
+| [`DEPENDENCY-UPGRADE.md`](./DEPENDENCY-UPGRADE.md) | Phased major-version upgrade plan with usage analysis | **€2 000 – 15 000** | Stuck on EOL versions; React/Node/Python/Spring/Rails upgrades |
+
+### Compliance — Sector-specific (high-margin)
+
+| Prompt | Deliverable | Realistic price | Regulatory hook |
+|---|---|---|---|
+| [`AI-ACT.md`](./AI-ACT.md) | EU AI Act conformity assessment with risk classification | **€3 000 – 15 000** | Regulation 2024/1689 — high-risk obligations enforceable Aug 2026 |
+| [`HIPAA.md`](./HIPAA.md) | HIPAA Security Rule + Privacy Rule + BAA audit | **€3 000 – 15 000** | US healthcare; every covered entity / business associate |
+| [`PCI-DSS.md`](./PCI-DSS.md) | PCI-DSS v4.0.1 audit + scope-reduction analysis | **€3 000 – 15 000** | Anyone touching cardholder data; annual requirement |
+| [`ISO-27001.md`](./ISO-27001.md) | ISO 27001:2022 control mapping + Statement of Applicability draft | **€5 000 – 25 000** | Cert prep, surveillance audit, customer-procurement gate |
+| [`DORA.md`](./DORA.md) | EU Digital Operational Resilience Act assessment with Art. 28 register | **€5 000 – 30 000** | EU financial entities — enforceable Jan 2025 |
+| [`PROMPT-SECURITY.md`](./PROMPT-SECURITY.md) | LLM application security audit (OWASP LLM Top 10 + indirect prompt injection) | **€3 000 – 15 000** | Every shipping LLM application; brand-new market, low competition |
+| [`K8S-AUDIT.md`](./K8S-AUDIT.md) | Kubernetes cluster security + cost audit | **€3 000 – 15 000** | Platform teams running production Kubernetes |
+| [`MOBILE-PRIVACY.md`](./MOBILE-PRIVACY.md) | App Store / Play Store privacy labels with code citations | **€1 000 – 5 000** | Every published mobile app; commonly mis-declared |
 
 ---
 
@@ -72,6 +93,10 @@ side-hustle case studies, McKinsey 2026 State of AI).
 | [`PROPOSAL.md`](./PROPOSAL.md) | Send-ready consulting proposal with anchored pricing, scoped deliverables, AI-aware T&Cs | Saves 3–5 h per deal |
 | [`AGENT-BUILDER.md`](./AGENT-BUILDER.md) | Deployable specialist-agent system prompt + ops handbook + eval set | **€500 – 1 500 build + €100 – 400/mo retainer** — the side-hustle case-study model |
 | [`RETAINER.md`](./RETAINER.md) | Monthly status report that makes invisible work visible and seeds upsells | Protects €1 000 – 5 000/mo recurring per client |
+| [`CONTRACT-REVIEW.md`](./CONTRACT-REVIEW.md) | Red-flag analysis of inbound MSA / SOW / NDA / DPA before signing | Self-defence — prevents €10 k+ in bad terms; explicitly NOT legal advice |
+| [`CASE-STUDY.md`](./CASE-STUDY.md) | Anonymised case study in 3 formats (long, short, social) after every engagement | One case study = 12+ months of inbound; €0 marginal cost |
+| [`RELEASE-NOTES.md`](./RELEASE-NOTES.md) | Customer-facing changelog + in-app banner + email + blog from git history | Replaces 1–3 h per release; for clients **€500 – 2 000** per release-comms pack |
+| [`PITCH.md`](./PITCH.md) | Investor / sales pitch deck as Marp/Reveal Markdown with speaker notes | For clients **€2 000 – 10 000** per deck; for own use saves 5–15 h per pitch |
 
 ---
 
