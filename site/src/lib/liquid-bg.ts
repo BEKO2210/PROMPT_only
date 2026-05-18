@@ -141,6 +141,10 @@ export function mountLiquidBg(
 ): LiquidBgHandle | null {
   if (typeof window === 'undefined') return null;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
+  // Skip on touch devices — full-bleed fragment-shader at 60fps drains
+  // mobile GPU and fights with native scroll, causing 'page hangs'.
+  // Background falls back to the existing CSS gradient + grid.
+  if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return null;
 
   const gl = canvas.getContext('webgl', {
     alpha: false,

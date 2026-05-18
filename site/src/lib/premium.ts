@@ -92,6 +92,10 @@ let lenisInstance: any = null;
 export async function initLenis(): Promise<void> {
   if (typeof window === 'undefined') return;
   if (reduceMotion()) return;
+  // Skip Lenis on touch devices — native momentum-scroll is better,
+  // Lenis lerping intercepts touch and feels like the page 'hangs'
+  // when scrolling on a phone/tablet.
+  if (isTouch()) return;
 
   try {
     const { default: Lenis } = await import('lenis');
