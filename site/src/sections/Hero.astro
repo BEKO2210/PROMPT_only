@@ -1,0 +1,272 @@
+---
+// Hero — first impression, single-screen, message-first.
+// Animation philosophy: text reveals in stagger when load completes,
+// background gradient subtly drifts, scroll cue invites continuation.
+// GSAP is loaded only here; not blocking other pages.
+---
+
+<section
+  id="hero"
+  class="relative min-h-[100svh] flex items-center pt-28 pb-section-sm
+         overflow-hidden"
+  aria-labelledby="hero-headline"
+>
+  <!-- Decorative orbs (GPU-accelerated, drifting) -->
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div
+      class="absolute top-[10%] left-[10%] h-[480px] w-[480px] rounded-full
+             bg-accent-500/20 blur-[120px] animate-float"
+      style="animation-duration: 12s"
+    ></div>
+    <div
+      class="absolute bottom-[10%] right-[10%] h-[420px] w-[420px] rounded-full
+             bg-amber-500/10 blur-[120px] animate-float"
+      style="animation-duration: 14s; animation-delay: -3s"
+    ></div>
+    <!-- Subtle noise to break the gradient banding -->
+    <svg class="absolute inset-0 w-full h-full opacity-[0.04] mix-blend-overlay" aria-hidden="true">
+      <filter id="noiseFilter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
+    </svg>
+  </div>
+
+  <div class="container-page w-full">
+    <div class="grid lg:grid-cols-12 gap-12 items-center">
+      <!-- LEFT: copy + CTAs -->
+      <div class="lg:col-span-7">
+        <!-- Eyebrow badge -->
+        <div
+          data-hero-anim="0"
+          class="opacity-0 inline-flex items-center gap-2 rounded-full
+                 border border-accent-500/30 bg-accent-500/10 backdrop-blur-md
+                 px-4 py-1.5 text-sm text-accent-200 mb-6"
+        >
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inset-0 rounded-full bg-accent-400 animate-ping opacity-75"></span>
+            <span class="relative h-2 w-2 rounded-full bg-accent-400"></span>
+          </span>
+          78 production-grade Prompts · 10 Sample Deliverables
+        </div>
+
+        <!-- Display headline -->
+        <h1
+          id="hero-headline"
+          class="text-display-2xl font-display tracking-tightest text-ink-50 mb-6"
+        >
+          <span data-hero-anim="1" class="opacity-0 block">
+            Senior Consulting,
+          </span>
+          <span data-hero-anim="2" class="opacity-0 block">
+            in Tagen geliefert <span class="text-ink-400">—</span>
+          </span>
+          <span data-hero-anim="3" class="opacity-0 block">
+            nicht in <span class="text-gradient">Wochen</span>.
+          </span>
+        </h1>
+
+        <!-- Subhead -->
+        <p
+          data-hero-anim="4"
+          class="opacity-0 max-w-prose-tight text-xl text-ink-200 leading-snug mb-10"
+        >
+          Eine kuratierte Bibliothek aus 78 Workflows produziert
+          Audit-, Compliance-, Architecture- und DD-Reports auf
+          Beratungsklasse-Niveau. Reduziert Liefer-Zeit um 60–80 %,
+          ohne Qualitätsverlust.
+        </p>
+
+        <!-- CTAs -->
+        <div data-hero-anim="5" class="opacity-0 flex flex-wrap gap-3 mb-10">
+          <a href="#kontakt" class="btn-primary no-tap">
+            Erstgespräch buchen
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+          <a href="#samples" class="btn-secondary no-tap">
+            Sample-Reports ansehen
+          </a>
+        </div>
+
+        <!-- Inline mini-trust signals -->
+        <div data-hero-anim="6" class="opacity-0 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-ink-300">
+          <div class="flex items-center gap-2">
+            <svg class="text-success" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            EU AI Act · DORA · GDPR · HIPAA · PCI-DSS · ISO 27001
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="text-success" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Verbatim-Disclaimer · Haftungs-bewusst
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: hero visual — a stylised "report" preview card stack -->
+      <div class="lg:col-span-5 relative">
+        <div data-hero-anim="3" class="opacity-0 relative perspective-1200">
+          <!-- Stacked report cards (decorative) -->
+          <div
+            class="relative aspect-[4/5] max-w-[440px] mx-auto"
+            style="transform-style: preserve-3d"
+          >
+            <!-- Back card -->
+            <div
+              class="absolute inset-0 rounded-2xl glass shadow-glow-soft
+                     -translate-x-6 translate-y-6 rotate-[6deg]"
+              style="transform: translate3d(24px,24px,0) rotate(6deg)"
+              aria-hidden="true"
+            ></div>
+            <!-- Mid card -->
+            <div
+              class="absolute inset-0 rounded-2xl glass shadow-glow-soft
+                     -translate-x-3 translate-y-3 rotate-[3deg]"
+              style="transform: translate3d(12px,12px,0) rotate(3deg)"
+              aria-hidden="true"
+            ></div>
+            <!-- Front card with mock report -->
+            <article
+              class="absolute inset-0 rounded-2xl bg-ink-900/90 backdrop-blur-xl
+                     border border-white/10 shadow-glow-soft p-6 overflow-hidden
+                     animate-pulse-glow"
+              aria-label="Beispiel-Report-Vorschau"
+            >
+              <!-- Header bar like a window title -->
+              <div class="flex items-center justify-between mb-5">
+                <div class="flex gap-1.5" aria-hidden="true">
+                  <span class="h-2.5 w-2.5 rounded-full bg-ink-600"></span>
+                  <span class="h-2.5 w-2.5 rounded-full bg-ink-600"></span>
+                  <span class="h-2.5 w-2.5 rounded-full bg-ink-600"></span>
+                </div>
+                <span class="font-mono text-[10px] text-ink-400">AUDIT-REPORT.pdf</span>
+              </div>
+
+              <!-- Report content -->
+              <div class="space-y-4">
+                <div>
+                  <div class="text-[10px] uppercase tracking-widest text-ink-400 mb-1">Executive Summary</div>
+                  <div class="font-display text-lg text-ink-100 leading-tight">Security & Code-Quality Audit</div>
+                  <div class="text-xs text-ink-300 mt-0.5">Pivot Logistics B.V. · 2026-05-03</div>
+                </div>
+
+                <div class="hairline"></div>
+
+                <!-- Severity chips -->
+                <div class="grid grid-cols-3 gap-2 text-center">
+                  <div class="rounded-md bg-danger/15 border border-danger/30 px-2 py-2">
+                    <div class="text-lg font-display font-bold text-danger">3</div>
+                    <div class="text-[10px] text-ink-300 uppercase tracking-wide">Critical</div>
+                  </div>
+                  <div class="rounded-md bg-warning/15 border border-warning/30 px-2 py-2">
+                    <div class="text-lg font-display font-bold text-warning">7</div>
+                    <div class="text-[10px] text-ink-300 uppercase tracking-wide">High</div>
+                  </div>
+                  <div class="rounded-md bg-accent-500/15 border border-accent-500/30 px-2 py-2">
+                    <div class="text-lg font-display font-bold text-accent-300">18</div>
+                    <div class="text-[10px] text-ink-300 uppercase tracking-wide">Medium</div>
+                  </div>
+                </div>
+
+                <!-- Finding card -->
+                <div class="rounded-lg bg-ink-800/60 border border-white/5 p-3">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="font-mono text-[10px] text-danger">AUD-001</span>
+                    <span class="rounded-full bg-danger/20 text-danger text-[10px] px-2 py-0.5 font-medium">CRITICAL</span>
+                  </div>
+                  <div class="text-sm font-medium text-ink-100 leading-tight">IDOR on order-history endpoint</div>
+                  <div class="text-[10px] text-ink-400 mt-1 font-mono">services/orders/api/v2.py:142</div>
+                </div>
+
+                <!-- Animated progress (shimmer line) -->
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between text-[10px] text-ink-400">
+                    <span>Remediation roadmap</span>
+                    <span class="text-success">3/61 fixed</span>
+                  </div>
+                  <div class="h-1 rounded-full bg-ink-800 overflow-hidden">
+                    <div class="h-full w-[20%] rounded-full bg-gradient-to-r from-accent-500 to-accent-300"></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- Floating badges around the card -->
+          <div
+            class="absolute -top-4 -left-2 lg:-left-8 z-10 glass rounded-full
+                   px-3 py-1.5 text-xs font-medium text-ink-100 shadow-glow-soft
+                   animate-float"
+            style="animation-delay: -1s"
+          >
+            <span class="text-success">●</span> €5.8k engagement
+          </div>
+          <div
+            class="absolute -bottom-3 -right-2 lg:-right-6 z-10 glass rounded-full
+                   px-3 py-1.5 text-xs font-medium text-ink-100 shadow-glow-soft
+                   animate-float"
+            style="animation-delay: -2s"
+          >
+            <span class="text-accent-300">▶</span> 4-Tage-Turnaround
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll cue -->
+  <a
+    href="#methodik"
+    class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10
+           flex flex-col items-center gap-2 text-ink-400
+           hover:text-ink-100 transition-colors no-tap group"
+    aria-label="Weiter scrollen"
+    data-hero-anim="6"
+    style="opacity:0"
+  >
+    <span class="text-[11px] uppercase tracking-widest">Methodik</span>
+    <span class="inline-flex h-9 w-6 items-center justify-center rounded-full border border-ink-500/40 overflow-hidden">
+      <span class="block h-2 w-1 rounded-full bg-ink-300 animate-bounce" style="animation-duration: 1.5s"></span>
+    </span>
+  </a>
+</section>
+
+<!-- Hero entrance animation: stagger reveal via GSAP if loaded;
+     graceful fallback to CSS reveal otherwise. Reduced-motion respected. -->
+<script>
+  (async () => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els = Array.from(document.querySelectorAll('[data-hero-anim]'))
+      .sort((a, b) => Number((a as HTMLElement).dataset.heroAnim) - Number((b as HTMLElement).dataset.heroAnim));
+
+    if (reduce || !els.length) {
+      els.forEach(el => (el as HTMLElement).style.opacity = '1');
+      return;
+    }
+
+    try {
+      const { gsap } = await import('gsap');
+      gsap.fromTo(
+        els,
+        { opacity: 0, y: 32, filter: 'blur(8px)' },
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 1.0,
+          ease: 'expo.out',
+          stagger: 0.09,
+          clearProps: 'filter,transform',
+        }
+      );
+    } catch (e) {
+      // Fallback: just show them
+      els.forEach((el, i) => {
+        const html = el as HTMLElement;
+        html.style.transition = `opacity 600ms ease-out ${i * 80}ms, transform 600ms ease-out ${i * 80}ms`;
+        html.style.opacity = '1';
+      });
+    }
+  })();
+</script>

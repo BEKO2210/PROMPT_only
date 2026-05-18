@@ -1,0 +1,36 @@
+---
+interface Props {
+  size?: number;
+  withText?: boolean;
+  href?: string;
+}
+const { size = 32, withText = true, href = '/' } = Astro.props;
+---
+
+<a
+  href={href}
+  class="group inline-flex items-center gap-2.5 no-tap focus-visible:ring-accent-300 rounded-md"
+  aria-label="Zur Startseite"
+>
+  <span
+    class="relative inline-flex shrink-0 items-center justify-center rounded-lg
+           bg-gradient-to-br from-accent-400 to-accent-600
+           shadow-glow-accent transition-transform duration-500
+           group-hover:rotate-[8deg]"
+    style={`width:${size}px;height:${size}px`}
+  >
+    <span
+      class="font-display font-bold text-ink-950"
+      style={`font-size:${Math.round(size * 0.55)}px;line-height:1`}
+    >P</span>
+    <span
+      class="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/20"
+      aria-hidden="true"
+    ></span>
+  </span>
+  {withText && (
+    <span class="font-display font-semibold text-ink-100 tracking-tight text-lg">
+      PROMPT<span class="text-accent-400">_</span>only
+    </span>
+  )}
+</a>

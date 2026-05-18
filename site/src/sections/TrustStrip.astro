@@ -1,0 +1,89 @@
+---
+// TrustStrip — directly under Hero, above-fold-adjacent.
+// Two elements:
+//   1. Stat row (numbers from the library — verifiable)
+//   2. Methodology / framework marquee (regulatory + technical chops)
+// No fake customer logos. Honesty over theatre.
+
+interface Stat { value: string; label: string; sublabel?: string }
+const stats: Stat[] = [
+  { value: '78', label: 'Production-grade Prompts', sublabel: 'kuratiert, versioniert, getestet' },
+  { value: '10', label: 'Sample Deliverables', sublabel: 'redaktiert, mit Honorar-Indikation' },
+  { value: '20', label: 'A-Tier mit Quality-Gate', sublabel: 'verifizierbar pro Output' },
+  { value: '7',  label: 'Kanonische Disclaimer', sublabel: 'haftungs-bewusst, jurisdiktional' },
+];
+
+const frameworks: string[] = [
+  'EU AI Act',
+  'DORA',
+  'GDPR / DSGVO',
+  'HIPAA',
+  'PCI-DSS v4.0.1',
+  'ISO 27001:2022',
+  'OWASP Top 10',
+  'OWASP LLM Top 10',
+  'Schrems-II TIA',
+  'NIST CSF',
+  'C4 Model',
+  'STRIDE',
+  'Diátaxis',
+  'CycloneDX 1.5',
+  'EDPB Rec 01/2020',
+  'WCAG 2.2',
+];
+---
+
+<section class="section-sm py-section-sm relative" aria-label="Vertrauenssignale">
+  <div class="container-page">
+    <!-- Stat row -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/10">
+      {stats.map((s) => (
+        <div class="bg-ink-900/70 backdrop-blur p-6 lg:p-8 flex flex-col gap-2 reveal card-spotlight relative">
+          <div class="text-display-md text-gradient font-display tabular-nums">{s.value}</div>
+          <div class="text-sm font-medium text-ink-100">{s.label}</div>
+          {s.sublabel && <div class="text-xs text-ink-400 leading-snug">{s.sublabel}</div>}
+        </div>
+      ))}
+    </div>
+
+    <!-- Methodology marquee -->
+    <div class="reveal mt-12 lg:mt-16">
+      <div class="text-center text-[11px] uppercase tracking-[0.2em] text-ink-400 mb-5">
+        Frameworks & Standards · gemappt im Library
+      </div>
+
+      <!-- Marquee container with edge fades -->
+      <div class="relative overflow-hidden" style="--gap: 3rem">
+        <!-- Gradient edge masks -->
+        <div class="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-ink-950 to-transparent z-10"></div>
+        <div class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-ink-950 to-transparent z-10"></div>
+
+        <!-- Two duplicated tracks for seamless infinite scroll -->
+        <div class="flex gap-[var(--gap)] w-max animate-marquee" style="animation-duration: 40s">
+          {[...frameworks, ...frameworks].map((f) => (
+            <span class="shrink-0 text-base lg:text-lg font-display font-medium text-ink-200/80 hover:text-accent-300 transition-colors cursor-default whitespace-nowrap">
+              {f}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    animation: marquee linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee { animation: none; transform: none; }
+  }
+  /* Pause on hover for accessibility */
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+</style>
