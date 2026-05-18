@@ -175,6 +175,19 @@ const samples: Sample[] = [
 ];
 
 const categories = ['Alle', 'Strategic', 'Compliance', 'AI', 'Internal'] as const;
+
+// Map sample category -> thumbnail variant + tone
+const thumbConfig = (category: Sample['category']): { variant: 'audit' | 'compliance' | 'arch' | 'perf'; tone: 'cyan' | 'amber' | 'red' } => {
+  switch (category) {
+    case 'Strategic':  return { variant: 'audit',      tone: 'cyan' };
+    case 'Compliance': return { variant: 'compliance', tone: 'amber' };
+    case 'AI':         return { variant: 'audit',      tone: 'red' };
+    case 'Internal':   return { variant: 'arch',       tone: 'cyan' };
+    default:           return { variant: 'audit',      tone: 'cyan' };
+  }
+};
+
+import SampleThumbnail from '@components/SampleThumbnail.astro';
 ---
 
 <section id="samples" class="section relative">
@@ -240,6 +253,9 @@ const categories = ['Alle', 'Strategic', 'Compliance', 'AI', 'Internal'] as cons
             </div>
             <span class="font-mono text-[10px] text-ink-500 tabular-nums">{s.date}</span>
           </div>
+
+          <!-- Visual: stylized report-page preview (inline SVG, ~1.6KB) -->
+          <SampleThumbnail {...thumbConfig(s.category)} />
 
           <!-- Body -->
           <div class="p-6 flex flex-col gap-4">

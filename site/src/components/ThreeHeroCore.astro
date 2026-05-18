@@ -84,18 +84,28 @@ const { size = 480, label = 'Audit-Core: kompiliert die Library zu Reports' } = 
       </filter>
     </defs>
 
-    <!-- Halo layers — pulse staggered for depth -->
-    <circle cx="120" cy="120" r="112" fill="url(#hcHalo3)" filter="url(#hcBlurLg)">
-      <animate attributeName="r" values="112;118;112" dur="6.5s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.7;1;0.7" dur="6.5s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="120" cy="120" r="104" fill="url(#hcHalo2)" filter="url(#hcBlur)">
-      <animate attributeName="r" values="104;110;104" dur="5s" begin="-1.5s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.6;1;0.6" dur="5s" begin="-1.5s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="120" cy="120" r="96" fill="url(#hcHalo1)" filter="url(#hcBlur)">
-      <animate attributeName="r" values="96;100;96" dur="4s" begin="-2.5s" repeatCount="indefinite"/>
-    </circle>
+    <!-- Halo layers — pulse staggered for depth.
+         Wrapped in .orb-anim group so CSS media query can hide the whole
+         set on touch devices (feGaussianBlur + SMIL r-animation per frame
+         is the #1 hang-cause on Samsung S23 Ultra). Static halos remain
+         via a single non-animated, non-filtered fallback below. -->
+    <g class="orb-anim">
+      <circle cx="120" cy="120" r="112" fill="url(#hcHalo3)" filter="url(#hcBlurLg)">
+        <animate attributeName="r" values="112;118;112" dur="6.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;1;0.7" dur="6.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="120" cy="120" r="104" fill="url(#hcHalo2)" filter="url(#hcBlur)">
+        <animate attributeName="r" values="104;110;104" dur="5s" begin="-1.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.6;1;0.6" dur="5s" begin="-1.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="120" cy="120" r="96" fill="url(#hcHalo1)" filter="url(#hcBlur)">
+        <animate attributeName="r" values="96;100;96" dur="4s" begin="-2.5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <!-- Touch fallback: 1 static halo with no filter (CSS reveals only on touch) -->
+    <g class="orb-touch-only" style="display:none">
+      <circle cx="120" cy="120" r="108" fill="url(#hcHalo2)" opacity="0.7"/>
+    </g>
 
     <!-- ===== RINGS — BACK HALVES (drawn before sphere) =====
          Each ring is split into top-arc (back) + bottom-arc (front)
@@ -103,7 +113,7 @@ const { size = 480, label = 'Audit-Core: kompiliert die Library zu Reports' } = 
          rotation as the front-rings group, so the rings stay in sync
          while passing through the sphere physically (back-arc hidden
          where the sphere overlaps, front-arc on top of the sphere). -->
-    <g style="transform-origin: 120px 120px; animation: hc-spin 60s linear infinite;">
+    <g class="orb-spin" style="transform-origin: 120px 120px; animation: hc-spin 60s linear infinite;">
       <!-- ring 1: rx=98 ry=22 tilt 15° -->
       <g transform="rotate(15 120 120)">
         <path d="M 22 120 A 98 22 0 0 0 218 120"
@@ -138,35 +148,37 @@ const { size = 480, label = 'Audit-Core: kompiliert die Library zu Reports' } = 
          No filter:url() — Gaussian-blur on rotating groups crushes
          mobile GPU. Brighter colors + extra circle for soft-glow
          instead. -->
-    <g style="transform-origin: 120px 120px; animation: hc-spin-rev 22s linear infinite;">
+    <g class="orb-spin" style="transform-origin: 120px 120px; animation: hc-spin-rev 22s linear infinite;">
       <!-- back: y < 120 -->
       <circle cx="84"  cy="46"  r="2.2" fill="#c9f5ff" opacity="0.95"/>
       <circle cx="120" cy="30"  r="1.8" fill="#1ccaff" opacity="0.9"/>
     </g>
-    <g style="transform-origin: 120px 120px; animation: hc-spin 38s linear infinite;">
+    <g class="orb-spin" style="transform-origin: 120px 120px; animation: hc-spin 38s linear infinite;">
       <circle cx="73"  cy="15"  r="2.0" fill="#c9f5ff" opacity="0.95"/>
     </g>
 
     <!-- ===== SPHERE — between back and front layers ===== -->
     <!-- Core sphere — large enough to dominate, with pulse -->
     <circle cx="120" cy="120" r="74" fill="url(#hcCore)">
-      <animate attributeName="r" values="74;76;74" dur="3.5s" repeatCount="indefinite"/>
+      <animate class="orb-smil" attributeName="r" values="74;76;74" dur="3.5s" repeatCount="indefinite"/>
     </circle>
 
-    <!-- Inner chrome specular highlight (still on sphere top) -->
+    <!-- Inner chrome specular highlight (still on sphere top).
+         filter:url() is moderate-cost but kept here — only 1 instance,
+         not animated each frame. -->
     <ellipse cx="100" cy="92" rx="34" ry="18" fill="url(#hcSpec)" filter="url(#hcBlur)"/>
 
     <!-- Hair-thin equator line — sits ON the sphere (front, but covered
          by anything drawn after) -->
     <ellipse cx="120" cy="120" rx="74" ry="9"
              fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="0.6">
-      <animate attributeName="ry" values="9;13;9" dur="8s" repeatCount="indefinite"/>
+      <animate class="orb-smil" attributeName="ry" values="9;13;9" dur="8s" repeatCount="indefinite"/>
     </ellipse>
 
     <!-- ===== RINGS — FRONT HALVES (drawn after sphere) =====
          Mirror group of the back-rings. Same rotation, same tilt
          transforms — only the arc direction differs. -->
-    <g style="transform-origin: 120px 120px; animation: hc-spin 60s linear infinite;">
+    <g class="orb-spin" style="transform-origin: 120px 120px; animation: hc-spin 60s linear infinite;">
       <g transform="rotate(15 120 120)">
         <path d="M 22 120 A 98 22 0 0 1 218 120"
               fill="none" stroke="rgba(88,223,255,0.55)" stroke-width="0.9"/>
@@ -193,7 +205,7 @@ const { size = 480, label = 'Audit-Core: kompiliert die Library zu Reports' } = 
          Dots with cy > 120 are below the equator → visually "in front of"
          the sphere when viewed from front.
          No filter — see back-dots comment above. -->
-    <g style="transform-origin: 120px 120px; animation: hc-spin-rev 22s linear infinite;">
+    <g class="orb-spin" style="transform-origin: 120px 120px; animation: hc-spin-rev 22s linear infinite;">
       <circle cx="195" cy="120" r="2.2" fill="#c9f5ff" opacity="0.95"/>
       <circle cx="84"  cy="194" r="2.0" fill="#58dfff" opacity="0.95"/>
       <circle cx="45"  cy="120" r="2.0" fill="#58dfff" opacity="0.95"/>
@@ -201,7 +213,7 @@ const { size = 480, label = 'Audit-Core: kompiliert die Library zu Reports' } = 
       <circle cx="30"  cy="120" r="1.6" fill="#1ccaff" opacity="0.9"/>
       <circle cx="120" cy="210" r="1.8" fill="#1ccaff" opacity="0.9"/>
     </g>
-    <g style="transform-origin: 120px 120px; animation: hc-spin 38s linear infinite;">
+    <g class="orb-spin" style="transform-origin: 120px 120px; animation: hc-spin 38s linear infinite;">
       <circle cx="225" cy="120" r="2.0" fill="#58dfff" opacity="0.95"/>
       <circle cx="167" cy="225" r="1.6" fill="#00b3f0" opacity="0.9"/>
       <circle cx="15"  cy="120" r="1.8" fill="#00b3f0" opacity="0.9"/>
@@ -213,12 +225,43 @@ const { size = 480, label = 'Audit-Core: kompiliert die Library zu Reports' } = 
   </svg>
 
   <style>
+    /* Vignette around the orb — darkens the corners of the hero-core
+       container so the orb visually pops + sits in deeper space */
+    .hero-core::before {
+      content: '';
+      position: absolute;
+      inset: -8%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 50%,
+        transparent 38%,
+        rgba(2, 2, 10, 0.55) 70%,
+        rgba(2, 2, 10, 0.95) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
     @keyframes hc-spin     { to { transform: rotate(360deg);  } }
     @keyframes hc-spin-rev { to { transform: rotate(-360deg); } }
+
+    /* Reduced-motion: stop all rotation/pulse */
     @media (prefers-reduced-motion: reduce) {
+      .hero-core-fallback .orb-spin,
       .hero-core-fallback g[style*="hc-spin"] {
         animation: none !important;
       }
+      .hero-core-fallback .orb-smil,
+      .hero-core-fallback .orb-anim { display: none !important; }
+    }
+
+    /* Touch devices: stop heavy halos (filter:url() on pulsing radius
+       is the #1 hang-cause on Samsung Android). Stop CSS rotations.
+       Stop SMIL pulse animations. Static rings + sphere + chrome still
+       render — no perceptible visual loss, big perf win. */
+    @media (hover: none), (pointer: coarse) {
+      .hero-core-fallback .orb-anim    { display: none !important; }
+      .hero-core-fallback .orb-spin    { animation: none !important; }
+      .hero-core-fallback .orb-smil    { display: none !important; }
+      .hero-core-fallback .orb-touch-only { display: block !important; }
     }
   </style>
 

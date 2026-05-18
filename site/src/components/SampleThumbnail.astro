@@ -1,0 +1,97 @@
+---
+// SampleThumbnail — inline-SVG mockup of a report page preview.
+// Designed to render quickly (no external image fetch), look like a
+// real document preview, and adapt color tone per sample category.
+//
+// Renders:
+//  - faux page header with mini-bars representing headline+lede
+//  - 3 severity chips (colored squares: red/amber/cyan) with counts
+//  - 3 finding rows: ID-label + body line + dim file-path line
+//  - tiny progress bar at the bottom
+//
+// All vector — scales crisply on Retina, ~1.6 KB inline.
+
+interface Props {
+  /** Tone preset — picks the accent color */
+  tone?: 'cyan' | 'amber' | 'red';
+  /** Optional title shown as the largest mock-bar */
+  variant?: 'audit' | 'compliance' | 'arch' | 'perf';
+}
+
+const { tone = 'cyan', variant = 'audit' } = Astro.props;
+
+const accent = tone === 'amber' ? '#ff9d1c' : tone === 'red' ? '#ef4444' : '#1ccaff';
+
+// Per-variant: how many finding rows, which severities prominent
+const variants = {
+  audit:      { rows: 4, chips: ['#ef4444', '#f59e0b', '#1ccaff'], counts: [3, 7, 18] },
+  compliance: { rows: 5, chips: ['#f59e0b', '#1ccaff', '#22c55e'], counts: [2, 11, 24] },
+  arch:       { rows: 3, chips: ['#1ccaff', '#1ccaff', '#22c55e'], counts: [12, 8, 5] },
+  perf:       { rows: 4, chips: ['#f59e0b', '#1ccaff', '#22c55e'], counts: [5, 9, 14] },
+} as const;
+const cfg = variants[variant];
+---
+
+<div class="sample-thumb relative w-full aspect-[16/7] overflow-hidden border-y border-white/5">
+  <!-- Background: subtle gradient mimicking a page surface -->
+  <div
+    class="absolute inset-0"
+    style={`background:
+      linear-gradient(135deg, ${accent}0c 0%, transparent 60%),
+      radial-gradient(ellipse at top right, ${accent}10, transparent 70%),
+      linear-gradient(180deg, #0e0e1a 0%, #08080f 100%);`}
+    aria-hidden="true"
+  ></div>
+
+  <svg viewBox="0 0 400 175" class="relative w-full h-full" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+    <!-- Faux page header — wide bar (title) + thin bar (subtitle) -->
+    <rect x="16" y="14" width="180" height="9"  rx="2" fill="rgba(255,255,255,0.85)"/>
+    <rect x="16" y="29" width="120" height="5"  rx="1.5" fill="rgba(255,255,255,0.30)"/>
+    <rect x="16" y="40" width="80"  height="3"  rx="1.5" fill="rgba(255,255,255,0.18)"/>
+
+    <!-- Severity chips, top right -->
+    {[0, 1, 2].map((i) => (
+      <g transform={`translate(${280 + i * 35}, 14)`}>
+        <rect x="0" y="0" width="28" height="22" rx="3" fill={cfg.chips[i]} fill-opacity="0.15" stroke={cfg.chips[i]} stroke-width="0.6" stroke-opacity="0.5"/>
+        <text x="14" y="11.5" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9" font-weight="700" fill={cfg.chips[i]}>{cfg.counts[i]}</text>
+        <rect x="6" y="14" width="16" height="2" rx="0.5" fill={cfg.chips[i]} fill-opacity="0.35"/>
+      </g>
+    ))}
+
+    <!-- Hairline divider -->
+    <line x1="16" y1="56" x2="384" y2="56" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+
+    <!-- Finding rows -->
+    {Array.from({ length: cfg.rows }).map((_, i) => {
+      const y = 68 + i * 22;
+      const sev = cfg.chips[i % 3];
+      const titleW = 140 + (i % 3) * 35;
+      const fileW = 80 + ((i * 17) % 50);
+      return (
+        <g>
+          <!-- Severity chip on left -->
+          <rect x="16" y={y} width="14" height="14" rx="3" fill={sev} fill-opacity="0.18" stroke={sev} stroke-width="0.5" stroke-opacity="0.4"/>
+          <circle cx="23" cy={y + 7} r="1.6" fill={sev}/>
+          <!-- ID label -->
+          <text x="36" y={y + 10} font-family="ui-monospace, monospace" font-size="7" fill={sev} font-weight="700">AUD-{String(i + 1).padStart(3, '0')}</text>
+          <!-- Title bar -->
+          <rect x={72} y={y + 3} width={titleW} height="4" rx="1" fill="rgba(255,255,255,0.65)"/>
+          <!-- file:line dimmer bar below -->
+          <rect x={72} y={y + 11} width={fileW} height="2.5" rx="1" fill="rgba(255,255,255,0.20)"/>
+        </g>
+      );
+    })}
+
+    <!-- Mini progress bar at bottom -->
+    <g transform="translate(16, 162)">
+      <rect x="0" y="0" width="368" height="3" rx="1.5" fill="rgba(255,255,255,0.08)"/>
+      <rect x="0" y="0" width="80" height="3" rx="1.5" fill={accent} fill-opacity="0.8"/>
+    </g>
+
+    <!-- Top-right page-number-style label -->
+    <text x="384" y="49" text-anchor="end" font-family="ui-monospace, monospace" font-size="7" fill="rgba(255,255,255,0.35)" letter-spacing="1.2">P. 01 / 14</text>
+  </svg>
+
+  <!-- Glass overlay so thumbnail blends into card -->
+  <div class="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-ink-900/80 to-transparent pointer-events-none" aria-hidden="true"></div>
+</div>
