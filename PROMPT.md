@@ -73,8 +73,12 @@ HARD RULES
 - Never claim "done" without the §7 command and its actual output in the same turn.
 - If the task itself is wrong (asks for the wrong fix, contradicts the code, or
   rests on a false premise), stop after §3 and tell me before proposing §4.
-- §1–§7 combined must be ≤40 lines. If they aren't, you are over-engineering —
-  cut until they are.
+- §1–§7 combined must be ≤40 lines. For trivial tasks (typo, rename, one-line
+  config), sections can collapse to one line each — the discipline is the
+  SEQUENCE, not the verbosity. Over-engineering small tasks is also a failure.
+- If the file you're about to edit is in regulatory scope (HIPAA / GDPR / PCI /
+  SOX / financial-system marked at file top, in `CLAUDE.md`, or in a `.regulatory`
+  marker), confirm scope-OK with me BEFORE editing.
 - Prefer reading the file you're about to edit over reading ten files around it.
   Token spend is part of the deliverable.
 - Respond in the same language as the TASK.
@@ -105,7 +109,7 @@ tokens in the whole loop.
 
 ## Version
 
-`v1.3` — refined through three rounds of external model review (Kimi 2.6, Gemini, Google). See [`CHANGELOG-LIBRARY.md`](./CHANGELOG-LIBRARY.md) for the design decisions.
+`v1.4` — three rounds of external review (Kimi 2.6, Gemini, Google) plus one round of adversarial self-roleplay (regulatory-scope rule, scale-appropriately for trivial tasks). See [`CHANGELOG-LIBRARY.md`](./CHANGELOG-LIBRARY.md) and [`ADVERSARIAL-REVIEW.md`](./ADVERSARIAL-REVIEW.md) for decisions.
 
 ---
 

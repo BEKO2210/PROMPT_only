@@ -46,6 +46,12 @@ lawyer — your §10 disclaimer must say so explicitly.
      - SPECIAL CATEGORY (Art. 9): health, biometrics, genetic, racial /
        ethnic origin, political opinions, religious beliefs, trade union,
        sex life / orientation, criminal convictions (Art. 10)
+     - TRACKING TECHNOLOGIES: cookies, tracking pixels, fingerprinting
+       libraries (Canvas / WebGL / font / audio), server-side analytics
+       SDKs (Segment, Rudderstack), session-replay tools (Hotjar,
+       FullStory), ad-network pixels. These create personal data even
+       when claimed "anonymised" — anonymisation under GDPR is a
+       high bar most tracking-tech vendors do not meet.
    Note: Art. 9 special category data triggers significantly stricter
    requirements — flag prominently.
 
@@ -67,8 +73,11 @@ lawyer — your §10 disclaimer must say so explicitly.
      - Purpose (Art. 5(1)(b) purpose limitation — be specific)
      - Legal basis (Art. 6(1): consent / contract / legal obligation /
        vital interests / public task / legitimate interests)
-     - If legitimate interests: where is the LIA (legitimate interest
-       assessment) — usually absent in code, flag as `[REQUIRES LIA]`
+     - If legitimate interests Art. 6(1)(f): check for documented LIA
+       (Legitimate Interest Assessment) — three-part test of purpose,
+       necessity, balancing. Absence is a CRITICAL gap; processing
+       under LI without a documented LIA is non-compliant. Mark
+       `[LIA: PRESENT (cite location) / MISSING — CRITICAL GAP]`.
      - If special category: Art. 9(2) condition that applies
    Note that "we have consent" requires evidence of consent capture in
    code — flag gaps.
@@ -99,9 +108,19 @@ lawyer — your §10 disclaimer must say so explicitly.
      - Provider's legal entity location
      - Data sent (from §3 EGRESS analysis)
      - Required safeguard (SCCs / adequacy decision / DPF)
-     - Status: VISIBLE_ADEQUATE / VISIBLE_NEEDS_SCC / NOT_VERIFIABLE
+     - SCC status: PRESENT (cite contract) / MISSING / NOT_VERIFIABLE
+     - TIA (Transfer Impact Assessment) status per EDPB Recommendations
+       01/2020: COMPLETE / MISSING / NOT_APPLICABLE. Post-Schrems-II,
+       SCC presence ALONE is insufficient — each transfer requires a
+       TIA documenting whether the destination country's law and
+       practice (especially surveillance) provide essentially
+       equivalent protection. SCC + TIA = adequate; SCC alone = PARTIAL.
+     - Overall status: VISIBLE_ADEQUATE (SCC + TIA + supplementary
+       measures where needed) / VISIBLE_NEEDS_TIA (SCC present, TIA
+       missing) / VISIBLE_NEEDS_SCC (no SCC) / NOT_VERIFIABLE
    Flag US-hosted AI providers (OpenAI, Anthropic, etc.) explicitly —
-   they are the highest current scrutiny.
+   they are the highest current scrutiny, and the most common TIA
+   gap (most providers have SCC but customer-side TIA is missing).
 
 8. ARTICLE 30 RoPA
    Fill in the Record of Processing Activities template per Art. 30(1)
@@ -187,7 +206,7 @@ data to US AI providers without an SCC review.
 
 ## Version
 
-`v1.0` — initial release.
+`v1.1` — initial release + one round of adversarial self-roleplay review (see [`ADVERSARIAL-REVIEW.md`](./ADVERSARIAL-REVIEW.md)).
 
 ---
 

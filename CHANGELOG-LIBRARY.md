@@ -3,6 +3,57 @@
 Material changes to the library. Per-prompt versioning lives at the
 bottom of each prompt file (in a `## Version` section).
 
+## 2026-05-18 — Adversarial self-roleplay review on 5 sample prompts
+
+Self-roleplay multi-reviewer stress test applied to the 5 A-tier prompts
+that have samples: SHIP, HUNT, DD, GDPR, RAG-AUDIT. Documented in
+[`ADVERSARIAL-REVIEW.md`](./ADVERSARIAL-REVIEW.md).
+
+13 findings accepted, 3 rejected (each with documented reason).
+
+### SHIP → v1.4
+- New HARD RULE: confirm scope-OK before editing files marked in
+  regulatory scope (HIPAA / GDPR / PCI / SOX / financial)
+- Softened "≤40 lines" rule: trivial tasks can collapse sections to
+  one line each; the discipline is the SEQUENCE, not verbosity
+
+### HUNT → v1.1
+- New HARD RULE: PII in §2 REPRO requires sanitised / synthetic data
+- New HARD RULE: non-deterministic bugs require ≥20-run §7 verification
+- New HARD RULE: post-fix, also run existing test suite (catches
+  collateral regressions beyond the §8 new test)
+
+### DD → v1.1
+- §5 DEPENDENCIES & LICENSING: scan for change-of-control triggers
+  in commercial contracts and OSS license clauses
+- §7 TEAM & KEY-PERSON: weight review activity + design-doc authorship
+  + incident-escalation patterns alongside commit volume (senior
+  engineers commit less but matter more)
+
+### GDPR → v1.1
+- §2 PII INVENTORY: include tracking technologies (cookies, pixels,
+  fingerprinting, server-side analytics) — these create personal data
+  even when claimed "anonymised"
+- §4 PURPOSE & LEGAL BASIS: Art. 6(1)(f) legitimate interests require
+  documented LIA; absence is CRITICAL gap
+- §7 THIRD-COUNTRY TRANSFERS: SCC alone insufficient post-Schrems-II;
+  TIA (Transfer Impact Assessment per EDPB Recommendations 01/2020)
+  required per transfer; new status `VISIBLE_NEEDS_TIA`
+
+### RAG-AUDIT → v1.1
+- §2 CORPUS QUALITY: PII inventory in corpus (cross-reference to
+  GDPR.md / HIPAA.md scope); flag US-hosted LLMs receiving EU PII
+- §5 RETRIEVAL METRICS: add context-precision, faithfulness, answer-
+  correctness (RAGAS-style) alongside recall/MRR/nDCG
+- §5 RETRIEVAL METRICS: sample-size guidance (30=directional only,
+  100+=production, 300+=tail-behaviour)
+
+### Honest caveat
+This was self-roleplay, not real external model review. SHIP's
+quality comes from three rounds of actual external review. The other
+four prompts have now had one round of simulated review; real
+external review of all five remains the highest-leverage next step.
+
 ## 2026-05-18 — A-tier quality hardening (Quality gates + Versioning + When NOT to use)
 
 Applied to the 20 highest-stakes prompts (the A-tier from

@@ -53,7 +53,13 @@ deliverable. Three rules:
    - Format conversion losses (PDF tables → garbled text;
      code-fenced markdown blocks misparsed)
    - Language consistency vs query language
-   - PII leakage risk (personal data in corpus going to LLM context)
+   - PII INVENTORY in corpus  — what categories of personal data
+     reach LLM context? Cross-reference against [`GDPR.md`](./GDPR.md)
+     (EU PII) or [`HIPAA.md`](./HIPAA.md) (US PHI) scope. Flag US-
+     hosted LLM providers receiving EU PII (Schrems-II exposure) and
+     any LLM receiving PHI without a BAA. This is a compliance issue
+     independent of retrieval quality and must be surfaced even when
+     retrieval works perfectly.
 
 3. CHUNKING STRATEGY
    - Current strategy (fixed-size / semantic / recursive / sentence /
@@ -75,12 +81,23 @@ deliverable. Three rules:
      do top-k results materially differ?
 
 5. RETRIEVAL METRICS  (the hard data)
-   Build or use GOLDEN_SET (or derive one if absent) — minimum
-   30 query/expected-answer pairs.
+   Build or use GOLDEN_SET (or derive one if absent).
+   Sample-size guidance: 30 queries gives DIRECTIONAL signal only;
+   100+ gives production confidence on common queries; 300+ enables
+   tail-behaviour detection. Document the confidence level per
+   metric reported — claiming production conclusions from 30 queries
+   is statistically irresponsible.
+
    For each query, measure:
      - Recall@k (does the expected doc appear in top-k)
      - MRR (Mean Reciprocal Rank — how high does it rank)
      - nDCG@10 (graded relevance)
+     - CONTEXT-PRECISION (relevant retrieved chunks / total retrieved
+       chunks) — high recall with low precision means the LLM sees noise
+     - FAITHFULNESS (output grounded in retrieved context, Ragas-style
+       judged by an LLM evaluator) — gates the LLM's interpretation
+     - ANSWER-CORRECTNESS (output matches ground truth on
+       ground-truthable queries)
      - Latency per query (p50 / p95)
    Baseline at k = 3, 5, 10. Most RAG bugs are visible here.
 
@@ -185,7 +202,7 @@ required.
 
 ## Version
 
-`v1.0` — initial release.
+`v1.1` — initial release + one round of adversarial self-roleplay review (see [`ADVERSARIAL-REVIEW.md`](./ADVERSARIAL-REVIEW.md)).
 
 ---
 

@@ -67,6 +67,15 @@ HARD RULES
   the issue may be environmental, not a code defect.
 - If §5 PROBE contradicts §4 twice with different hypotheses, you don't
   understand the system well enough — stop and ask.
+- If §2 REPRO would require production data containing PII (real users,
+  PHI, payment data), use a sanitised or synthetic subset. Reproducing
+  on real PII without explicit lawful basis is itself a violation.
+- For non-deterministic bugs (race conditions, concurrency, network
+  timing), run §7 RE-REPRO at least 20 times and report pass rate.
+  Single-run "green" is meaningless for these classes.
+- After §6 FIX lands, also run the existing test suite (or a relevant
+  subset covering adjacent code paths). §8 REGRESSION catches the same
+  bug returning; existing tests catch collateral damage from the fix.
 - Respond in the same language as the BUG report.
 
 BUG:
@@ -85,7 +94,7 @@ re-shipping next quarter.
 
 ## Version
 
-`v1.0` — initial release.
+`v1.1` — initial release + one round of adversarial self-roleplay review (see [`ADVERSARIAL-REVIEW.md`](./ADVERSARIAL-REVIEW.md)).
 
 ---
 

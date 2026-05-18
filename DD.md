@@ -86,6 +86,11 @@ RATING SCHEMA (use consistently):
    - Single-source / single-maintainer critical deps (bus risk)
    - Commercial deps that the buyer will inherit (Oracle, ESRI,
      proprietary SDKs)
+   - CHANGE-OF-CONTROL triggers: scan commercial vendor contracts and
+     OSS licenses for clauses that terminate, re-license, or trigger
+     fees on M&A. Some commercial licenses terminate on acquisition;
+     some patent-related OSS clauses (Apache-2.0 §3) have unusual
+     termination effects. Surface as RED if discovered.
    Rating + justification.
 
 6. OPERATIONS & RELIABILITY
@@ -96,14 +101,22 @@ RATING SCHEMA (use consistently):
    Rating + justification.
 
 7. TEAM & KEY-PERSON RISK
-   From `git log`:
+   From `git log` AND review activity (not commits alone — senior
+   engineers commit less but matter more):
      - Top 5 committers by lines / commits over last 12 months
+     - Top 5 reviewers by PR comments / approvals authored (often
+       different people from top committers; this is where seniority hides)
+     - Top 5 design-doc authors (`docs/adr/`, `docs/design/`, `RFC/`,
+       internal design wiki if visible)
      - Concentration: % of code authored by top 1 / top 3
      - Bus factor: how many people have touched each critical area
        (auth, billing, core domain)?
      - Reviewer concentration (if PR history visible)
-   Concentration above ~60% in one author is a 🟡 minimum, 🔴 if that
-   author is not in the retention plan.
+     - Incident-escalation patterns (who's in on-call rotations or
+       named in `on-call.md` / runbooks?)
+   Concentration above ~60% in one author across ANY of these signals
+   (not just commits) is a 🟡 minimum, 🔴 if that person is not in the
+   retention plan.
 
 8. INTELLECTUAL PROPERTY HYGIENE
    - Copyright headers consistent? attributed to the company?
@@ -210,7 +223,7 @@ page is what makes the engagement defensible — never ship without it.
 
 ## Version
 
-`v1.0` — initial release.
+`v1.1` — initial release + one round of adversarial self-roleplay review (see [`ADVERSARIAL-REVIEW.md`](./ADVERSARIAL-REVIEW.md)).
 
 ---
 
