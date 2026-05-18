@@ -57,6 +57,24 @@ Markdown to PDF directly.
 
 ---
 
+## Tier 3 — Business operations (sell more of Tier 2)
+
+The meta-layer. These don't produce client-facing technical deliverables;
+they produce the sales artefacts and recurring-revenue artefacts that
+let you sell, close, deliver, and renew Tier-2 engagements at higher
+velocity. Built from research into what actually generates income for AI
+freelancers and consultants in 2026 (PromptBase top-seller patterns,
+side-hustle case studies, McKinsey 2026 State of AI).
+
+| Prompt | Produces | Leverage / price |
+|---|---|---|
+| [`DISCOVERY.md`](./DISCOVERY.md) | Pre-call prospect briefing with sources, talk track, discovery questions | Saves 1–2 h per lead, raises close rate |
+| [`PROPOSAL.md`](./PROPOSAL.md) | Send-ready consulting proposal with anchored pricing, scoped deliverables, AI-aware T&Cs | Saves 3–5 h per deal |
+| [`AGENT-BUILDER.md`](./AGENT-BUILDER.md) | Deployable specialist-agent system prompt + ops handbook + eval set | **€500 – 1 500 build + €100 – 400/mo retainer** — the side-hustle case-study model |
+| [`RETAINER.md`](./RETAINER.md) | Monthly status report that makes invisible work visible and seeds upsells | Protects €1 000 – 5 000/mo recurring per client |
+
+---
+
 ## Design contract (every prompt)
 
 1. **Artefact-orientated** — output is the deliverable, not narration of thinking.
