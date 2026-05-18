@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import Cursor from '../components/Cursor.astro';
+import LoadingScreen from '../components/LoadingScreen.astro';
 
 interface Props {
   title: string;
@@ -150,6 +152,12 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
   </head>
 
   <body class="overflow-x-hidden">
+    <!-- Loading screen — first-visit brand reveal -->
+    <LoadingScreen />
+
+    <!-- Custom cursor — shown by JS only on hover-capable + motion-OK -->
+    <Cursor />
+
     <!-- Skip to content for keyboard / screen-reader users -->
     <a
       href="#main"
@@ -166,33 +174,17 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 
     <slot />
 
-    <!-- Reveal-on-scroll: tiny IntersectionObserver, respects reduced-motion -->
-    <script is:inline>
-      (() => {
-        if (typeof window === 'undefined') return;
-        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reduce) {
-          document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
-          return;
-        }
-        const io = new IntersectionObserver(
-          entries => {
-            for (const e of entries) {
-              if (e.isIntersecting) {
-                e.target.classList.add('is-visible');
-                io.unobserve(e.target);
-              }
-            }
-          },
-          { threshold: 0.12, rootMargin: '0px 0px -10% 0px' }
-        );
-        const observe = () => document.querySelectorAll('.reveal:not(.is-visible)').forEach(el => io.observe(el));
-        observe();
-        document.addEventListener('astro:after-swap', observe);
-      })();
+    <!-- Premium primitives: reveals + Lenis + cursor + magnetic + split-text.
+         Bundled by Astro (not inline). Initialized on first load AND
+         re-initialized after ClientRouter navigation. -->
+    <script>
+      import { initPremium, initReveals } from '../lib/premium';
+      initPremium();
+      // Re-run reveals after view-transition swap (Lenis + cursor persist)
+      document.addEventListener('astro:after-swap', () => initReveals());
     </script>
 
-    <!-- Card spotlight follow-cursor effect -->
+    <!-- Card spotlight follow-cursor effect (kept inline for first-paint) -->
     <script is:inline>
       (() => {
         if (typeof window === 'undefined') return;

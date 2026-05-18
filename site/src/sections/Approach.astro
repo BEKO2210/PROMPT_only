@@ -115,16 +115,24 @@ const total = categories.reduce((s, c) => s + c.count, 0);
               style="perspective: 1400px; transform-style: preserve-3d;"
             >
               {categories.map((c, i) => (
-                <article
+                <a
+                  href={`#services`}
                   data-approach-card
                   data-index={i}
-                  class="absolute inset-0 rounded-2xl shadow-glow-soft p-6 flex flex-col justify-between border backdrop-blur-xl"
+                  data-magnetic
+                  data-magnetic-strength="0.12"
+                  data-magnetic-radius="180"
+                  class="approach-card group absolute inset-0 rounded-2xl shadow-glow-soft p-6 flex flex-col justify-between border backdrop-blur-xl
+                         transition-shadow duration-300 hover:shadow-glow-accent
+                         focus-visible:ring-accent-300 no-tap"
                   style={`
                     background: linear-gradient(135deg, ${c.color}1A 0%, rgba(11,11,22,0.85) 60%);
                     border-color: ${c.color}40;
                     will-change: transform, opacity;
                     transform-origin: 50% 100%;
+                    pointer-events: auto;
                   `}
+                  aria-label={`Kategorie ${c.label}: ${c.count} Prompts — zu Services`}
                 >
                   <header>
                     <div
@@ -151,7 +159,22 @@ const total = categories.reduce((s, c) => s + c.count, 0);
                   <footer class="text-xs text-ink-300 leading-snug border-t border-white/10 pt-3 font-mono break-words">
                     {c.prompts}
                   </footer>
-                </article>
+
+                  <!-- Hover-revealed CTA chevron -->
+                  <span
+                    class="absolute top-4 right-4 inline-flex h-8 w-8 items-center justify-center
+                           rounded-full bg-white/5 text-ink-300
+                           opacity-0 -translate-x-2 transition-all duration-300
+                           group-hover:opacity-100 group-hover:translate-x-0
+                           group-hover:bg-accent-500 group-hover:text-ink-950"
+                    aria-hidden="true"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                      <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                  </span>
+                </a>
               ))}
             </div>
 

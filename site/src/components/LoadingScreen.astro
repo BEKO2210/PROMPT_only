@@ -1,0 +1,129 @@
+---
+// LoadingScreen — first-visit brand reveal.
+// BA monogram strokes in, fills, expands; overlay fades out.
+// Only shows on first visit per session (sessionStorage flag).
+// Skip-on-click + auto-dismiss after 1.6 s + Esc-key skip.
+---
+
+<div
+  id="loading-screen"
+  class="fixed inset-0 z-[100] bg-ink-950 flex items-center justify-center pointer-events-auto"
+  aria-hidden="true"
+  data-loading-screen
+>
+  <svg
+    width="120"
+    height="120"
+    viewBox="0 0 120 120"
+    class="block"
+    aria-hidden="true"
+  >
+    <defs>
+      <linearGradient id="loadGradient" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#00b3f0"/>
+        <stop offset="1" stop-color="#58dfff"/>
+      </linearGradient>
+    </defs>
+    <!-- Outer cube (drawn first) -->
+    <rect
+      x="10" y="10" width="100" height="100" rx="20"
+      fill="none" stroke="url(#loadGradient)" stroke-width="2"
+      pathLength="100"
+      stroke-dasharray="100"
+      stroke-dashoffset="100"
+      class="cube-stroke"
+    />
+    <!-- BA text (fades in after stroke) -->
+    <text
+      x="60" y="80"
+      font-family="Inter Tight, Inter, system-ui, sans-serif"
+      font-size="48" font-weight="800"
+      text-anchor="middle"
+      fill="url(#loadGradient)"
+      class="ba-fill"
+      opacity="0"
+      letter-spacing="-2"
+    >BA</text>
+  </svg>
+
+  <!-- Skip hint -->
+  <button
+    type="button"
+    class="absolute bottom-8 right-8 text-xs uppercase tracking-[0.15em] text-ink-400 hover:text-ink-200 transition-colors focus-visible:ring-accent-300"
+    data-loading-skip
+  >
+    Skip
+  </button>
+</div>
+
+<style>
+  /* Stroke animation: outer cube draws in */
+  .cube-stroke {
+    animation: cube-draw 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+  @keyframes cube-draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Fill fades in after stroke complete */
+  .ba-fill {
+    animation: ba-fade 0.5s ease-out 0.7s forwards;
+  }
+  @keyframes ba-fade {
+    to { opacity: 1; }
+  }
+
+  /* Reduced motion: skip all animations, show instantly */
+  @media (prefers-reduced-motion: reduce) {
+    .cube-stroke { stroke-dashoffset: 0; animation: none; }
+    .ba-fill { opacity: 1; animation: none; }
+  }
+
+  /* When dismissed: fade overlay out, scale slightly */
+  #loading-screen.dismissed {
+    pointer-events: none;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    transform: scale(1.05);
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    if (typeof window === 'undefined') return;
+    const SS_KEY = 'ba-loading-shown';
+    const screen = document.getElementById('loading-screen');
+    if (!screen) return;
+
+    // If already shown in this session, dismiss immediately
+    try {
+      if (sessionStorage.getItem(SS_KEY) === '1') {
+        screen.style.display = 'none';
+        return;
+      }
+    } catch {}
+
+    // Mark shown
+    try { sessionStorage.setItem(SS_KEY, '1'); } catch {}
+
+    // Lock body scroll while overlay is up
+    document.documentElement.style.overflow = 'hidden';
+
+    const dismiss = () => {
+      if (screen.classList.contains('dismissed')) return;
+      screen.classList.add('dismissed');
+      document.documentElement.style.overflow = '';
+      setTimeout(() => screen.remove(), 600);
+    };
+
+    // Auto-dismiss after 1.6 s
+    setTimeout(dismiss, 1600);
+
+    // Skip button + click anywhere + Esc key
+    screen.addEventListener('click', dismiss);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') dismiss();
+    }, { once: true });
+  })();
+</script>

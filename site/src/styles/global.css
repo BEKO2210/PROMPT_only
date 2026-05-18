@@ -136,14 +136,20 @@
     @apply h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent;
   }
 
-  /* Reveal-on-scroll initial state (animated via JS) */
+  /* Reveal-on-scroll: opacity + transform transition (not animation,
+     because animations don't replay reliably and can leave stuck states.
+     Transitions are the robust choice). */
   .reveal {
     opacity: 0;
     transform: translateY(24px);
     will-change: opacity, transform;
+    transition:
+      opacity 0.8s var(--ease-out-expo),
+      transform 0.8s var(--ease-out-expo);
   }
   .reveal.is-visible {
-    animation: fade-up 0.8s var(--ease-out-expo) forwards;
+    opacity: 1;
+    transform: translateY(0);
   }
 
   /* Gradient text utility */
@@ -244,4 +250,148 @@
   @page {
     margin: 18mm 16mm;
   }
+}
+
+/* ===========================================================================
+   CUSTOM CURSOR — state-machine driven, only renders on hover-capable + motion-OK
+   =========================================================================== */
+
+/* Hide native cursor when custom cursor is active */
+html.cursor-custom,
+html.cursor-custom * {
+  cursor: none !important;
+}
+
+#cursor {
+  display: none;            /* shown by JS only when conditions met */
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference; /* high contrast over any background */
+  will-change: transform;
+}
+
+#cursor .cursor-dot {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: width 0.25s var(--ease-out-expo),
+              height 0.25s var(--ease-out-expo),
+              top 0.25s var(--ease-out-expo),
+              left 0.25s var(--ease-out-expo),
+              opacity 0.25s ease;
+}
+
+#cursor .cursor-ring {
+  position: absolute;
+  top: -18px;
+  left: -18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
+  transition: width 0.3s var(--ease-out-expo),
+              height 0.3s var(--ease-out-expo),
+              top 0.3s var(--ease-out-expo),
+              left 0.3s var(--ease-out-expo),
+              border-color 0.3s ease,
+              background-color 0.3s ease,
+              opacity 0.3s ease;
+}
+
+/* State: pointer (hovering buttons / links) — ring grows, dot shrinks */
+#cursor[data-state="pointer"] .cursor-dot {
+  width: 0; height: 0; top: 0; left: 0;
+  opacity: 0;
+}
+#cursor[data-state="pointer"] .cursor-ring {
+  width: 56px; height: 56px;
+  top: -28px; left: -28px;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+/* State: text (hovering text inputs) — ring becomes I-beam-like */
+#cursor[data-state="text"] .cursor-dot {
+  width: 2px; height: 22px;
+  top: -11px; left: -1px;
+  border-radius: 1px;
+}
+#cursor[data-state="text"] .cursor-ring {
+  opacity: 0;
+}
+
+/* State: expanded (big interactive panels via data-cursor="expanded") */
+#cursor[data-state="expanded"] .cursor-dot {
+  width: 0; height: 0; opacity: 0;
+}
+#cursor[data-state="expanded"] .cursor-ring {
+  width: 100px; height: 100px;
+  top: -50px; left: -50px;
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* State: hidden (off-screen or via data-cursor="hide") */
+#cursor[data-state="hidden"] .cursor-dot,
+#cursor[data-state="hidden"] .cursor-ring {
+  opacity: 0;
+}
+
+/* Touch / no-hover devices: never show custom cursor regardless of JS */
+@media (hover: none), (pointer: coarse) {
+  #cursor { display: none !important; }
+  html.cursor-custom,
+  html.cursor-custom * {
+    cursor: auto !important;
+  }
+}
+
+/* Reduced-motion: native cursor stays */
+@media (prefers-reduced-motion: reduce) {
+  #cursor { display: none !important; }
+  html.cursor-custom,
+  html.cursor-custom * {
+    cursor: auto !important;
+  }
+}
+
+/* ===========================================================================
+   MAGNETIC BUTTONS — markers only; behavior in premium.ts
+   =========================================================================== */
+[data-magnetic] {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+/* ===========================================================================
+   SPLIT-TEXT REVEAL — markers + base styling for split chars
+   =========================================================================== */
+[data-split-reveal] {
+  overflow: hidden;        /* mask for character slide-up */
+  display: inline-block;
+}
+[data-split-reveal] .word {
+  display: inline-block;
+  overflow: hidden;
+}
+[data-split-reveal] .char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* 3D-tilt cards — markers + perspective parent style */
+[data-tilt] {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+[data-tilt-inner] {
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
 }
