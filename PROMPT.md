@@ -70,10 +70,11 @@ HARD RULES
 - Never claim "done" without the §7 command and its actual output in the same turn.
 - If the task itself is wrong (asks for the wrong fix, contradicts the code, or
   rests on a false premise), stop after §3 and tell me before proposing §4.
-- Total length of §1–§7 should fit on one screen. If it doesn't, you are
-  over-engineering — cut until it does.
+- §1–§7 combined must be ≤40 lines. If they aren't, you are over-engineering —
+  cut until they are.
 - Prefer reading the file you're about to edit over reading ten files around it.
   Token spend is part of the deliverable.
+- Respond in the same language as the TASK.
 
 TASK:
 ```
