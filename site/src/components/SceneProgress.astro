@@ -1,0 +1,97 @@
+---
+// SceneProgress — vertical mission-timeline (right rail) showing the
+// active "scene" of the page. Pure CSS positioning, JS picks the
+// active dot via IntersectionObserver. Hidden on mobile (lg breakpoint).
+// Respects prefers-reduced-motion.
+
+interface Scene {
+  id: string;       // matches the section id on the page
+  label: string;    // shown in tooltip on hover/active
+}
+
+interface Props {
+  scenes: Scene[];
+}
+
+const { scenes } = Astro.props;
+---
+
+<nav
+  class="scene-progress hidden lg:flex"
+  aria-label="Seiten-Sektionen"
+  data-scene-progress
+>
+  {scenes.map((scene) => (
+    <a
+      href={`#${scene.id}`}
+      class="scene-progress-dot block"
+      data-scene-target={scene.id}
+      aria-label={scene.label}
+    >
+      <span class="scene-progress-label">{scene.label}</span>
+    </a>
+  ))}
+</nav>
+
+<script>
+  const init = () => {
+    const nav = document.querySelector<HTMLElement>('[data-scene-progress]');
+    if (!nav) return;
+
+    const dots = Array.from(nav.querySelectorAll<HTMLAnchorElement>('[data-scene-target]'));
+    if (!dots.length) return;
+
+    // Build map: section element -> dot
+    const targets = dots
+      .map((dot) => {
+        const id = dot.dataset.sceneTarget;
+        const section = id ? document.getElementById(id) : null;
+        return section ? { section, dot } : null;
+      })
+      .filter((x): x is { section: HTMLElement; dot: HTMLAnchorElement } => x !== null);
+
+    if (!targets.length) {
+      nav.style.display = 'none';
+      return;
+    }
+
+    const setActive = (activeDot: HTMLAnchorElement | null) => {
+      for (const dot of dots) dot.classList.remove('is-active');
+      activeDot?.classList.add('is-active');
+    };
+
+    // Active = section whose center is nearest viewport center
+    const onScroll = () => {
+      const center = window.innerHeight / 2;
+      let best: { dot: HTMLAnchorElement; distance: number } | null = null;
+      for (const { section, dot } of targets) {
+        const r = section.getBoundingClientRect();
+        const sectionCenter = r.top + r.height / 2;
+        const distance = Math.abs(sectionCenter - center);
+        if (r.bottom < 0 || r.top > window.innerHeight) continue;
+        if (best === null || distance < best.distance) {
+          best = { dot, distance };
+        }
+      }
+      setActive(best ? best.dot : null);
+    };
+
+    // rAF-throttled scroll listener
+    let ticking = false;
+    const onScrollRaf = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        onScroll();
+        ticking = false;
+      });
+    };
+
+    window.addEventListener('scroll', onScrollRaf, { passive: true });
+    window.addEventListener('resize', onScrollRaf, { passive: true });
+    onScroll();
+  };
+
+  init();
+  document.addEventListener('astro:after-swap', init);
+</script>

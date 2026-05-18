@@ -398,13 +398,66 @@ export function initOrbs(): void {
   });
 }
 
-// 8. INIT ALL --------------------------------------------------------------
+// 8. RIPPLE + BORDER-SWEEP -------------------------------------------------
+// Click-Ripple: appends a temporary .ripple-dot at the click position.
+// Auto-applies to anything with [data-ripple] OR .ripple-host.
+// Also auto-promotes [data-tilt] cards to .border-sweep on hover (because
+// every tilt card looks better with a glanz-sweep on hover).
+
+export function initRipple(): void {
+  if (typeof window === 'undefined') return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+
+  const handler = (e: PointerEvent) => {
+    const t = (e.target as HTMLElement | null)?.closest<HTMLElement>(
+      '[data-ripple], .ripple-host'
+    );
+    if (!t) return;
+    const r = t.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
+    // Diameter scales with card diagonal so the ripple fully covers
+    const diag = Math.hypot(r.width, r.height);
+    const dot = document.createElement('span');
+    dot.className = 'ripple-dot';
+    dot.style.left = `${x}px`;
+    dot.style.top = `${y}px`;
+    dot.style.width = `${diag}px`;
+    dot.style.height = `${diag}px`;
+    t.appendChild(dot);
+    dot.addEventListener('animationend', () => dot.remove(), { once: true });
+    // Safety remove after 1.2s in case animationend doesn't fire
+    setTimeout(() => dot.remove(), 1200);
+  };
+
+  document.addEventListener('pointerdown', handler, { passive: true });
+}
+
+/**
+ * Auto-promote: every [data-tilt] becomes ripple-host + border-sweep
+ * (visual polish applied universally — nothing to manually add per card).
+ */
+export function initCardPolish(): void {
+  if (typeof window === 'undefined') return;
+  const wire = () => {
+    document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
+      card.classList.add('border-sweep', 'ripple-host');
+    });
+  };
+  wire();
+  document.addEventListener('astro:after-swap', wire);
+}
+
+// 9. INIT ALL --------------------------------------------------------------
 // Single entry point. Order matters slightly (reveals first so user sees
 // content immediately, then progressive enhancement layers on top).
 
 export async function initPremium(): Promise<void> {
   // Always-on
   initReveals();
+  initCardPolish();
+  initRipple();
 
   // Best-effort enhancements (each fails gracefully)
   await Promise.allSettled([

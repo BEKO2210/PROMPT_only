@@ -1,0 +1,62 @@
+---
+// MagneticButton — wrapper around an <a>/<button> that:
+//   - applies magnetic cursor-pull (uses existing data-magnetic from premium.ts)
+//   - adds the .btn-magnetic class for shine-sweep on hover
+//   - supports primary/secondary tone
+//   - supports keyboard with visible focus ring
+//
+// Reduced-motion: magnetic + shine-sweep auto-disabled via CSS media query.
+
+interface Props {
+  href?: string;             // if set, renders <a>
+  type?: 'button' | 'submit' | 'reset';
+  tone?: 'primary' | 'secondary';
+  strength?: number;         // magnetic strength (0–1)
+  class?: string;
+  /** Suppress the trailing arrow icon */
+  noArrow?: boolean;
+  /** ARIA label override */
+  label?: string;
+}
+
+const {
+  href,
+  type = 'button',
+  tone = 'primary',
+  strength = 0.4,
+  class: extraClass = '',
+  noArrow = false,
+  label,
+} = Astro.props;
+
+const toneClass =
+  tone === 'primary'
+    ? 'btn-primary btn-magnetic'
+    : 'btn-secondary btn-magnetic';
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  {...(href ? { href } : { type })}
+  class={`${toneClass} no-tap relative ${extraClass}`}
+  data-magnetic
+  data-magnetic-strength={strength}
+  aria-label={label}
+>
+  <span class="relative z-[2] inline-flex items-center gap-2">
+    <slot />
+    {!noArrow && (
+      <svg
+        class="transition-transform duration-300 group-hover:translate-x-0.5"
+        width="16" height="16" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor"
+        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    )}
+  </span>
+</Tag>

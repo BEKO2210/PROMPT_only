@@ -17,14 +17,50 @@
     --leading-normal: 1.6;
     --leading-loose: 1.75;
 
-    /* Easing */
+    /* Easing — kinematisch + bewährt */
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+    --ease-cinematic: cubic-bezier(0.83, 0, 0.17, 1);
+    --ease-bounce-soft: cubic-bezier(0.34, 1.56, 0.64, 1);
 
     /* Glass effects */
     --glass-bg: rgba(11, 11, 22, 0.6);
     --glass-border: rgba(255, 255, 255, 0.08);
     --glass-blur: 16px;
+
+    /* ===== MISSION CONTROL DESIGN TOKENS ===== */
+    /* Deeper-than-ink-950 vacuum for hero/cinematic surfaces */
+    --ink-vacuum: #02020a;
+
+    /* Chrome palette — for premium glass-stack reflections */
+    --chrome-100: #f0f4f8;
+    --chrome-300: #b8c2cc;
+    --chrome-500: #4a5160;
+
+    /* Holographic blue — slightly cooler than accent for tech-vibe */
+    --hologram: rgba(88, 223, 255, 0.85);
+    --hologram-soft: rgba(88, 223, 255, 0.35);
+
+    /* Beam-Light — for hero scan beams + button beams */
+    --beam: rgba(0, 179, 240, 0.6);
+    --beam-amber: rgba(255, 183, 74, 0.5);
+
+    /* Mission grid overlay (fine 1px lines) */
+    --mission-grid: rgba(255, 255, 255, 0.035);
+
+    /* Glow stacks — composable shadows for cinematic depth */
+    --glow-core:
+      0 0 60px rgba(0, 179, 240, 0.45),
+      0 0 120px rgba(0, 179, 240, 0.25),
+      inset 0 0 40px rgba(88, 223, 255, 0.15);
+    --glow-chrome:
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 8px 32px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --glow-holographic:
+      0 0 0 1px rgba(88, 223, 255, 0.3),
+      0 0 30px rgba(88, 223, 255, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   /* Reset + base */
@@ -185,6 +221,361 @@
   }
   .card-spotlight:hover::before {
     opacity: 1;
+  }
+
+  /* ===== MISSION CONTROL COMPONENTS ===== */
+
+  /* Vacuum surface — deeper-than-base for hero sections */
+  .surface-vacuum {
+    background: var(--ink-vacuum);
+    background-image:
+      radial-gradient(ellipse 60% 40% at 50% 0%, rgba(0,179,240,0.10), transparent 70%),
+      radial-gradient(ellipse 80% 50% at 50% 100%, rgba(0,0,0,0.8), transparent 70%);
+  }
+
+  /* Mission grid overlay — adds 1px line grid for technical surfaces */
+  .mission-grid {
+    background-image:
+      linear-gradient(var(--mission-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--mission-grid) 1px, transparent 1px);
+    background-size: 80px 80px;
+    background-position: -1px -1px;
+  }
+
+  /* Holographic card — premium glass-stack with cyan rim */
+  .holo-card {
+    position: relative;
+    background:
+      linear-gradient(135deg,
+        rgba(11, 11, 22, 0.75) 0%,
+        rgba(7, 7, 16, 0.85) 100%);
+    border: 1px solid rgba(88, 223, 255, 0.18);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    box-shadow: var(--glow-holographic);
+    isolation: isolate;
+  }
+  .holo-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg,
+      rgba(88, 223, 255, 0.4),
+      transparent 30%,
+      transparent 70%,
+      rgba(255, 183, 74, 0.25));
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Mission tag — small monospace status indicator */
+  .mission-tag {
+    @apply inline-flex items-center gap-2 font-mono text-[10px] uppercase
+           tracking-[0.18em] text-ink-300;
+  }
+  .mission-tag::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+    animation: mission-pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes mission-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.55; transform: scale(0.85); }
+  }
+
+  /* Magnetic button — extends btn-primary with beam-light slide */
+  .btn-magnetic {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .btn-magnetic::after {
+    content: '';
+    position: absolute;
+    left: -120%;
+    top: 0;
+    height: 100%;
+    width: 60%;
+    background: linear-gradient(110deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 80%);
+    transition: left 700ms var(--ease-cinematic);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .btn-magnetic:hover::after {
+    left: 120%;
+  }
+
+  /* Light-beam underline — used under hero CTAs on hover */
+  .beam-underline {
+    position: relative;
+  }
+  .beam-underline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent,
+      var(--beam) 50%,
+      transparent);
+    box-shadow: 0 0 8px var(--beam);
+    transition: width 500ms var(--ease-cinematic),
+                left 500ms var(--ease-cinematic);
+    transform: translateX(-50%);
+  }
+  .beam-underline:hover::before,
+  .beam-underline:focus-visible::before {
+    width: 110%;
+  }
+
+  /* Horizontal scan-line that sweeps across hero on first paint */
+  .hero-scanline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(88, 223, 255, 0.7) 30%,
+      rgba(88, 223, 255, 0.7) 70%,
+      transparent 100%);
+    box-shadow: 0 0 20px rgba(0, 179, 240, 0.5);
+    animation: scanline-sweep 4.8s var(--ease-cinematic) infinite;
+    pointer-events: none;
+    opacity: 0;
+  }
+  @keyframes scanline-sweep {
+    0% { transform: translateY(0); opacity: 0; }
+    8% { opacity: 1; }
+    50% { transform: translateY(60vh); opacity: 1; }
+    92% { opacity: 0.7; }
+    100% { transform: translateY(95vh); opacity: 0; }
+  }
+
+  /* Chrome reflection sweep on glass cards */
+  .chrome-sweep {
+    position: relative;
+    overflow: hidden;
+  }
+  .chrome-sweep::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: conic-gradient(from 0deg at 50% 50%,
+      transparent 0%,
+      rgba(255, 255, 255, 0.08) 10%,
+      transparent 20%,
+      transparent 80%,
+      rgba(255, 255, 255, 0.04) 90%,
+      transparent 100%);
+    animation: chrome-rotate 18s linear infinite;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  @keyframes chrome-rotate {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Scene Progress — vertical mission timeline (right rail) */
+  .scene-progress {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 30;
+    pointer-events: auto;
+  }
+  .scene-progress-dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition:
+      transform 350ms var(--ease-cinematic),
+      background 350ms var(--ease-cinematic),
+      box-shadow 350ms var(--ease-cinematic);
+    cursor: pointer;
+  }
+  .scene-progress-dot:hover {
+    transform: scale(1.3);
+    background: rgba(88, 223, 255, 0.4);
+  }
+  .scene-progress-dot.is-active {
+    background: var(--accent-500, #00b3f0);
+    border-color: rgba(88, 223, 255, 0.7);
+    transform: scale(1.4);
+    box-shadow: 0 0 14px rgba(0, 179, 240, 0.7);
+  }
+  .scene-progress-label {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-6px);
+    white-space: nowrap;
+    font-family: var(--font-mono, monospace);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(230, 230, 240, 0.8);
+    padding: 4px 10px;
+    background: rgba(11, 11, 22, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease-out, transform 200ms ease-out;
+  }
+  .scene-progress-dot:hover .scene-progress-label,
+  .scene-progress-dot.is-active .scene-progress-label {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  @media (max-width: 1023px) {
+    .scene-progress { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scene-progress-dot,
+    .hero-scanline,
+    .chrome-sweep::before,
+    .btn-magnetic::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* Framework marquee — for FrameworkStrip */
+  .framework-track {
+    display: flex;
+    gap: 3.5rem;
+    width: max-content;
+    animation: framework-scroll 32s linear infinite;
+    will-change: transform;
+  }
+  .framework-strip:hover .framework-track {
+    animation-play-state: paused;
+  }
+  @keyframes framework-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .framework-track { animation: none; }
+  }
+
+  /* Border-Sweep — cyan glanz-streifen läuft EINMAL um den Card-Border
+     on hover. Pure CSS, GPU-only. Combines well with .holo-card and
+     .card-spotlight. */
+  .border-sweep {
+    position: relative;
+    isolation: isolate;
+  }
+  .border-sweep::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(
+      from var(--sweep-from, 0deg) at 50% 50%,
+      transparent 0%,
+      transparent 75%,
+      rgba(88, 223, 255, 0.65) 85%,
+      rgba(255, 255, 255, 0.5) 92%,
+      rgba(88, 223, 255, 0.65) 96%,
+      transparent 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+  .border-sweep:hover::after {
+    opacity: 1;
+    animation: border-sweep-rotate 1.4s var(--ease-cinematic) 1 forwards;
+  }
+  @keyframes border-sweep-rotate {
+    from { --sweep-from: 0deg;   }
+    to   { --sweep-from: 360deg; }
+  }
+  /* CSS @property registration so conic-gradient angle can transition.
+     Falls back to instant change in browsers without @property support. */
+  @property --sweep-from {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  /* Click-Ripple — SVG burst inserted at click position by JS.
+     Container needs position: relative + overflow: hidden. */
+  .ripple-host {
+    position: relative;
+    overflow: hidden;
+  }
+  .ripple-dot {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle,
+      rgba(88, 223, 255, 0.55) 0%,
+      rgba(88, 223, 255, 0.25) 35%,
+      transparent 70%);
+    transform: translate(-50%, -50%) scale(0);
+    animation: ripple-fade 700ms var(--ease-cinematic) forwards;
+    mix-blend-mode: screen;
+    z-index: 5;
+  }
+  @keyframes ripple-fade {
+    0%   { transform: translate(-50%, -50%) scale(0);   opacity: 0.95; }
+    60%  { opacity: 0.6; }
+    100% { transform: translate(-50%, -50%) scale(3);   opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .border-sweep:hover::after { animation: none; opacity: 0; }
+    .ripple-dot { animation: none; display: none; }
+  }
+
+  /* Floating audit panels — glass mini-pills around hero core */
+  .float-panel {
+    @apply inline-flex items-center gap-2 font-mono text-[10px]
+           uppercase tracking-[0.15em] text-ink-200
+           rounded-full px-3.5 py-1.5;
+    background: rgba(11, 11, 22, 0.75);
+    border: 1px solid rgba(88, 223, 255, 0.22);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    animation: float-soft 7s ease-in-out infinite;
+  }
+  @keyframes float-soft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
   }
 }
 
