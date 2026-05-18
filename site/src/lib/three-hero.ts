@@ -196,12 +196,19 @@ export async function mountHeroCore(
   // Hard refuse cases — keep them cheap and explicit
   if (typeof window === 'undefined') return null;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
-  if (window.innerWidth < 768) return null;
+  // (Touch / small-viewport guard removed by user request — same orb
+  // on mobile as desktop. Mobile gets lower mesh subdivision + DPR cap
+  // below to keep render cost manageable on phones.)
 
   // Test WebGL availability before importing three
   const probe = document.createElement('canvas').getContext('webgl2')
               ?? document.createElement('canvas').getContext('webgl');
   if (!probe) return null;
+
+  // Detect low-power devices for adaptive quality settings
+  const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  const isSmall = window.innerWidth < 768;
+  const lowPower = isTouch || isSmall;
 
   // Dynamic import — keeps three.js out of the critical bundle
   const THREE = await import('three');
@@ -218,18 +225,21 @@ export async function mountHeroCore(
   const renderer: WebGLRenderer = new THREE.WebGLRenderer({
     canvas,
     alpha: true,
-    antialias: true,
-    powerPreference: 'high-performance',
+    antialias: !lowPower,
+    powerPreference: lowPower ? 'low-power' : 'high-performance',
   });
   renderer.setClearColor(0x000000, 0);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // DPR cap: low-power devices (mobile / S23 Ultra DPR 3.5) capped to 1
+  // — shader runs at native CSS-pixel size, not 3x retina. Massive perf win
+  // on phones, visual loss is minimal at the orb's display size.
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, lowPower ? 1 : 2));
   renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
 
-  // Core mesh
-  // Smooth sphere (widthSegments=64, heightSegments=48) — no visible
-  // facets even at large display size. Icosahedron at subdivision 4
-  // showed octagonal silhouette on narrow desktops.
-  const geometry = new THREE.SphereGeometry(1.4, 64, 48);
+  // Core mesh — smooth sphere. Low-power gets coarser tessellation
+  // (32x24 = 1536 tris) vs desktop (64x48 = 6144 tris).
+  const geometry = lowPower
+    ? new THREE.SphereGeometry(1.4, 32, 24)
+    : new THREE.SphereGeometry(1.4, 64, 48);
 
   const material: ShaderMaterial = new THREE.ShaderMaterial({
     vertexShader: VERT,
@@ -251,7 +261,10 @@ export async function mountHeroCore(
   // Halo (outer expanded sphere, additive blended)
   // Halo just slightly larger than the sphere (1.4 -> 1.55) so the
   // atmosphere reads as a tight rim, not a wide cyan haze around the orb.
-  const haloGeo = new THREE.SphereGeometry(1.55, 32, 24);
+  // Low-power: coarser tessellation (16x12 = 384 tris).
+  const haloGeo = lowPower
+    ? new THREE.SphereGeometry(1.55, 16, 12)
+    : new THREE.SphereGeometry(1.55, 32, 24);
   const haloMat = new THREE.ShaderMaterial({
     vertexShader: HALO_VERT,
     fragmentShader: HALO_FRAG,
