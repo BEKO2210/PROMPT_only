@@ -222,11 +222,14 @@ const categories = ['Alle', 'Strategic', 'Compliance', 'AI', 'Internal'] as cons
           id={s.id}
           data-sample-card
           data-category={s.category}
+          data-tilt
+          data-tilt-max="8"
+          data-tilt-scale="1.01"
           class="reveal card-spotlight group relative rounded-2xl border border-white/10
                  bg-ink-900/50 backdrop-blur-xl overflow-hidden
                  transition-all duration-500 ease-out
-                 hover:border-white/20 hover:-translate-y-0.5"
-          style={`animation-delay: ${i * 40}ms`}
+                 hover:border-white/20"
+          style={`transition-delay: ${i * 40}ms`}
         >
           <!-- Top bar — like a document window -->
           <div class="flex items-center justify-between px-5 py-3 border-b border-white/5 bg-ink-900/70">

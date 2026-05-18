@@ -145,12 +145,14 @@ const accentClass = (a: string) => a === 'amber'
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
       {services.map((s, i) => (
         <article
+          data-tilt
+          data-tilt-max="10"
+          data-tilt-scale="1.015"
           class="reveal card-spotlight group relative rounded-2xl border border-white/10
                  bg-ink-900/50 backdrop-blur-xl p-6 lg:p-7 flex flex-col
                  transition-all duration-500 ease-out
-                 hover:border-white/20 hover:-translate-y-1
-                 hover:bg-ink-900/70 hover:shadow-glow-soft"
-          style={`animation-delay: ${i * 50}ms`}
+                 hover:border-white/20 hover:bg-ink-900/70 hover:shadow-glow-soft"
+          style={`transition-delay: ${i * 50}ms`}
         >
           <!-- Icon + accent header -->
           <div class="flex items-start justify-between mb-5">

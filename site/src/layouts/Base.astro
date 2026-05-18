@@ -172,6 +172,15 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
       <div class="absolute inset-0 bg-mesh-hero"></div>
     </div>
 
+    <!-- Cursor-following gradient orbs (Apple-tier ambient effect).
+         Three layered orbs with staggered lag, JS-driven. Hidden on
+         touch + reduced-motion. -->
+    <div class="cursor-orbs" aria-hidden="true">
+      <div class="cursor-orb cursor-orb-1"></div>
+      <div class="cursor-orb cursor-orb-2"></div>
+      <div class="cursor-orb cursor-orb-3"></div>
+    </div>
+
     <slot />
 
     <!-- Premium primitives: reveals + Lenis + cursor + magnetic + split-text.

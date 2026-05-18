@@ -59,6 +59,78 @@ Ohne sie bleibt der Rest Lippenstift auf einem Schwein.
 
 ---
 
+## Tier 1.5 — CARDS & 3D, drastisch aufgebohrt (Phase 9 erweitert)
+
+> User-Feedback: "die Karten und 3D-Animationen müssen vieeel vieeel besser werden"
+> Diese Tier ist die Antwort. Jede Karte auf der Seite bekommt cinematic feel.
+
+### 9-CARD.1 True 3D-Tilt (perspective + rotateX/Y auf Cursor)
+- Jede Card mit `[data-tilt]` reagiert auf Cursor-Position
+- `perspective: 1000px` + `rotateX/Y` proportional zu Cursor-Offset
+- Max-Tilt configurable (default 12°, subtle 6°, dramatic 18°)
+- Inner-Layer mit `[data-tilt-inner]` macht die echte Transformation
+- GSAP power2.out 0.4s on move, 0.6s smooth recover on leave
+- Spotlight-Gradient INNERHALB der Card folgt Cursor (--tilt-x/y vars)
+
+### 9-CARD.2 Card-Layer Parallax (Inhalt schwebt anders als Background)
+- Card-Background-Image parallaxiert stärker als Card-Text
+- `translateZ` Werte per Layer:
+  - Background: 0 px (referenz)
+  - Decorative elements: +20 px (subtle pop)
+  - Icon/Title: +40 px (mid-pop)
+  - Hover-revealed Pfeil: +60 px (strong pop)
+- Echtes 3D, nicht fake
+
+### 9-CARD.3 Glass-Edge Light Pickup
+- Card-Border ist gradient die auf Tilt-Winkel reagiert
+- Light-Source virtuell oben-links — wenn Card kippt, glüht entsprechende Edge
+- Pure CSS via conic-gradient + tilt-x/y vars
+
+### 9-CARD.4 Click-Ripple + Press-Feedback
+- Click auf Card erzeugt SVG-Ripple aus Click-Position
+- 250 ms Animation, fadet zur Edge
+- Card scaled 0.97 für 100 ms (press feedback)
+- Funktioniert auf Touch + Mouse
+
+### 9-CARD.5 Stagger-Entrance bei Section-Enter
+- Cards in einer Section reveal mit choreographiertem Stagger
+- Erste Card: 0 ms, dann +80 ms je Card
+- Während Reveal: subtle Tilt-Sweep (entrance flourish)
+- Settle zu neutral nach 500 ms
+
+### 9-CARD.6 Magnetic + Tilt + Spotlight kombiniert
+- Alle drei Effekte gleichzeitig
+- Reihenfolge der Update-Loops sorgfältig (Magnetic zuerst, dann Tilt)
+- Kein Layout-Thrash — alles auf GPU (transform + opacity only)
+
+### 9-CARD.7 Sample-Cards: Click → Modal-Expand
+- Sample-Card-Click expandiert zu Vollscreen-Modal mit FLIP-Animation
+- Card-Position → Modal-Position smooth via GSAP FLIP plugin
+- Background-Blur 24px
+- Esc + Click-Outside + X-Button schließt
+- Modal zeigt komplettes Sample (markdown rendered)
+
+### 9-CARD.8 Approach-Cards: Fan + Tilt + Magnetic GEMEINSAM
+- Bestehende Fan-Animation bleibt (Scroll-driven)
+- DAZU: bei Hover über einzelne Card aus dem Fan, leichter Tilt
+- DAZU: Magnetic falls Cursor nah
+- Stack-Layer rotieren leicht entgegen — schafft Tiefe
+- Click: scroll-snap zur Services-Section + brief Pulse
+
+### 9-CARD.9 Services-Cards: Tilt + Icon-Pop
+- Icon-Square innerhalb der Card "pops" weiter aus dem Tilt
+- Hover: Icon kippt zusätzlich um -8° (eigenständiges Element)
+- Glow um Icon intensiviert
+- Tagline-Text bleibt fast statisch (Anker)
+
+### 9-CARD.10 Pricing-Tier-Cards: Spotlight + Sister-Dim
+- Hover über eine Pricing-Card dimmt die anderen 2 subtle (opacity 0.7)
+- Hover-Card hellt auf (opacity 1.0 + scale 1.02)
+- Spotlight innerhalb Hover-Card folgt Cursor
+- Most-Popular-Badge schimmert via shimmer-gradient permanent
+
+---
+
 ## Tier 2 — Hero Upgrade (Phase 9–10)
 
 ### 9.1 WebGL Particle Hero

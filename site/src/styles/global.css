@@ -395,3 +395,120 @@ html.cursor-custom * {
   transform-style: preserve-3d;
   transition: transform 0.15s ease-out;
 }
+
+/* ===========================================================================
+   TILT SPOTLIGHT — gradient that follows cursor INSIDE the tilted card
+   =========================================================================== */
+[data-tilt] {
+  position: relative;
+  transform-style: preserve-3d;
+  --tilt-x: 50%;
+  --tilt-y: 50%;
+}
+[data-tilt]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    400px circle at var(--tilt-x) var(--tilt-y),
+    rgba(0, 179, 240, 0.15),
+    rgba(255, 255, 255, 0.04) 25%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+}
+[data-tilt]:hover::after {
+  opacity: 1;
+}
+
+/* Tilt-inner pop layer */
+[data-tilt-inner] {
+  position: relative;
+  z-index: 0;
+  transform-style: preserve-3d;
+}
+
+/* Layered pop within tilted cards (children can opt in) */
+[data-tilt] [data-pop="1"] { transform: translateZ(20px); }
+[data-tilt] [data-pop="2"] { transform: translateZ(40px); }
+[data-tilt] [data-pop="3"] { transform: translateZ(60px); }
+
+/* ===========================================================================
+   CURSOR-FOLLOWING ORBS — three layered blurred gradient circles
+   Positioned via JS (transform) for buttery-smooth lag
+   =========================================================================== */
+.cursor-orbs {
+  position: fixed;
+  inset: 0;
+  z-index: -5;
+  pointer-events: none;
+  overflow: hidden;
+}
+.cursor-orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.45;
+  will-change: transform;
+  mix-blend-mode: screen;
+}
+.cursor-orb-1 {
+  width: 500px;
+  height: 500px;
+  margin: -250px 0 0 -250px;
+  background: radial-gradient(circle, rgba(0,179,240,0.65), transparent 65%);
+}
+.cursor-orb-2 {
+  width: 380px;
+  height: 380px;
+  margin: -190px 0 0 -190px;
+  background: radial-gradient(circle, rgba(255,157,28,0.4), transparent 65%);
+}
+.cursor-orb-3 {
+  width: 320px;
+  height: 320px;
+  margin: -160px 0 0 -160px;
+  background: radial-gradient(circle, rgba(88,223,255,0.5), transparent 65%);
+}
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  .cursor-orbs { display: none; }
+}
+
+/* ===========================================================================
+   SPLITTEXT GRADIENT — when text-gradient is on a [data-split-reveal] parent,
+   the bg-clip:text doesn't inherit to .char children. Fix by propagating.
+   =========================================================================== */
+.text-gradient[data-split-reveal] .char,
+[data-split-reveal] .text-gradient .char {
+  background: linear-gradient(135deg, #00b3f0 0%, #58dfff 50%, #c9f5ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Boost tilt spotlight — was too subtle, now actually visible */
+[data-tilt]::after {
+  background: radial-gradient(
+    480px circle at var(--tilt-x) var(--tilt-y),
+    rgba(0, 179, 240, 0.28),
+    rgba(255, 255, 255, 0.08) 22%,
+    transparent 50%
+  ) !important;
+}
+[data-tilt]:hover::after {
+  opacity: 1 !important;
+}
+
+/* Stronger orbs — bump opacity, slightly less blur */
+.cursor-orb {
+  opacity: 0.55 !important;
+  filter: blur(70px) !important;
+}

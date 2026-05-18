@@ -254,8 +254,6 @@ export function initMagnetic(): void {
 }
 
 // 5. SPLIT-TEXT REVEALS ----------------------------------------------------
-// Apply to elements with [data-split-reveal]. Splits to chars, animates
-// from below-clip with stagger + blur.
 
 export async function initSplitTextReveals(): Promise<void> {
   if (typeof window === 'undefined') return;
@@ -295,7 +293,112 @@ export async function initSplitTextReveals(): Promise<void> {
   }
 }
 
-// 6. INIT ALL --------------------------------------------------------------
+// 6. 3D TILT --------------------------------------------------------------
+// Cards with [data-tilt] respond to cursor with perspective rotation.
+// Inner [data-tilt-inner] (optional) does the rotation; otherwise the
+// element itself is rotated. Spotlight gradient inside the card follows
+// cursor via --tilt-x / --tilt-y CSS vars.
+
+export function initTilt(): void {
+  if (typeof window === 'undefined') return;
+  if (reduceMotion() || isTouch()) return;
+
+  document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
+    if ((card as any)._tiltWired) return;
+    (card as any)._tiltWired = true;
+
+    const inner =
+      (card.querySelector('[data-tilt-inner]') as HTMLElement | null) || card;
+    const maxTilt = parseFloat(card.dataset.tiltMax || '12');
+    const perspective = parseFloat(card.dataset.tiltPerspective || '1200');
+    const scale = parseFloat(card.dataset.tiltScale || '1.02');
+
+    // Ensure transform-style is preserved
+    card.style.transformStyle = 'preserve-3d';
+    inner.style.transformStyle = 'preserve-3d';
+    inner.style.willChange = 'transform';
+
+    // Use gsap.quickTo for sub-frame precision
+    const rotXTo = gsap.quickTo(inner, 'rotationX', {
+      duration: 0.45,
+      ease: 'power2.out',
+    });
+    const rotYTo = gsap.quickTo(inner, 'rotationY', {
+      duration: 0.45,
+      ease: 'power2.out',
+    });
+    const scaleTo = gsap.quickTo(inner, 'scale', {
+      duration: 0.45,
+      ease: 'power2.out',
+    });
+
+    // One-time perspective set on parent for proper 3D space
+    gsap.set(card, { transformPerspective: perspective });
+
+    const onMove = (e: PointerEvent) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width; // 0..1
+      const y = (e.clientY - rect.top) / rect.height;
+      const rotY = (x - 0.5) * 2 * maxTilt;
+      const rotX = -(y - 0.5) * 2 * maxTilt;
+      rotXTo(rotX);
+      rotYTo(rotY);
+      scaleTo(scale);
+
+      // Update spotlight position (consumed by .tilt-spotlight::before)
+      card.style.setProperty('--tilt-x', `${x * 100}%`);
+      card.style.setProperty('--tilt-y', `${y * 100}%`);
+    };
+    const onLeave = () => {
+      rotXTo(0);
+      rotYTo(0);
+      scaleTo(1);
+    };
+    card.addEventListener('pointermove', onMove, { passive: true });
+    card.addEventListener('pointerleave', onLeave, { passive: true });
+  });
+}
+
+// 7. CURSOR-FOLLOWING ORBS --------------------------------------------------
+// Three gradient orbs in the background that follow the cursor with
+// staggered lag. Apple-tier ambient effect.
+
+export function initOrbs(): void {
+  if (typeof window === 'undefined') return;
+  if (reduceMotion() || isTouch()) return;
+
+  const orbs = document.querySelectorAll<HTMLElement>('.cursor-orb');
+  if (!orbs.length) return;
+
+  let mx = window.innerWidth / 2;
+  let my = window.innerHeight / 2;
+  window.addEventListener('mousemove', (e) => {
+    mx = e.clientX;
+    my = e.clientY;
+  }, { passive: true });
+
+  // Different lag per orb for a layered parallax feel
+  const lags = [0.8, 1.4, 2.2]; // seconds
+  const offsets = [
+    { x: 0, y: 0 },
+    { x: 80, y: -60 },
+    { x: -100, y: 80 },
+  ];
+  orbs.forEach((orb, i) => {
+    orb.style.willChange = 'transform';
+    const xTo = gsap.quickTo(orb, 'x', { duration: lags[i] || 1.5, ease: 'power3' });
+    const yTo = gsap.quickTo(orb, 'y', { duration: lags[i] || 1.5, ease: 'power3' });
+    const o = offsets[i] || { x: 0, y: 0 };
+    function tick() {
+      xTo(mx + o.x - window.innerWidth / 2);
+      yTo(my + o.y - window.innerHeight / 2);
+      requestAnimationFrame(tick);
+    }
+    tick();
+  });
+}
+
+// 8. INIT ALL --------------------------------------------------------------
 // Single entry point. Order matters slightly (reveals first so user sees
 // content immediately, then progressive enhancement layers on top).
 
@@ -309,5 +412,7 @@ export async function initPremium(): Promise<void> {
     initCursor(),
     initMagnetic(),
     initSplitTextReveals(),
+    Promise.resolve(initTilt()),
+    Promise.resolve(initOrbs()),
   ].map((p) => Promise.resolve(p)));
 }
