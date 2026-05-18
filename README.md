@@ -23,8 +23,6 @@ Two tiers:
 | [`REVIEW.md`](./REVIEW.md) | Review a PR / diff | ≤60-line output, `file:line` for every claim, style nits explicitly deferred to linter |
 | [`REFACTOR.md`](./REFACTOR.md) | Change structure without changing behaviour | Witness-test gate; PROOF must be bit-identical pre vs. post |
 | [`TRIM.md`](./TRIM.md) | Audit tech debt with ROI | Each item: real file + recurring cost in hours/year, ranked by payback |
-| [`TEST-PLAN.md`](./TEST-PLAN.md) | Risk-based test strategy for an area | P0/P1/P2 ranking by catch-value ÷ effort; explicit out-of-scope |
-| [`DEAD-CODE.md`](./DEAD-CODE.md) | Find truly unused code safely | HIGH / MEDIUM / LOW confidence tiers; staged removal with deprecation window |
 
 ---
 
@@ -141,11 +139,16 @@ side-hustle case studies, McKinsey 2026 State of AI).
 | Prompt | Produces | Leverage |
 |---|---|---|
 | [`PROJECT-KICKOFF.md`](./PROJECT-KICKOFF.md) | Engagement kickoff document with stakeholder map, RACI, success criteria, risks | Saves 2–4 h per project; cuts scope disputes ~50% |
-| [`SCOPE-CHANGE.md`](./SCOPE-CHANGE.md) | Change order document with itemised scope + cost + timeline impact | Captures 10–40% upsell revenue most consultants miss |
-| [`STATUS-REPORT.md`](./STATUS-REPORT.md) | Weekly client status report (progress / upcoming / blockers / decisions) | 30 min/week; fewer "what's going on?" pings; higher referrals |
+| [`SCOPE-CHANGE.md`](./SCOPE-CHANGE.md) ⚙️ | Change order document with itemised scope + cost + timeline impact | Internal leverage — captures 10–40% upsell revenue most consultants miss |
+| [`STATUS-REPORT.md`](./STATUS-REPORT.md) ⚙️ | Weekly client status report (progress / upcoming / blockers / decisions) | Internal leverage — 30 min/week per active engagement |
 | [`CLIENT-OFFBOARDING.md`](./CLIENT-OFFBOARDING.md) | Handover doc + final report + testimonial ask + referral ask + future-work hook | 50–70% of testimonials come from properly closed engagements |
-| [`INVOICE-FOLLOWUP.md`](./INVOICE-FOLLOWUP.md) | Stage-appropriate reminder (gentle → firm → formal → final notice) | Prevents AR write-offs; closes 5–15% revenue gap most consultants leave |
+| [`INVOICE-FOLLOWUP.md`](./INVOICE-FOLLOWUP.md) ⚙️ | Stage-appropriate reminder (gentle → firm → formal → final notice) | Internal leverage — prevents AR write-offs |
 | [`TESTIMONIAL-REQUEST.md`](./TESTIMONIAL-REQUEST.md) | Full collection process: ask, draft-for-them, permission, LinkedIn rec | One testimonial = 12+ months of inbound; marginal cost ~15 min |
+| [`JOB-DESCRIPTION.md`](./JOB-DESCRIPTION.md) ⚙️ | JD in founder voice with transparent comp + negative selection | Internal leverage when hiring; standalone-sale rarely viable |
+| [`INTERVIEW-LOOP.md`](./INTERVIEW-LOOP.md) ⚙️ | Work-sample-anchored interview loop with scorecards + bias mitigation | Internal leverage; bundles with broader hiring strategy |
+| [`CONTRACT-REVIEW.md`](./CONTRACT-REVIEW.md) ⚙️ | Red-flag analysis of inbound MSA / SOW / NDA — NOT legal advice | Self-defence; never sold standalone |
+
+⚙️ = Internal-leverage prompt. Use them yourself; do not sell them as standalone deliverables.
 
 ### Data & Analytics (verkaufbar)
 
@@ -156,12 +159,12 @@ side-hustle case studies, McKinsey 2026 State of AI).
 | [`METRICS-FRAMEWORK.md`](./METRICS-FRAMEWORK.md) | North-star + metric tree + team ownership + anti-metric deprecation | **€2 000 – 8 000** | Companies with 50 metrics and zero clarity |
 | [`DATA-PIPELINE-AUDIT.md`](./DATA-PIPELINE-AUDIT.md) | Data-pipeline reliability + cost + quality + lineage audit | **€3 000 – 12 000** | Data teams quietly delivering wrong numbers |
 
-### Talent / HR (verkaufbar)
+### Talent / HR
 
-| Prompt | Deliverable | Realistic price | Buyer |
-|---|---|---|---|
-| [`JOB-DESCRIPTION.md`](./JOB-DESCRIPTION.md) | JD written in founder voice with transparent comp + negative selection | **€500 – 2 000** per role | Anyone whose templated JDs attract B-players |
-| [`INTERVIEW-LOOP.md`](./INTERVIEW-LOOP.md) | Work-sample-anchored interview loop with structured scorecards + bias mitigation | **€1 000 – 5 000** per role design | Companies fixing hire-quality via process, not luck |
+Moved to Tier 3 internal leverage. JOB-DESCRIPTION and INTERVIEW-LOOP
+are useful when YOU hire (your own team or while advising clients on
+hiring); standalone-sale rarely viable in the €500-2k range claimed in
+early library versions. See Tier 3 listing.
 
 ---
 
@@ -197,9 +200,83 @@ For ARCH.md (Mermaid diagrams), install
 
 ---
 
+## Sample outputs
+
+The [`samples/`](./samples/) folder contains redacted, realistic worked
+examples for the 5 highest-stakes prompts:
+
+- [`samples/SHIP-sample.md`](./samples/SHIP-sample.md) — the 8-section
+  workflow applied to a real EU password-reset delay bug
+- [`samples/HUNT-sample.md`](./samples/HUNT-sample.md) — full bug-hunt
+  cycle on a data-corruption race condition
+- [`samples/DD-sample.md`](./samples/DD-sample.md) — Technical Due
+  Diligence for a fictional €120M clinical-trial-SaaS acquisition
+- [`samples/GDPR-sample.md`](./samples/GDPR-sample.md) — DSGVO
+  assessment + Article 30 RoPA for a fictional EU SaaS using
+  US-hosted LLM providers
+- [`samples/RAG-AUDIT-sample.md`](./samples/RAG-AUDIT-sample.md) —
+  RAG-system audit with measured retrieval metrics on a fictional
+  internal-docs chatbot
+
+Use samples to evaluate the library before committing, to calibrate
+clients during sales conversations, or to onboard the agent with a
+concrete output reference.
+
+---
+
+## Disclaimers — single source of truth
+
+All Tier-2 disclaimer texts are maintained canonically in
+[`_LEGAL/`](./_LEGAL/). Prompts keep their disclaimers inline (so
+each prompt is self-contained), but `_LEGAL/` is the source of
+truth for updating the language across the library.
+
+When jurisdictional law or industry practice changes, update the
+relevant `_LEGAL/*.md` file and propagate to every prompt that
+references it.
+
+---
+
+## Recommended bundles
+
+The library was designed so prompts compose into engagement
+packages. The 8 highest-value bundles:
+
+| Bundle | Prompts | Realistic price |
+|---|---|---|
+| **Fintech Compliance Pack** | PCI-DSS + DORA + GDPR + SBOM | €15 000 – 40 000 |
+| **Healthtech Launch Pack** | HIPAA + A11Y + AUDIT + RUNBOOK | €10 000 – 30 000 |
+| **AI Startup Pack** | AI-ACT + PROMPT-SECURITY + GDPR + AGENT-BUILDER + MODEL-CARD | €10 000 – 35 000 |
+| **M&A Tech-DD Pack** | DD + AUDIT + SBOM + ARCH + DATA-PIPELINE-AUDIT | €20 000 – 60 000 |
+| **Web Launch Pack** | WEBSITE-FULL + COPY-AUDIT + SEO + ANALYTICS-AUDIT | €8 000 – 25 000 |
+| **Conversion Sprint** | CONVERSION-AUDIT + CHECKOUT-AUDIT + CTA-OPTIMIZER + FORM-OPTIMIZER + 3-month retainer | €10 000 – 30 000 |
+| **Content Engine (recurring)** | NEWSLETTER + SOCIAL-CALENDAR + SEO-CONTENT (monthly) | €3 000 – 10 000/month |
+| **Sales Ops** | DISCOVERY + PROPOSAL + RETAINER + CASE-STUDY | Internal leverage; raises win-rate measurably |
+
+Bundles convert better than individual sales — buyers have ONE
+compliance budget, ONE marketing budget, ONE M&A advisory budget,
+not three.
+
+---
+
 ## Status
 
-Each prompt has gone through external review against at least one
-independent model. Accepted refinements are committed; rejected ones are
-documented in commit messages with rationale. The design contract above
-is the result of that review loop.
+The library has been through one focused quality audit
+([`LIBRARY-AUDIT.md`](./LIBRARY-AUDIT.md)) and one round of
+pruning + sample-output addition + disclaimer extraction (the
+state you're reading now). Two weak prompts (`TEST-PLAN`,
+`DEAD-CODE`) were removed; five sellable-prompt claims were
+recategorised as internal leverage where standalone-sale was
+not realistic.
+
+`SHIP` has additionally been through three rounds of external
+model review (one round documented in commit history). The
+other 78 prompts have not been individually stress-tested at
+that depth. The design contract above is the result of that
+review loop and is consistently applied across all current
+prompts.
+
+Future quality work: multi-model review of the A-tier prompts
+(see LIBRARY-AUDIT.md §"What to do next"), addition of
+quality-gate checklists per prompt, sample-output expansion
+beyond the current 5.
