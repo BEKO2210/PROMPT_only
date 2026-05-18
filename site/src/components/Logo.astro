@@ -12,7 +12,7 @@ const { size = 32, withText = true, href = import.meta.env.BASE_URL } = Astro.pr
 <a
   href={href}
   class="group inline-flex items-center gap-2.5 no-tap focus-visible:ring-accent-300 rounded-md"
-  aria-label="Zur Startseite"
+  aria-label="Belkis Aslani — Software Compliance & Audit, zur Startseite"
 >
   <span
     class="relative inline-flex shrink-0 items-center justify-center rounded-lg
@@ -22,17 +22,22 @@ const { size = 32, withText = true, href = import.meta.env.BASE_URL } = Astro.pr
     style={`width:${size}px;height:${size}px`}
   >
     <span
-      class="font-display font-bold text-ink-950"
-      style={`font-size:${Math.round(size * 0.55)}px;line-height:1`}
-    >P</span>
+      class="font-display font-bold text-ink-950 tracking-tighter"
+      style={`font-size:${Math.round(size * 0.42)}px;line-height:1;letter-spacing:-0.04em`}
+    >BA</span>
     <span
       class="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/20"
       aria-hidden="true"
     ></span>
   </span>
   {withText && (
-    <span class="font-display font-semibold text-ink-100 tracking-tight text-lg">
-      PROMPT<span class="text-accent-400">_</span>only
+    <span class="flex flex-col leading-none">
+      <span class="font-display font-semibold text-ink-100 tracking-tight text-base">
+        Belkis Aslani
+      </span>
+      <span class="font-mono text-[10px] text-ink-400 mt-1 tracking-wider uppercase">
+        Software Compliance &amp; Audit
+      </span>
     </span>
   )}
 </a>
