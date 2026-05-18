@@ -113,11 +113,12 @@ const links: NavLink[] = [
   <div
     id="mobile-menu"
     class="mobile-drawer md:hidden fixed inset-0 z-[60]
-           bg-ink-vacuum/95 backdrop-blur-2xl
+           bg-ink-950 backdrop-blur-2xl
            opacity-0 pointer-events-none transition-opacity duration-500"
     role="dialog"
     aria-modal="true"
     aria-label="Hauptnavigation"
+    style="background-color: #02020a;"
   >
     <!-- Ambient glow + grid -->
     <div class="absolute inset-0 mission-grid opacity-50 pointer-events-none" aria-hidden="true"></div>
@@ -145,8 +146,12 @@ const links: NavLink[] = [
       </span>
     </div>
 
-    <!-- Links — big, stacked, cinematic -->
-    <nav class="absolute inset-0 flex flex-col items-start justify-center px-8 gap-1.5">
+    <!-- Links — big, stacked, cinematic.
+         pt-24 clears the mission-tag + close button at top.
+         pb-44 reserves space for the absolute-positioned CTA footer,
+         preventing the last link ("Kontakt") from being covered.
+         Container scrolls if links exceed available height (rare). -->
+    <nav class="absolute inset-0 flex flex-col items-start justify-center px-8 gap-1.5 pt-24 pb-44 overflow-y-auto">
       {links.map((l, i) => (
         <a
           href={l.href}
