@@ -1,0 +1,60 @@
+---
+// CinematicHeading — H1/H2 wrapper that produces a 3-line stagger reveal
+// with per-line variable accent. Hooks into the existing premium.ts
+// SplitText init via [data-split-reveal] on each line.
+
+export interface CinematicHeadingLine {
+  text: string;
+  /** Per-line accent: 'plain' | 'accent' (gradient) | 'amber' */
+  accent?: 'plain' | 'accent' | 'amber';
+  /** Per-line weight: defaults vary; override if needed */
+  weight?: 400 | 500 | 600 | 700 | 800;
+}
+
+interface Props {
+  /** Tag: h1 / h2 / h3 */
+  as?: 'h1' | 'h2' | 'h3';
+  id?: string;
+  lines: CinematicHeadingLine[];
+  /** Wrapper class */
+  class?: string;
+  /** Base font size token from tailwind (e.g. 'text-display-2xl') */
+  size?: string;
+}
+
+const {
+  as: Tag = 'h2',
+  id,
+  lines,
+  class: extraClass = '',
+  size = 'text-display-xl',
+} = Astro.props;
+
+const accentToClass = (a: CinematicHeadingLine['accent']) =>
+  a === 'accent' ? 'text-gradient'
+  : a === 'amber' ? 'text-amber-400'
+  : 'text-ink-50';
+
+const weightToClass = (w: CinematicHeadingLine['weight']) =>
+  w === 400 ? 'font-normal'
+  : w === 500 ? 'font-medium'
+  : w === 600 ? 'font-semibold'
+  : w === 800 ? 'font-extrabold'
+  : 'font-bold';
+---
+
+<Tag
+  id={id}
+  class={`cinematic-heading ${size} font-display tracking-tightest leading-[1.02] ${extraClass}`}
+>
+  {lines.map((line: CinematicHeadingLine, i: number) => (
+    <span
+      data-split-reveal
+      data-hero-anim={i + 1}
+      class={`block ${accentToClass(line.accent)} ${weightToClass(line.weight)}`}
+      style={`transition-delay: ${i * 80}ms`}
+    >
+      {line.text}
+    </span>
+  ))}
+</Tag>

@@ -2,12 +2,22 @@
 import Base from '@layouts/Base.astro';
 import Nav from '@components/Nav.astro';
 import Footer from '@components/Footer.astro';
+import SceneProgress from '@components/SceneProgress.astro';
 
 import Hero from '@sections/Hero.astro';
 import TrustStrip from '@sections/TrustStrip.astro';
 import Problem from '@sections/Problem.astro';
 
 const baseUrl = import.meta.env.BASE_URL;
+
+// Scene timeline for the right-rail SceneProgress indicator
+const HOME_SCENES = [
+  { id: 'hero',      label: 'Mission Control' },
+  { id: 'trust',     label: 'Trust Strip' },
+  { id: 'problem',   label: 'Problem' },
+  { id: 'paths',     label: 'Drei Wege' },
+  { id: 'final-cta', label: 'Gespräch' },
+];
 ---
 
 <Base
@@ -15,6 +25,7 @@ const baseUrl = import.meta.env.BASE_URL;
   description="Senior-Consulting für regulierte Software-Engagements: EU AI Act · DSGVO · DORA · ISO 27001 · PCI-DSS · HIPAA. 78 production-grade Workflows · 10 redaktierte Sample Deliverables. Freiberg am Neckar · Stuttgart-Region · Remote-first DACH."
 >
   <Nav />
+  <SceneProgress scenes={HOME_SCENES} />
 
   <main id="main">
     <Hero />
@@ -22,7 +33,7 @@ const baseUrl = import.meta.env.BASE_URL;
     <Problem />
 
     <!-- Home-page teasers — three big cards inviting to sub-pages -->
-    <section class="section relative">
+    <section id="paths" class="section relative">
       <div class="container-page">
         <div class="reveal text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-3 font-medium text-center">
           Wo es weitergeht
@@ -109,11 +120,11 @@ const baseUrl = import.meta.env.BASE_URL;
         </div>
 
         <!-- Final CTA strip -->
-        <div class="reveal mt-section-sm text-center">
+        <div id="final-cta" class="reveal mt-section-sm text-center">
           <p class="text-lg text-ink-300 mb-5">
             Oder direkt zur Sache?
           </p>
-          <a href={`${baseUrl}kontakt`} data-magnetic data-magnetic-strength="0.35" class="btn-primary no-tap inline-flex">
+          <a href={`${baseUrl}kontakt`} data-magnetic data-magnetic-strength="0.35" class="btn-primary btn-magnetic no-tap inline-flex">
             30-Minuten Erstgespräch buchen
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>

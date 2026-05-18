@@ -1,0 +1,138 @@
+---
+// ThreeHeroCore — cinematic Three.js audit-core-orb for the hero.
+// Mounts a canvas + provides a graceful animated SVG fallback for
+// reduced-motion / mobile / no-WebGL clients. Initialisation is
+// dynamic-imported on first paint so the three.js bundle stays out
+// of the critical path.
+
+interface Props {
+  /** Diameter (px) — controls box size, not WebGL render-size */
+  size?: number;
+  /** Optional aria-label for the visualisation */
+  label?: string;
+}
+
+const { size = 480, label = 'Audit-Core: kompiliert die Library zu Reports' } = Astro.props;
+---
+
+<div
+  class="hero-core relative aspect-square mx-auto select-none pointer-events-none"
+  style={`max-width: ${size}px`}
+  data-hero-core
+  aria-label={label}
+  role="img"
+>
+  <!-- WebGL canvas (init via JS, hidden until ready) -->
+  <canvas
+    data-hero-core-canvas
+    class="hero-core-canvas absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700"
+    aria-hidden="true"
+  ></canvas>
+
+  <!-- SVG fallback — always rendered, hidden when WebGL takes over -->
+  <svg
+    data-hero-core-fallback
+    viewBox="0 0 200 200"
+    class="hero-core-fallback absolute inset-0 w-full h-full transition-opacity duration-700"
+    aria-hidden="true"
+  >
+    <defs>
+      <radialGradient id="hcCore" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="#58dfff" stop-opacity="0.95"/>
+        <stop offset="45%" stop-color="#00b3f0" stop-opacity="0.85"/>
+        <stop offset="100%" stop-color="#001e3c" stop-opacity="1"/>
+      </radialGradient>
+      <radialGradient id="hcHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="60%" stop-color="#1ccaff" stop-opacity="0"/>
+        <stop offset="85%" stop-color="#1ccaff" stop-opacity="0.45"/>
+        <stop offset="100%" stop-color="#1ccaff" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="hcBlur"><feGaussianBlur stdDeviation="4"/></filter>
+    </defs>
+
+    <!-- Outer halo -->
+    <circle cx="100" cy="100" r="92" fill="url(#hcHalo)" filter="url(#hcBlur)">
+      <animate attributeName="r" values="92;96;92" dur="6s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Orbiting rings (decorative, hint at the 3D nature) -->
+    <ellipse cx="100" cy="100" rx="85" ry="22"
+             fill="none" stroke="rgba(88,223,255,0.25)" stroke-width="0.8"
+             transform="rotate(15 100 100)">
+      <animateTransform attributeName="transform" type="rotate"
+                        from="15 100 100" to="375 100 100"
+                        dur="32s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="100" cy="100" rx="80" ry="28"
+             fill="none" stroke="rgba(0,179,240,0.2)" stroke-width="0.6"
+             transform="rotate(-25 100 100)">
+      <animateTransform attributeName="transform" type="rotate"
+                        from="-25 100 100" to="-385 100 100"
+                        dur="44s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Core sphere -->
+    <circle cx="100" cy="100" r="62" fill="url(#hcCore)"/>
+
+    <!-- Chrome highlight crescent -->
+    <path d="M 60 70 Q 100 50 140 75 Q 110 60 80 80 Z"
+          fill="rgba(255,255,255,0.18)" filter="url(#hcBlur)"/>
+  </svg>
+
+  <!-- Floating audit panels — orbit the core, glass + holographic -->
+  <div class="hero-core-panels pointer-events-none absolute inset-0">
+    <div class="float-panel absolute" style="top: 8%;  right: -4%; animation-delay: -1s;">
+      <span class="text-danger">●</span> AUD-001 · IDOR detected
+    </div>
+    <div class="float-panel absolute" style="bottom: 22%; left: -10%; animation-delay: -3s;">
+      <span class="text-amber-400">●</span> DSGVO · 47 PII fields mapped
+    </div>
+    <div class="float-panel absolute" style="bottom: -2%; right: 6%; animation-delay: -5s;">
+      <span class="text-success">●</span> 78 workflows · 100% verbatim
+    </div>
+  </div>
+</div>
+
+<script>
+  import { mountHeroCore } from '../lib/three-hero';
+
+  type HeroHandle = { destroy: () => void } | null;
+  const handles = new WeakMap<HTMLCanvasElement, HeroHandle>();
+
+  const init = async (root: HTMLElement) => {
+    const canvas = root.querySelector<HTMLCanvasElement>('[data-hero-core-canvas]');
+    const fallback = root.querySelector<HTMLElement>('[data-hero-core-fallback]');
+    if (!canvas) return;
+
+    const handle = await mountHeroCore(canvas);
+    if (handle) {
+      handles.set(canvas, handle);
+      canvas.style.opacity = '1';
+      if (fallback) fallback.style.opacity = '0';
+    }
+    // If null, leave fallback visible — no further action
+  };
+
+  const wire = () => {
+    document.querySelectorAll<HTMLElement>('[data-hero-core]').forEach((el) => {
+      if ((el as HTMLElement & { _heroInit?: boolean })._heroInit) return;
+      (el as HTMLElement & { _heroInit?: boolean })._heroInit = true;
+      // Defer until idle so we don't block first paint
+      const start = () => init(el);
+      if ('requestIdleCallback' in window) {
+        (window as Window & typeof globalThis).requestIdleCallback(start, { timeout: 800 });
+      } else {
+        setTimeout(start, 250);
+      }
+    });
+  };
+
+  wire();
+  document.addEventListener('astro:after-swap', wire);
+  document.addEventListener('astro:before-swap', () => {
+    document.querySelectorAll<HTMLCanvasElement>('[data-hero-core-canvas]').forEach((c) => {
+      handles.get(c)?.destroy();
+      handles.delete(c);
+    });
+  });
+</script>

@@ -1,299 +1,229 @@
 ---
-// Hero — first impression, single-screen, message-first.
-// Animation philosophy: text reveals in stagger when load completes,
-// background gradient subtly drifts, scroll cue invites continuation.
-// GSAP is loaded only here; not blocking other pages.
+// Hero — cinematic mission-control rebuild.
+// Full viewport, scan-line on first paint, mission-status-tag,
+// Three.js audit-core orb (with SVG fallback), magnetic CTAs,
+// framework strip on the bottom edge.
+//
+// Headline: user-direktive copy
+//   "Senior Software Audits. Geliefert wie ein Produktfilm.
+//    Verifiziert wie ein Board-Report."
+// Alt copy preserved in HEADLINE_ALT for easy A/B swap.
+
+import ThreeHeroCore from '@components/ThreeHeroCore.astro';
+import FrameworkStrip from '@components/FrameworkStrip.astro';
+import CinematicHeading from '@components/CinematicHeading.astro';
+import MagneticButton from '@components/MagneticButton.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Headline lines — easy to A/B swap by changing this array
+const HEADLINE = [
+  { text: 'Senior Software Audits.',         accent: 'plain'  as const, weight: 700 as const },
+  { text: 'Geliefert wie ein Produktfilm.',  accent: 'plain'  as const, weight: 600 as const },
+  { text: 'Verifiziert wie ein Board-Report.', accent: 'accent' as const, weight: 700 as const },
+];
+
+// Alt for future swap:
+// const HEADLINE_ALT = [
+//   { text: 'From codebase to board-ready audit', accent: 'plain'  as const, weight: 700 as const },
+//   { text: 'in days, not weeks.',                accent: 'accent' as const, weight: 700 as const },
+// ];
+
+// Current date for mission tag (server-rendered; updated client-side too)
+const now = new Date();
+const isoDate = now.toISOString().slice(0, 10);
 ---
 
 <section
   id="hero"
-  class="relative min-h-[100svh] flex items-center pt-28 pb-section-sm
-         overflow-hidden"
+  class="surface-vacuum mission-grid relative min-h-[100svh] flex items-center pt-28 pb-section-sm overflow-hidden"
   aria-labelledby="hero-headline"
 >
-  <!-- Decorative orbs (GPU-accelerated, drifting) -->
+  <!-- Decorative vacuum + ambient glow -->
   <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
     <div
-      class="absolute top-[10%] left-[10%] h-[480px] w-[480px] rounded-full
-             bg-accent-500/20 blur-[120px] animate-float"
-      style="animation-duration: 12s"
+      class="absolute top-[5%] left-[12%] h-[520px] w-[520px] rounded-full bg-accent-500/14 blur-[140px] animate-float"
+      style="animation-duration: 14s"
     ></div>
     <div
-      class="absolute bottom-[10%] right-[10%] h-[420px] w-[420px] rounded-full
-             bg-amber-500/10 blur-[120px] animate-float"
-      style="animation-duration: 14s; animation-delay: -3s"
+      class="absolute bottom-[5%] right-[10%] h-[460px] w-[460px] rounded-full bg-accent-400/8 blur-[140px] animate-float"
+      style="animation-duration: 18s; animation-delay: -4s"
     ></div>
-    <!-- Subtle noise to break the gradient banding -->
     <svg class="absolute inset-0 w-full h-full opacity-[0.04] mix-blend-overlay" aria-hidden="true">
-      <filter id="noiseFilter">
-        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
-      </filter>
+      <filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter>
       <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
     </svg>
   </div>
 
-  <div class="container-page w-full">
-    <div class="grid lg:grid-cols-12 gap-12 items-center">
-      <!-- LEFT: copy + CTAs -->
-      <div class="lg:col-span-7">
-        <!-- Logo mark above headline — establishes brand at first glance -->
-        <div data-hero-anim="0" class="opacity-0 mb-8 inline-flex items-center gap-3">
-          <span class="hero-logo-mark relative inline-flex items-center justify-center" style="width:88px;height:88px" aria-hidden="true">
-            <picture>
-              <source srcset={`${import.meta.env.BASE_URL}logo-256.webp`} type="image/webp" />
-              <img
-                src={`${import.meta.env.BASE_URL}logo-256.png`}
-                alt=""
-                width="88"
-                height="88"
-                class="hero-logo-img relative z-10 block"
-                decoding="async"
-                fetchpriority="high"
-              />
-            </picture>
-            <!-- Stronger halo behind the hero logo -->
-            <span
-              class="absolute inset-0 -z-0 rounded-full blur-2xl opacity-70 bg-gradient-to-br from-accent-400/60 via-success/40 to-accent-500/60"
-              aria-hidden="true"
-            ></span>
-          </span>
-          <div class="flex flex-col leading-none">
-            <span class="font-display font-semibold text-xl text-ink-50 tracking-tight">Belkis Aslani</span>
-            <span class="font-mono text-[11px] text-ink-400 mt-1.5 tracking-[0.15em] uppercase">Software Compliance &amp; Audit</span>
-          </div>
-        </div>
+  <!-- Scanline on first paint -->
+  <div class="hero-scanline" aria-hidden="true"></div>
 
+  <!-- Top mission-status tag -->
+  <div
+    data-hero-anim="0"
+    class="opacity-0 absolute top-24 left-6 lg:left-12 z-10 flex flex-col gap-1.5"
+  >
+    <span class="mission-tag">
+      <span data-mission-status>LIVE · DE · {isoDate}</span>
+    </span>
+    <span class="font-mono text-[10px] text-ink-500 tracking-[0.15em] uppercase">
+      Belkis Aslani · Mission Control
+    </span>
+  </div>
+
+  <!-- Brand corner stamp (top right) -->
+  <div
+    data-hero-anim="0"
+    class="opacity-0 absolute top-24 right-6 lg:right-12 z-10 hidden md:flex items-center gap-3"
+  >
+    <div class="text-right">
+      <div class="font-mono text-[10px] text-accent-300 tracking-[0.2em] uppercase">78 / 9 / 10</div>
+      <div class="font-mono text-[10px] text-ink-500 tracking-[0.15em] uppercase">Workflows / Services / Samples</div>
+    </div>
+  </div>
+
+  <div class="container-page w-full">
+    <div class="grid lg:grid-cols-12 gap-14 items-center">
+      <!-- LEFT: copy + CTAs -->
+      <div class="lg:col-span-7 order-2 lg:order-1">
         <!-- Eyebrow badge -->
         <div
           data-hero-anim="0"
           class="opacity-0 inline-flex items-center gap-2 rounded-full
-                 border border-accent-500/30 bg-accent-500/10 backdrop-blur-md
-                 px-4 py-1.5 text-sm text-accent-200 mb-6"
+                 border border-accent-500/25 bg-accent-500/8 backdrop-blur-md
+                 px-3.5 py-1.5 text-[12px] text-accent-200 mb-7 font-mono tracking-[0.1em] uppercase"
         >
-          <span class="relative flex h-2 w-2">
+          <span class="relative flex h-1.5 w-1.5">
             <span class="absolute inset-0 rounded-full bg-accent-400 animate-ping opacity-75"></span>
-            <span class="relative h-2 w-2 rounded-full bg-accent-400"></span>
+            <span class="relative h-1.5 w-1.5 rounded-full bg-accent-400"></span>
           </span>
-          78 production-grade Prompts · 10 Sample Deliverables
+          78 Workflows · 10 Samples · Production-Grade
         </div>
 
-        <!-- Display headline — character-level SplitText reveal -->
-        <h1
+        <!-- Cinematic headline -->
+        <CinematicHeading
+          as="h1"
           id="hero-headline"
-          class="text-display-2xl font-display tracking-tightest text-ink-50 mb-6"
-        >
-          <span data-split-reveal data-hero-anim="1" class="block">
-            Senior Consulting,
-          </span>
-          <span data-split-reveal data-hero-anim="2" class="block">
-            in Tagen geliefert.
-          </span>
-          <span data-split-reveal data-hero-anim="3" class="block text-gradient">
-            Nicht in Wochen.
-          </span>
-        </h1>
+          lines={HEADLINE}
+          size="text-display-2xl"
+          class="mb-7"
+        />
 
         <!-- Subhead -->
         <p
           data-hero-anim="4"
-          class="opacity-0 max-w-prose-tight text-xl text-ink-200 leading-snug mb-10"
+          class="opacity-0 max-w-prose-tight text-lg lg:text-xl text-ink-200 leading-snug mb-9"
         >
-          Eine kuratierte Bibliothek aus 78 Workflows produziert
-          Audit-, Compliance-, Architecture- und DD-Reports auf
-          Beratungsklasse-Niveau. Reduziert Liefer-Zeit um 60–80 %,
+          Eine kuratierte Bibliothek aus <strong class="text-ink-50 font-medium">78 production-grade Workflows</strong>
+          produziert Audit-, Compliance-, Architecture- und Due-Diligence-Reports
+          auf Beratungsklasse-Niveau. Lieferzeit
+          <strong class="text-accent-300 font-medium">60–80 % kürzer</strong>,
           ohne Qualitätsverlust.
         </p>
 
-        <!-- CTAs -->
+        <!-- CTA pair -->
         <div data-hero-anim="5" class="opacity-0 flex flex-wrap gap-3 mb-10">
-          <a href="/PROMPT_only/kontakt" data-magnetic data-magnetic-strength="0.4" class="btn-primary no-tap">
+          <MagneticButton href={`${baseUrl}kontakt`} tone="primary" strength={0.4}>
             Erstgespräch buchen
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"/>
-              <polyline points="12 5 19 12 12 19"/>
-            </svg>
-          </a>
-          <a href="/PROMPT_only/samples" class="btn-secondary no-tap">
+          </MagneticButton>
+          <MagneticButton href={`${baseUrl}samples`} tone="secondary" strength={0.3}>
             Sample-Reports ansehen
-          </a>
+          </MagneticButton>
         </div>
 
-        <!-- Inline mini-trust signals -->
+        <!-- Trust line -->
         <div data-hero-anim="6" class="opacity-0 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-ink-300">
           <div class="flex items-center gap-2">
             <svg class="text-success" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            EU AI Act · DORA · GDPR · HIPAA · PCI-DSS · ISO 27001
+            Verbatim-Disclaimer · haftungsbewusst formuliert
           </div>
           <div class="flex items-center gap-2">
             <svg class="text-success" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Verbatim-Disclaimer · Haftungs-bewusst
+            Sample-Outputs vor Vertragsabschluss
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: hero visual — a stylised "report" preview card stack -->
-      <div class="lg:col-span-5 relative">
-        <div data-hero-anim="3" class="opacity-0 relative perspective-1200">
-          <!-- Stacked report cards (decorative) -->
-          <div
-            class="relative aspect-[4/5] max-w-[440px] mx-auto"
-            style="transform-style: preserve-3d"
-          >
-            <!-- Back card -->
-            <div
-              class="absolute inset-0 rounded-2xl glass shadow-glow-soft
-                     -translate-x-6 translate-y-6 rotate-[6deg]"
-              style="transform: translate3d(24px,24px,0) rotate(6deg)"
-              aria-hidden="true"
-            ></div>
-            <!-- Mid card -->
-            <div
-              class="absolute inset-0 rounded-2xl glass shadow-glow-soft
-                     -translate-x-3 translate-y-3 rotate-[3deg]"
-              style="transform: translate3d(12px,12px,0) rotate(3deg)"
-              aria-hidden="true"
-            ></div>
-            <!-- Front card with mock report -->
-            <article
-              class="absolute inset-0 rounded-2xl bg-ink-900/90 backdrop-blur-xl
-                     border border-white/10 shadow-glow-soft p-6 overflow-hidden
-                     animate-pulse-glow"
-              aria-label="Beispiel-Report-Vorschau"
-            >
-              <!-- Header bar like a window title -->
-              <div class="flex items-center justify-between mb-5">
-                <div class="flex gap-1.5" aria-hidden="true">
-                  <span class="h-2.5 w-2.5 rounded-full bg-ink-600"></span>
-                  <span class="h-2.5 w-2.5 rounded-full bg-ink-600"></span>
-                  <span class="h-2.5 w-2.5 rounded-full bg-ink-600"></span>
-                </div>
-                <span class="font-mono text-[10px] text-ink-400">AUDIT-REPORT.pdf</span>
-              </div>
-
-              <!-- Report content -->
-              <div class="space-y-4">
-                <div>
-                  <div class="text-[10px] uppercase tracking-widest text-ink-400 mb-1">Executive Summary</div>
-                  <div class="font-display text-lg text-ink-100 leading-tight">Security & Code-Quality Audit</div>
-                  <div class="text-xs text-ink-300 mt-0.5">Pivot Logistics B.V. · 2026-05-03</div>
-                </div>
-
-                <div class="hairline"></div>
-
-                <!-- Severity chips -->
-                <div class="grid grid-cols-3 gap-2 text-center">
-                  <div class="rounded-md bg-danger/15 border border-danger/30 px-2 py-2">
-                    <div class="text-lg font-display font-bold text-danger">3</div>
-                    <div class="text-[10px] text-ink-300 uppercase tracking-wide">Critical</div>
-                  </div>
-                  <div class="rounded-md bg-warning/15 border border-warning/30 px-2 py-2">
-                    <div class="text-lg font-display font-bold text-warning">7</div>
-                    <div class="text-[10px] text-ink-300 uppercase tracking-wide">High</div>
-                  </div>
-                  <div class="rounded-md bg-accent-500/15 border border-accent-500/30 px-2 py-2">
-                    <div class="text-lg font-display font-bold text-accent-300">18</div>
-                    <div class="text-[10px] text-ink-300 uppercase tracking-wide">Medium</div>
-                  </div>
-                </div>
-
-                <!-- Finding card -->
-                <div class="rounded-lg bg-ink-800/60 border border-white/5 p-3">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="font-mono text-[10px] text-danger">AUD-001</span>
-                    <span class="rounded-full bg-danger/20 text-danger text-[10px] px-2 py-0.5 font-medium">CRITICAL</span>
-                  </div>
-                  <div class="text-sm font-medium text-ink-100 leading-tight">IDOR on order-history endpoint</div>
-                  <div class="text-[10px] text-ink-400 mt-1 font-mono">services/orders/api/v2.py:142</div>
-                </div>
-
-                <!-- Animated progress (shimmer line) -->
-                <div class="space-y-1.5">
-                  <div class="flex items-center justify-between text-[10px] text-ink-400">
-                    <span>Remediation roadmap</span>
-                    <span class="text-success">3/61 fixed</span>
-                  </div>
-                  <div class="h-1 rounded-full bg-ink-800 overflow-hidden">
-                    <div class="h-full w-[20%] rounded-full bg-gradient-to-r from-accent-500 to-accent-300"></div>
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <!-- Floating badges around the card -->
-          <div
-            class="absolute -top-4 -left-2 lg:-left-8 z-10 glass rounded-full
-                   px-3 py-1.5 text-xs font-medium text-ink-100 shadow-glow-soft
-                   animate-float"
-            style="animation-delay: -1s"
-          >
-            <span class="text-success">●</span> €5.8k engagement
-          </div>
-          <div
-            class="absolute -bottom-3 -right-2 lg:-right-6 z-10 glass rounded-full
-                   px-3 py-1.5 text-xs font-medium text-ink-100 shadow-glow-soft
-                   animate-float"
-            style="animation-delay: -2s"
-          >
-            <span class="text-accent-300">▶</span> 4-Tage-Turnaround
-          </div>
+      <!-- RIGHT: WebGL audit-core orb -->
+      <div class="lg:col-span-5 order-1 lg:order-2 relative">
+        <div data-hero-anim="3" class="opacity-0 relative">
+          <ThreeHeroCore size={520} />
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Framework strip — bottom edge -->
+  <div
+    data-hero-anim="6"
+    class="opacity-0 absolute bottom-16 left-0 right-0 z-10"
+  >
+    <FrameworkStrip tone="subtle" />
+  </div>
+
   <!-- Scroll cue -->
   <a
-    href="/PROMPT_only/methodik"
-    class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10
+    href={`${baseUrl}methodik`}
+    class="absolute bottom-4 left-1/2 -translate-x-1/2 z-10
            flex flex-col items-center gap-2 text-ink-400
            hover:text-ink-100 transition-colors no-tap group"
-    aria-label="Weiter scrollen"
+    aria-label="Weiter zur Methodik"
     data-hero-anim="6"
     style="opacity:0"
   >
-    <span class="text-[11px] uppercase tracking-widest">Methodik</span>
+    <span class="text-[10px] uppercase tracking-[0.2em] font-mono">Methodik</span>
     <span class="inline-flex h-9 w-6 items-center justify-center rounded-full border border-ink-500/40 overflow-hidden">
-      <span class="block h-2 w-1 rounded-full bg-ink-300 animate-bounce" style="animation-duration: 1.5s"></span>
+      <span class="block h-2 w-1 rounded-full bg-accent-300 animate-bounce" style="animation-duration: 1.5s"></span>
     </span>
   </a>
 </section>
 
-<!-- Hero entrance animation: stagger reveal via GSAP if loaded;
-     graceful fallback to CSS reveal otherwise. Reduced-motion respected. -->
 <script>
+  // Hero entrance — stagger reveal of all [data-hero-anim] elements.
+  // Mission-status-tag clock auto-updates every 60 s.
   (async () => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const els = Array.from(document.querySelectorAll('[data-hero-anim]'))
-      .sort((a, b) => Number((a as HTMLElement).dataset.heroAnim) - Number((b as HTMLElement).dataset.heroAnim));
+    const els = Array.from(document.querySelectorAll<HTMLElement>('[data-hero-anim]'))
+      .sort((a, b) => Number(a.dataset.heroAnim) - Number(b.dataset.heroAnim));
 
     if (reduce || !els.length) {
-      els.forEach(el => (el as HTMLElement).style.opacity = '1');
-      return;
+      els.forEach((el) => (el.style.opacity = '1'));
+    } else {
+      try {
+        const { gsap } = await import('gsap');
+        gsap.fromTo(
+          els,
+          { opacity: 0, y: 32, filter: 'blur(8px)' },
+          {
+            opacity: 1,
+            y: 0,
+            filter: 'blur(0px)',
+            duration: 1.0,
+            ease: 'expo.out',
+            stagger: 0.09,
+            clearProps: 'filter,transform',
+          }
+        );
+      } catch (e) {
+        els.forEach((el, i) => {
+          el.style.transition = `opacity 600ms ease-out ${i * 80}ms, transform 600ms ease-out ${i * 80}ms`;
+          el.style.opacity = '1';
+        });
+      }
     }
 
-    try {
-      const { gsap } = await import('gsap');
-      gsap.fromTo(
-        els,
-        { opacity: 0, y: 32, filter: 'blur(8px)' },
-        {
-          opacity: 1,
-          y: 0,
-          filter: 'blur(0px)',
-          duration: 1.0,
-          ease: 'expo.out',
-          stagger: 0.09,
-          clearProps: 'filter,transform',
-        }
-      );
-    } catch (e) {
-      // Fallback: just show them
-      els.forEach((el, i) => {
-        const html = el as HTMLElement;
-        html.style.transition = `opacity 600ms ease-out ${i * 80}ms, transform 600ms ease-out ${i * 80}ms`;
-        html.style.opacity = '1';
-      });
+    // Live mission clock
+    const tag = document.querySelector<HTMLElement>('[data-mission-status]');
+    if (tag) {
+      const update = () => {
+        const d = new Date();
+        const iso = d.toISOString().slice(0, 10);
+        const hh = String(d.getUTCHours()).padStart(2, '0');
+        const mm = String(d.getUTCMinutes()).padStart(2, '0');
+        tag.textContent = `LIVE · DE · ${iso} · ${hh}:${mm} UTC`;
+      };
+      update();
+      setInterval(update, 60_000);
     }
   })();
 </script>

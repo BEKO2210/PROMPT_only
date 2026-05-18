@@ -1,0 +1,99 @@
+---
+// FrameworkStrip — horizontal marquee of compliance/standards labels.
+// Pause on hover. Velocity-skew on fast scroll (rAF-throttled).
+// Falls back to a static row on prefers-reduced-motion.
+
+interface Props {
+  /** Override the default standards list */
+  items?: string[];
+  /** Tone variant — 'subtle' is dimmer, 'bold' has accent color */
+  tone?: 'subtle' | 'bold';
+}
+
+const DEFAULT: string[] = [
+  'EU AI Act',
+  'DORA',
+  'GDPR',
+  'ISO 27001',
+  'OWASP Top 10',
+  'PCI-DSS v4',
+  'HIPAA',
+  'NIS2',
+  'SOC 2 Type II',
+  'CRA',
+];
+
+const { items = DEFAULT, tone = 'subtle' } = Astro.props;
+
+// Duplicate items so the loop is seamless
+const doubled = [...items, ...items];
+
+const toneClass =
+  tone === 'bold'
+    ? 'text-accent-200'
+    : 'text-ink-300';
+---
+
+<div
+  class="framework-strip relative overflow-hidden py-3"
+  data-framework-strip
+  aria-label="Standards & Frameworks"
+>
+  <!-- Edge-fade masks left + right -->
+  <div class="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-ink-950 to-transparent z-10" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-ink-950 to-transparent z-10" aria-hidden="true"></div>
+
+  <ul class="framework-track flex items-center" data-framework-track role="list">
+    {doubled.map((item, i) => (
+      <li
+        class={`flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] ${toneClass}`}
+        aria-hidden={i >= items.length ? 'true' : undefined}
+      >
+        <span class="inline-block h-1 w-1 rounded-full bg-accent-400/70" aria-hidden="true"></span>
+        {item}
+      </li>
+    ))}
+  </ul>
+</div>
+
+<script>
+  // Velocity-aware skew: faster scroll = stronger skew + slight speed-up.
+  // Reduced-motion: skip the velocity work entirely.
+  const init = () => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return;
+
+    const tracks = document.querySelectorAll<HTMLElement>('[data-framework-track]');
+    if (!tracks.length) return;
+
+    let lastY = window.scrollY;
+    let velocity = 0;
+    let ticking = false;
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const raw = y - lastY;
+        lastY = y;
+        velocity += (raw - velocity) * 0.18;
+        const skew = Math.max(-6, Math.min(6, velocity * 0.18));
+        const speedMul = 1 + Math.min(0.6, Math.abs(velocity) * 0.01);
+        for (const track of tracks) {
+          track.style.setProperty('--skew', `${skew}deg`);
+          track.style.transform = `skewX(${skew}deg)`;
+          track.style.animationDuration = `${32 / speedMul}s`;
+        }
+        // Decay
+        velocity *= 0.85;
+        ticking = false;
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+  };
+
+  init();
+  document.addEventListener('astro:after-swap', init);
+</script>

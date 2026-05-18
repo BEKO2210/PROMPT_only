@@ -1,0 +1,55 @@
+---
+// SectionShell — consistent section wrapper with Mission-Control framing.
+// - Numbered eyebrow (top-left, monospace)
+// - Optional mission-grid background overlay
+// - Subtle decorative scan-line at the top
+// - All children inside container-page
+
+interface Props {
+  id: string;
+  number: string;          // e.g. "01", "02"
+  eyebrow: string;
+  /** Show fine grid overlay behind content */
+  grid?: boolean;
+  /** Padding variant — 'lg' default, 'sm' for tight sections */
+  padding?: 'lg' | 'sm';
+  /** Extra wrapper classes */
+  class?: string;
+}
+
+const {
+  id,
+  number,
+  eyebrow,
+  grid = false,
+  padding = 'lg',
+  class: extraClass = '',
+} = Astro.props;
+
+const padClass = padding === 'lg' ? 'py-section' : 'py-section-sm';
+---
+
+<section
+  id={id}
+  class={`section-shell relative ${padClass} ${extraClass}`}
+  data-section-shell
+>
+  {grid && (
+    <div class="pointer-events-none absolute inset-0 mission-grid opacity-40 -z-10" aria-hidden="true"></div>
+  )}
+
+  <div class="container-page">
+    <!-- Mission-Control header strip -->
+    <div class="flex items-center gap-4 mb-10 reveal">
+      <span class="font-mono text-[10px] text-accent-300 tracking-[0.25em] tabular-nums">
+        SCENE / {number}
+      </span>
+      <span class="flex-1 h-px bg-gradient-to-r from-accent-500/40 via-white/8 to-transparent"></span>
+      <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-300">
+        {eyebrow}
+      </span>
+    </div>
+
+    <slot />
+  </div>
+</section>
