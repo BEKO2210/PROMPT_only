@@ -208,8 +208,9 @@ const total = categories.reduce((s, c) => s + c.count, 0);
       </p>
     </div>
 
-    <!-- Carousel rail -->
-    <div class="relative">
+    <!-- Carousel rail — overflow-hidden on outer prevents the inner
+         horizontal scroll from leaking into document scrollWidth -->
+    <div class="relative overflow-hidden">
       <!-- Edge-fade masks -->
       <div class="pointer-events-none absolute inset-y-0 left-0 w-8 z-10 bg-gradient-to-r from-ink-950 to-transparent" aria-hidden="true"></div>
       <div class="pointer-events-none absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-ink-950 to-transparent" aria-hidden="true"></div>
@@ -217,7 +218,7 @@ const total = categories.reduce((s, c) => s + c.count, 0);
       <ul
         data-approach-mobile-rail
         class="approach-rail flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth
-               px-[10vw] pb-4 -mx-1 list-none"
+               px-[10vw] pb-4 list-none"
         style="scrollbar-width: none;"
         role="list"
       >
