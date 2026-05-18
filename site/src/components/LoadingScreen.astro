@@ -98,33 +98,49 @@ const baseUrl = import.meta.env.BASE_URL;
   (() => {
     if (typeof window === 'undefined') return;
     const SS_KEY = 'ba-loading-shown';
-    const screen = document.getElementById('loading-screen');
-    if (!screen) return;
 
-    try {
-      if (sessionStorage.getItem(SS_KEY) === '1') {
-        screen.style.display = 'none';
-        return;
-      }
-    } catch {}
+    // Astro's ClientRouter does NOT re-execute inline scripts inserted via
+    // view-transition swap. So this IIFE runs exactly once per real page
+    // load. We install a permanent astro:before-swap handler so the loading
+    // screen markup is stripped from EVERY swapped-in page after the first.
 
-    try { sessionStorage.setItem(SS_KEY, '1'); } catch {}
-
-    document.documentElement.style.overflow = 'hidden';
-
-    const dismiss = () => {
-      if (screen.classList.contains('dismissed')) return;
+    const dismissNow = (screen) => {
+      if (!screen || screen.classList.contains('dismissed')) return;
       screen.classList.add('dismissed');
       document.documentElement.style.overflow = '';
       setTimeout(() => screen.remove(), 650);
     };
 
-    // Auto-dismiss after 1.7 s (giving logo entrance time + brief settle)
-    setTimeout(dismiss, 1700);
+    const screen = document.getElementById('loading-screen');
 
-    screen.addEventListener('click', dismiss);
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') dismiss();
-    }, { once: true });
+    let alreadyShown = false;
+    try { alreadyShown = sessionStorage.getItem(SS_KEY) === '1'; } catch {}
+
+    if (screen) {
+      if (alreadyShown) {
+        screen.remove();
+        document.documentElement.style.overflow = '';
+      } else {
+        try { sessionStorage.setItem(SS_KEY, '1'); } catch {}
+        document.documentElement.style.overflow = 'hidden';
+
+        setTimeout(() => dismissNow(screen), 1700);
+        screen.addEventListener('click', () => dismissNow(screen));
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') dismissNow(screen);
+        }, { once: true });
+      }
+    }
+
+    // Strip the loading screen from any future page that gets swapped in
+    // by Astro's ClientRouter — its inline script will not re-run, so the
+    // markup would otherwise sit there opaque and block interaction.
+    document.addEventListener('astro:before-swap', (event) => {
+      const next = event.newDocument.getElementById('loading-screen');
+      if (next) next.remove();
+    });
+    document.addEventListener('astro:after-swap', () => {
+      document.documentElement.style.overflow = '';
+    });
   })();
 </script>

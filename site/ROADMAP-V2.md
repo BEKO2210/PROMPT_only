@@ -53,9 +53,20 @@ Ohne sie bleibt der Rest Lippenstift auf einem Schwein.
 - LocalStorage flag: zeigt sich nur beim FIRST visit per Session
 
 ### 8.6 Bug-Fixes
-- **Approach-Karten klickbar machen** (aktuell pointer-events oder fehlende Anchors)
-- Magnetic-Hover für jede Karte
-- 3D-Tilt das auf Cursor-Position reagiert (Pseudo-Parallax)
+- ✅ **Approach-Karten klickbar machen** — Karten zu `<a>`-Elementen mit pointer-events + magnetic + hover-chevron umgebaut
+- ✅ Magnetic-Hover für jede Karte
+- ✅ 3D-Tilt das auf Cursor-Position reagiert (Pseudo-Parallax)
+- ✅ **Loading-Screen bleibt bei Seitenwechsel hängen** — inline `<script>` wird vom ClientRouter nicht re-executed; Fix via `astro:before-swap` Handler der das LoadingScreen-Markup aus jedem gewappten Dokument entfernt und `document.documentElement.style.overflow` zurücksetzt. Verifiziert mit Playwright: erste Landung zeigt Screen + Auto-Dismiss, jede ClientRouter-Navigation = Screen absent, Cold-Land auf Sub-Page = Screen zeigt sich + dismisst.
+
+---
+
+## Multi-Page Restructure (Phase 9.5) — ✅ DONE
+- ✅ Single-page Site in 6 Pages aufgeteilt (`/`, `/leistungen`, `/methodik`, `/samples`, `/ueber`, `/kontakt`)
+- ✅ `PageHeader.astro` Komponente für konsistente Sub-Page Hero-Strips
+- ✅ Home als Hub: Hero + TrustStrip + Problem + drei Teaser-Karten mit Watermark-Numbers (78/9/10) + Final-CTA
+- ✅ Anker-Links innerhalb der Sektionen auf base-aware absolute URLs umgeschrieben
+- ✅ Footer Link-Gruppen neu sortiert nach Seiten-Struktur
+- ✅ Build green (9 Routes inkl. Legal), Playwright verifies 6/6 Pages = 200 OK, korrekte H1s, 100% Reveals nach 3s Safety-Fallback
 
 ---
 
