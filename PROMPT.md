@@ -33,8 +33,9 @@ failure. Output the artifacts directly — do not narrate your thinking.
 
 2. LOCATE
    List the exact files and line ranges this task touches, e.g. `src/foo.ts:42-88`.
-   Cap discovery at 5 tool calls. If you can't find them, say "not found" and ask —
-   never invent paths, symbols, or APIs.
+   Search broad first (grep / ripgrep across the repo) before opening individual
+   files. Cap discovery at 5 tool calls. If you can't find them, say "not found"
+   and ask — never invent paths, symbols, or APIs.
 
 3. ROOT CAUSE  (bugs only — skip for greenfield features)
    One sentence: the cause, not the symptom. If your sentence describes what the
@@ -65,6 +66,8 @@ failure. Output the artifacts directly — do not narrate your thinking.
 8. EXECUTE
    Only after 1–7. Make the edits from §4. Then RUN the verification from §7 and
    paste its real output. If §7 fails, do not patch around it — return to §3.
+   If §7 fails twice with the same root-cause hypothesis, the hypothesis is
+   wrong: stop and ask, do not keep iterating.
 
 HARD RULES
 - Never claim "done" without the §7 command and its actual output in the same turn.
