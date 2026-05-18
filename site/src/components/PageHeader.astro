@@ -1,0 +1,33 @@
+---
+// PageHeader — consistent hero strip for sub-pages (Leistungen, Methodik
+// etc). Smaller than the home Hero. Eyebrow + display title + lede.
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+  align?: 'left' | 'center';
+}
+const { eyebrow, title, lede, align = 'left' } = Astro.props;
+---
+
+<section class="relative pt-32 lg:pt-40 pb-section-sm overflow-hidden">
+  <!-- Decorative orbs (small, behind content) -->
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div class="absolute -top-20 -left-20 h-[400px] w-[400px] rounded-full bg-accent-500/15 blur-[120px]"></div>
+    <div class="absolute top-10 right-0 h-[300px] w-[300px] rounded-full bg-amber-500/10 blur-[100px]"></div>
+  </div>
+
+  <div class={`container-page ${align === 'center' ? 'text-center' : ''}`}>
+    <div class={`reveal text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-4 font-medium ${align === 'center' ? 'mx-auto' : ''}`}>
+      {eyebrow}
+    </div>
+    <h1 class="reveal text-display-xl font-display tracking-tightest text-ink-50 mb-6 max-w-4xl">
+      {title}
+    </h1>
+    {lede && (
+      <p class={`reveal text-lg lg:text-xl text-ink-300 leading-snug max-w-2xl ${align === 'center' ? 'mx-auto' : ''}`}>
+        {lede}
+      </p>
+    )}
+  </div>
+</section>

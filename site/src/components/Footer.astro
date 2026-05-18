@@ -3,30 +3,29 @@ import Logo from './Logo.astro';
 
 const year = new Date().getFullYear();
 
+const baseUrl = import.meta.env.BASE_URL;
 const linkGroups = [
   {
-    title: 'Methodik',
+    title: 'Leistungen',
     links: [
-      { label: 'Services',  href: '#services' },
-      { label: 'Samples',   href: '#samples' },
-      { label: 'Prozess',   href: '#prozess' },
-      { label: 'Preise',    href: '#preise' },
+      { label: 'Services + Preise', href: `${baseUrl}leistungen` },
+      { label: 'Methodik',          href: `${baseUrl}methodik` },
+      { label: 'Sample-Reports',    href: `${baseUrl}samples` },
     ],
   },
   {
     title: 'Über',
     links: [
-      { label: 'About',    href: '#about' },
-      { label: 'FAQ',      href: '#faq' },
-      { label: 'Kontakt',  href: '#kontakt' },
-      { label: 'GitHub',   href: 'https://github.com/beko2210/PROMPT_only', external: true },
+      { label: 'Über Belkis',  href: `${baseUrl}ueber` },
+      { label: 'Kontakt',      href: `${baseUrl}kontakt` },
+      { label: 'Library auf GitHub', href: 'https://github.com/beko2210/PROMPT_only', external: true },
     ],
   },
   {
     title: 'Rechtliches',
     links: [
-      { label: 'Impressum',          href: `${import.meta.env.BASE_URL}impressum` },
-      { label: 'Datenschutz',        href: `${import.meta.env.BASE_URL}datenschutz` },
+      { label: 'Impressum',          href: `${baseUrl}impressum` },
+      { label: 'Datenschutz',        href: `${baseUrl}datenschutz` },
       { label: 'Library-Audit',      href: 'https://github.com/beko2210/PROMPT_only/blob/main/LIBRARY-AUDIT.md', external: true },
       { label: 'Disclaimer-Texte',   href: 'https://github.com/beko2210/PROMPT_only/tree/main/_LEGAL', external: true },
     ],

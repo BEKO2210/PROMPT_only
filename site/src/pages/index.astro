@@ -6,19 +6,13 @@ import Footer from '@components/Footer.astro';
 import Hero from '@sections/Hero.astro';
 import TrustStrip from '@sections/TrustStrip.astro';
 import Problem from '@sections/Problem.astro';
-import Approach from '@sections/Approach.astro';
-import Services from '@sections/Services.astro';
-import Samples from '@sections/Samples.astro';
-import Process from '@sections/Process.astro';
-import Pricing from '@sections/Pricing.astro';
-import About from '@sections/About.astro';
-import FAQ from '@sections/FAQ.astro';
-import CTA from '@sections/CTA.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <Base
   title="Belkis Aslani — Software Compliance & Audit | Senior Consulting in Tagen"
-  description="Senior-Consulting für regulierte Software-Engagements: EU AI Act · DSGVO · DORA · ISO 27001 · PCI-DSS · HIPAA. 78 production-grade Workflows · 10 redaktierte Sample Deliverables · Reports auf Beratungsklasse-Niveau in Tagen statt Wochen. Freiberg am Neckar · Stuttgart-Region · Remote-first DACH."
+  description="Senior-Consulting für regulierte Software-Engagements: EU AI Act · DSGVO · DORA · ISO 27001 · PCI-DSS · HIPAA. 78 production-grade Workflows · 10 redaktierte Sample Deliverables. Freiberg am Neckar · Stuttgart-Region · Remote-first DACH."
 >
   <Nav />
 
@@ -26,14 +20,108 @@ import CTA from '@sections/CTA.astro';
     <Hero />
     <TrustStrip />
     <Problem />
-    <Approach />
-    <Services />
-    <Samples />
-    <Process />
-    <Pricing />
-    <About />
-    <FAQ />
-    <CTA />
+
+    <!-- Home-page teasers — three big cards inviting to sub-pages -->
+    <section class="section relative">
+      <div class="container-page">
+        <div class="reveal text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-3 font-medium text-center">
+          Wo es weitergeht
+        </div>
+        <h2 class="reveal text-display-lg font-display tracking-tight max-w-3xl mx-auto mb-14 text-center">
+          Drei Wege durch die Site.
+        </h2>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+          <!-- Teaser: Methodik -->
+          <a
+            href={`${baseUrl}methodik`}
+            data-tilt data-tilt-max="9"
+            class="teaser-card reveal group relative rounded-3xl overflow-hidden border border-white/10 bg-ink-900/50 backdrop-blur-xl p-8 transition-all duration-500 hover:border-accent-500/40 no-tap"
+          >
+            <div class="text-[10px] uppercase tracking-[0.2em] text-accent-400 mb-4 font-medium">01 · Wie ich arbeite</div>
+            <h3 class="font-display text-2xl text-ink-50 leading-tight mb-3">
+              Die Methodik
+            </h3>
+            <p class="text-ink-300 text-sm leading-snug mb-6">
+              78 Workflows in acht Kategorien — die Bibliothek hinter jedem
+              Engagement. Plus der vier-Stage-Prozess von Discovery zu
+              Handover.
+            </p>
+            <div class="flex items-center gap-2 text-accent-300 font-medium text-sm group-hover:gap-3 transition-all">
+              Bibliothek + Prozess ansehen
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+            <!-- Big number watermark -->
+            <span class="absolute -bottom-4 -right-2 text-[180px] font-display font-black text-white/[0.02] leading-none pointer-events-none select-none" aria-hidden="true">78</span>
+          </a>
+
+          <!-- Teaser: Leistungen -->
+          <a
+            href={`${baseUrl}leistungen`}
+            data-tilt data-tilt-max="9"
+            class="teaser-card reveal group relative rounded-3xl overflow-hidden border border-white/10 bg-ink-900/50 backdrop-blur-xl p-8 transition-all duration-500 hover:border-accent-500/40 no-tap"
+            style="transition-delay: 80ms"
+          >
+            <div class="text-[10px] uppercase tracking-[0.2em] text-accent-400 mb-4 font-medium">02 · Was ich liefere</div>
+            <h3 class="font-display text-2xl text-ink-50 leading-tight mb-3">
+              Leistungen + Preise
+            </h3>
+            <p class="text-ink-300 text-sm leading-snug mb-6">
+              Neun packbare Service-Typen mit Anker-Preisen. AI Act,
+              DSGVO, DORA, ISO 27001, PCI, M&amp;A TDD, Architecture,
+              Performance, RAG-Audit.
+            </p>
+            <div class="flex items-center gap-2 text-accent-300 font-medium text-sm group-hover:gap-3 transition-all">
+              Services-Katalog ansehen
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+            <span class="absolute -bottom-4 -right-2 text-[180px] font-display font-black text-white/[0.02] leading-none pointer-events-none select-none" aria-hidden="true">9</span>
+          </a>
+
+          <!-- Teaser: Samples -->
+          <a
+            href={`${baseUrl}samples`}
+            data-tilt data-tilt-max="9"
+            class="teaser-card reveal group relative rounded-3xl overflow-hidden border border-white/10 bg-ink-900/50 backdrop-blur-xl p-8 transition-all duration-500 hover:border-accent-500/40 no-tap"
+            style="transition-delay: 160ms"
+          >
+            <div class="text-[10px] uppercase tracking-[0.2em] text-accent-400 mb-4 font-medium">03 · Was du bekommst</div>
+            <h3 class="font-display text-2xl text-ink-50 leading-tight mb-3">
+              Beispiel-Reports
+            </h3>
+            <p class="text-ink-300 text-sm leading-snug mb-6">
+              Zehn redaktierte Sample-Deliverables aus fiktiven aber
+              strukturell realistischen Engagements. Honorare und Befunde
+              spiegeln, was am Markt zahlt.
+            </p>
+            <div class="flex items-center gap-2 text-accent-300 font-medium text-sm group-hover:gap-3 transition-all">
+              Samples durchstöbern
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+            <span class="absolute -bottom-4 -right-2 text-[180px] font-display font-black text-white/[0.02] leading-none pointer-events-none select-none" aria-hidden="true">10</span>
+          </a>
+        </div>
+
+        <!-- Final CTA strip -->
+        <div class="reveal mt-section-sm text-center">
+          <p class="text-lg text-ink-300 mb-5">
+            Oder direkt zur Sache?
+          </p>
+          <a href={`${baseUrl}kontakt`} data-magnetic data-magnetic-strength="0.35" class="btn-primary no-tap inline-flex">
+            30-Minuten Erstgespräch buchen
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <Footer />

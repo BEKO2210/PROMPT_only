@@ -1,0 +1,28 @@
+---
+import Base from '@layouts/Base.astro';
+import Nav from '@components/Nav.astro';
+import Footer from '@components/Footer.astro';
+import PageHeader from '@components/PageHeader.astro';
+import About from '@sections/About.astro';
+import FAQ from '@sections/FAQ.astro';
+---
+
+<Base
+  title="Über Belkis Aslani — Software Compliance & Audit"
+  description="Senior-Consulting für regulierte Software-Engagements. Hintergrund, Library-Credibility, häufige Fragen vor dem ersten Engagement. Freiberg am Neckar · Stuttgart-Region · Remote-first DACH."
+>
+  <Nav />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="Über"
+      title="Senior-Consulting für regulierte Software, geliefert mit Bibliothek-Disziplin."
+      lede="Hintergrund, Methodik-Credibility und die häufigsten Fragen, die ein Buyer vor dem ersten Engagement hat."
+    />
+
+    <About />
+    <FAQ />
+  </main>
+
+  <Footer />
+</Base>

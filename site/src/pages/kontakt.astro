@@ -1,0 +1,27 @@
+---
+import Base from '@layouts/Base.astro';
+import Nav from '@components/Nav.astro';
+import Footer from '@components/Footer.astro';
+import PageHeader from '@components/PageHeader.astro';
+import CTA from '@sections/CTA.astro';
+---
+
+<Base
+  title="Kontakt — Belkis Aslani"
+  description="30-Minuten Erstgespräch zu Software-Compliance, Audits oder Due Diligence. NDA verfügbar. Antwort innerhalb 24 Stunden. Erstgespräch immer kostenfrei."
+>
+  <Nav />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="Kontakt"
+      title="30 Minuten Erstgespräch. Kein Verkaufs-Pitch."
+      lede="Du erzählst, was bei dir gerade brennt. Ich sage ehrlich, ob diese Methodik passt — oder ob du anders besser bedient wärst."
+      align="center"
+    />
+
+    <CTA />
+  </main>
+
+  <Footer />
+</Base>

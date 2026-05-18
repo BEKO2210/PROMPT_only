@@ -3,13 +3,13 @@ import Logo from './Logo.astro';
 
 interface NavLink { label: string; href: string }
 
+const baseUrl = import.meta.env.BASE_URL;
 const links: NavLink[] = [
-  { label: 'Methodik',   href: '#methodik' },
-  { label: 'Services',   href: '#services' },
-  { label: 'Samples',    href: '#samples' },
-  { label: 'Prozess',    href: '#prozess' },
-  { label: 'Preise',     href: '#preise' },
-  { label: 'FAQ',        href: '#faq' },
+  { label: 'Leistungen', href: `${baseUrl}leistungen` },
+  { label: 'Methodik',   href: `${baseUrl}methodik` },
+  { label: 'Samples',    href: `${baseUrl}samples` },
+  { label: 'Über',       href: `${baseUrl}ueber` },
+  { label: 'Kontakt',    href: `${baseUrl}kontakt` },
 ];
 ---
 
@@ -18,7 +18,7 @@ const links: NavLink[] = [
   class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
   data-state="top"
 >
-  <!-- Scroll progress bar (sub-pixel-precise via transform) -->
+  <!-- Scroll progress bar -->
   <div
     class="absolute top-0 left-0 right-0 h-[2px] bg-white/[0.04]"
     aria-hidden="true"
@@ -30,7 +30,6 @@ const links: NavLink[] = [
     ></div>
   </div>
 
-  <!-- Glass bar -->
   <div
     id="nav-bar"
     class="mx-auto max-w-page px-6 sm:px-8 lg:px-12 transition-all duration-300"
@@ -68,7 +67,7 @@ const links: NavLink[] = [
       <!-- Right CTA -->
       <div class="flex items-center gap-2">
         <a
-          href="#kontakt"
+          href={`${baseUrl}kontakt`}
           data-magnetic
           data-magnetic-strength="0.3"
           class="hidden sm:inline-flex items-center gap-1.5 rounded-full
@@ -84,7 +83,6 @@ const links: NavLink[] = [
           </svg>
         </a>
 
-        <!-- Mobile menu button -->
         <button
           id="nav-toggle"
           type="button"
@@ -109,7 +107,6 @@ const links: NavLink[] = [
       </div>
     </div>
 
-    <!-- Mobile menu -->
     <div
       id="mobile-menu"
       class="md:hidden hidden mt-2 rounded-2xl glass overflow-hidden"
@@ -128,7 +125,7 @@ const links: NavLink[] = [
           </a>
         ))}
         <a
-          href="#kontakt"
+          href={`${baseUrl}kontakt`}
           class="mt-2 rounded-xl bg-accent-500 px-4 py-3 text-base font-semibold
                  text-ink-950 text-center no-tap"
           data-mobile-link
@@ -143,7 +140,6 @@ const links: NavLink[] = [
 <script is:inline>
   (() => {
     if (typeof window === 'undefined') return;
-
     const nav = document.getElementById('site-nav');
     const inner = document.getElementById('nav-inner');
     const progress = document.getElementById('scroll-progress');
@@ -151,10 +147,8 @@ const links: NavLink[] = [
     const menu = document.getElementById('mobile-menu');
     const iconOpen = document.getElementById('icon-open');
     const iconClose = document.getElementById('icon-close');
-
     if (!nav || !inner || !progress) return;
 
-    // ---- Scroll-driven state: progress bar + nav background ----
     let ticking = false;
     const onScroll = () => {
       if (ticking) return;
@@ -164,7 +158,6 @@ const links: NavLink[] = [
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         const ratio = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
         progress.style.transform = `scaleX(${ratio})`;
-
         if (scrollTop > 12) {
           nav.dataset.state = 'scrolled';
           inner.classList.add('glass', 'border-white/10');
@@ -180,7 +173,6 @@ const links: NavLink[] = [
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // ---- Mobile menu ----
     if (toggle && menu && iconOpen && iconClose) {
       const closeMenu = () => {
         menu.classList.add('hidden');
@@ -202,7 +194,6 @@ const links: NavLink[] = [
       menu.querySelectorAll('[data-mobile-link]').forEach(el => {
         el.addEventListener('click', closeMenu);
       });
-      // Escape closes
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && !menu.classList.contains('hidden')) closeMenu();
       });
