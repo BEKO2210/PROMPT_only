@@ -82,6 +82,16 @@ Markdown to PDF directly.
 | [`ONBOARDING-AUDIT.md`](./ONBOARDING-AUDIT.md) | First-time user experience audit with time-to-AHA analysis | **€1 500 – 7 500** | SaaS with high signup-to-activation drop |
 | [`COMPETITOR-TEARDOWN.md`](./COMPETITOR-TEARDOWN.md) | Competitor deep teardown with steal-and-avoid playbook | **€1 000 – 5 000** | Founders + marketing teams pre-launch / pre-pivot |
 
+### AI / LLM Engineering (verkaufbar, neuer Markt)
+
+| Prompt | Deliverable | Realistic price | Buyer |
+|---|---|---|---|
+| [`RAG-AUDIT.md`](./RAG-AUDIT.md) | RAG system audit end-to-end (corpus, chunking, retrieval, reranking, citation, hallucination, cost-per-query) | **€3 000 – 15 000** | Anyone who shipped RAG without measuring it |
+| [`EVAL-DESIGN.md`](./EVAL-DESIGN.md) | Evaluation framework: golden set + automated eval + safety eval + CI regression | **€3 000 – 12 000** | Teams making LLM changes blind |
+| [`FINE-TUNE-PLAN.md`](./FINE-TUNE-PLAN.md) | Should-we-fine-tune decision tree + plan if yes; honest about the 80% who shouldn't | **€5 000 – 25 000** | Anyone with "we should fine-tune" on the roadmap |
+| [`AI-DATASET.md`](./AI-DATASET.md) | Dataset construction + datasheet (Gebru et al. format) for training / eval / RAG | **€3 000 – 15 000** | Pre-training, pre-eval, pre-RAG |
+| [`MODEL-CARD.md`](./MODEL-CARD.md) | Formal model card mapped to EU AI Act Annex IV technical documentation | **€2 000 – 8 000** | Any deployed model facing regulatory or procurement review |
+
 ### Compliance — Sector-specific (high-margin)
 
 | Prompt | Deliverable | Realistic price | Regulatory hook |
@@ -122,6 +132,36 @@ side-hustle case studies, McKinsey 2026 State of AI).
 | [`SOCIAL-CALENDAR.md`](./SOCIAL-CALENDAR.md) | Monthly social calendar (pillars, posts per platform, engagement playbook) | **€500 – 2 500/mo** recurring per brand |
 | [`NEWSLETTER.md`](./NEWSLETTER.md) | Weekly / monthly newsletter from your engagement work (compounding inbound) | **€300 – 1 500** per issue; weekly retainer **€1 200 – 6 000/mo** |
 | [`YOUTUBE-SCRIPT.md`](./YOUTUBE-SCRIPT.md) | Long-form YouTube script + package + production notes | **€500 – 2 500** per script; weekly retainer **€2 000 – 10 000/mo** |
+| [`PR-PITCH.md`](./PR-PITCH.md) | Press release + journalist-specific pitch + follow-up sequence | **€500 – 2 500** per pitch; PR retainer ongoing |
+| [`PODCAST-PITCH.md`](./PODCAST-PITCH.md) | Show-research + custom pitch + talking points + episode proposal per podcast | **€500 – 2 000** per outreach batch |
+| [`WEBINAR-PLAN.md`](./WEBINAR-PLAN.md) | Full webinar: title, reg page, agenda, promotion, live playbook, follow-up sequence, evergreen reuse | **€1 000 – 5 000** per webinar |
+
+### Agency operations (internal leverage)
+
+| Prompt | Produces | Leverage |
+|---|---|---|
+| [`PROJECT-KICKOFF.md`](./PROJECT-KICKOFF.md) | Engagement kickoff document with stakeholder map, RACI, success criteria, risks | Saves 2–4 h per project; cuts scope disputes ~50% |
+| [`SCOPE-CHANGE.md`](./SCOPE-CHANGE.md) | Change order document with itemised scope + cost + timeline impact | Captures 10–40% upsell revenue most consultants miss |
+| [`STATUS-REPORT.md`](./STATUS-REPORT.md) | Weekly client status report (progress / upcoming / blockers / decisions) | 30 min/week; fewer "what's going on?" pings; higher referrals |
+| [`CLIENT-OFFBOARDING.md`](./CLIENT-OFFBOARDING.md) | Handover doc + final report + testimonial ask + referral ask + future-work hook | 50–70% of testimonials come from properly closed engagements |
+| [`INVOICE-FOLLOWUP.md`](./INVOICE-FOLLOWUP.md) | Stage-appropriate reminder (gentle → firm → formal → final notice) | Prevents AR write-offs; closes 5–15% revenue gap most consultants leave |
+| [`TESTIMONIAL-REQUEST.md`](./TESTIMONIAL-REQUEST.md) | Full collection process: ask, draft-for-them, permission, LinkedIn rec | One testimonial = 12+ months of inbound; marginal cost ~15 min |
+
+### Data & Analytics (verkaufbar)
+
+| Prompt | Deliverable | Realistic price | Buyer |
+|---|---|---|---|
+| [`ANALYTICS-AUDIT.md`](./ANALYTICS-AUDIT.md) | GA4 / Mixpanel / Amplitude / Plausible audit with recommended event taxonomy | **€1 500 – 5 000** | Sites measuring 60% of what matters, 40% wrong |
+| [`DASHBOARD-DESIGN.md`](./DASHBOARD-DESIGN.md) | Exec / ops dashboard spec with KPIs, layout, queries, alerting | **€2 000 – 10 000** | Audiences currently making decisions on emailed screenshots |
+| [`METRICS-FRAMEWORK.md`](./METRICS-FRAMEWORK.md) | North-star + metric tree + team ownership + anti-metric deprecation | **€2 000 – 8 000** | Companies with 50 metrics and zero clarity |
+| [`DATA-PIPELINE-AUDIT.md`](./DATA-PIPELINE-AUDIT.md) | Data-pipeline reliability + cost + quality + lineage audit | **€3 000 – 12 000** | Data teams quietly delivering wrong numbers |
+
+### Talent / HR (verkaufbar)
+
+| Prompt | Deliverable | Realistic price | Buyer |
+|---|---|---|---|
+| [`JOB-DESCRIPTION.md`](./JOB-DESCRIPTION.md) | JD written in founder voice with transparent comp + negative selection | **€500 – 2 000** per role | Anyone whose templated JDs attract B-players |
+| [`INTERVIEW-LOOP.md`](./INTERVIEW-LOOP.md) | Work-sample-anchored interview loop with structured scorecards + bias mitigation | **€1 000 – 5 000** per role design | Companies fixing hire-quality via process, not luck |
 
 ---
 
