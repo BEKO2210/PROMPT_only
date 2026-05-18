@@ -170,8 +170,12 @@ const HALO_FRAG = /* glsl */ `
   varying vec3 vNormal;
   varying vec3 vViewDir;
   void main() {
-    float fres = pow(1.0 - max(dot(vNormal, vViewDir), 0.0), 3.0);
-    gl_FragColor = vec4(uColor * fres, fres * 0.7);
+    // Tight Fresnel — halo concentrates as a thin atmosphere ring at
+    // the silhouette edge of the sphere rather than a wide cyan blob
+    // surrounding the whole orb. Lower opacity multiplier so it reads
+    // as 'rim light' not 'background haze'.
+    float fres = pow(1.0 - max(dot(vNormal, vViewDir), 0.0), 6.0);
+    gl_FragColor = vec4(uColor * fres, fres * 0.35);
   }
 `;
 
@@ -245,12 +249,16 @@ export async function mountHeroCore(
   scene.add(mesh);
 
   // Halo (outer expanded sphere, additive blended)
-  const haloGeo = new THREE.SphereGeometry(1.85, 32, 24);
+  // Halo just slightly larger than the sphere (1.4 -> 1.55) so the
+  // atmosphere reads as a tight rim, not a wide cyan haze around the orb.
+  const haloGeo = new THREE.SphereGeometry(1.55, 32, 24);
   const haloMat = new THREE.ShaderMaterial({
     vertexShader: HALO_VERT,
     fragmentShader: HALO_FRAG,
     uniforms: {
-      uColor: { value: new THREE.Color('#1ccaff') },
+      // Halo color slightly desaturated + dimmer — reads as 'air glow'
+      // not a saturated cyan halo around the orb.
+      uColor: { value: new THREE.Color('#5fc6e8') },
     },
     transparent: true,
     blending: THREE.AdditiveBlending,
