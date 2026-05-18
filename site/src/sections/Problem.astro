@@ -1,0 +1,118 @@
+---
+// Problem — acknowledges the buyer's pain in their own language.
+// Three specific friction points with concrete cost framing.
+// Designed to make the reader nod three times before the methodology
+// section explains why this library solves it.
+
+interface Friction {
+  icon: string;
+  title: string;
+  body: string;
+  costLabel: string;
+  cost: string;
+  costTone: 'warning' | 'danger';
+}
+
+const frictions: Friction[] = [
+  {
+    icon: '⏳',
+    title: 'Sechs Wochen bis zum ersten Entwurf',
+    body: 'Jedes Engagement startet bei null. Templates passen nicht zum Mandanten. Senior-Berater schreiben Boilerplate statt Befunde.',
+    costLabel: 'Versteckte Kosten',
+    cost: '€12–30k Beratungsaufwand vor dem ersten echten Finding',
+    costTone: 'warning',
+  },
+  {
+    icon: '🎯',
+    title: 'Quality drift zwischen Engagements',
+    body: 'Jeder Berater hat seine Methode. Findings werden mal mit, mal ohne file:line zitiert. Disclaimer verwässern. Investment Committees merken das.',
+    costLabel: 'Risiko',
+    cost: 'Haftungs-Exposition bei jeder Inkonsistenz',
+    costTone: 'danger',
+  },
+  {
+    icon: '🔍',
+    title: 'Käufer sieht nicht was er kauft',
+    body: 'Ohne Sample-Outputs vor Vertragsabschluss vergleicht der Käufer nur Preis. Race-to-the-bottom statt Value-Selling.',
+    costLabel: 'Konversion',
+    cost: '3–8 % Close-Rate bei Cold Outreach',
+    costTone: 'warning',
+  },
+];
+---
+
+<section id="problem" class="section relative">
+  <div class="container-page">
+    <!-- Eyebrow -->
+    <div class="reveal text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-3 font-medium">
+      Das Problem
+    </div>
+
+    <!-- Headline -->
+    <h2 class="reveal text-display-lg font-display tracking-tight max-w-4xl mb-6">
+      Beratungs-Engagements scheitern selten an Substanz.
+      Sie scheitern an
+      <span class="text-gradient">Liefer-Zeit</span>,
+      <span class="text-gradient">Verifizierbarkeit</span>
+      und
+      <span class="text-gradient">Wiederholbarkeit</span>.
+    </h2>
+
+    <p class="reveal max-w-prose-tight text-lg text-ink-300 leading-snug mb-16">
+      Die meisten Probleme im Beratungs-Geschäft sind nicht intellektuell.
+      Sie sind operativ. Drei Reibungspunkte machen 80 % der Marge kaputt:
+    </p>
+
+    <!-- 3 friction cards -->
+    <div class="grid md:grid-cols-3 gap-6">
+      {frictions.map((f, i) => (
+        <article
+          class="reveal card-spotlight glass rounded-2xl p-6 lg:p-8 relative overflow-hidden"
+          style={`animation-delay: ${i * 80}ms`}
+        >
+          <!-- Numbered badge -->
+          <div class="absolute top-4 right-4 text-[10px] font-mono text-ink-500 tabular-nums">
+            0{i + 1}
+          </div>
+
+          <div class="text-3xl mb-5" aria-hidden="true">{f.icon}</div>
+
+          <h3 class="font-display text-xl text-ink-50 mb-3 leading-tight">
+            {f.title}
+          </h3>
+
+          <p class="text-ink-300 text-base leading-snug mb-6">
+            {f.body}
+          </p>
+
+          <div class="mt-auto pt-4 border-t border-white/5">
+            <div class="text-[10px] uppercase tracking-[0.15em] text-ink-400 mb-1.5 font-medium">
+              {f.costLabel}
+            </div>
+            <div class:list={[
+              'text-base font-display leading-snug font-medium',
+              f.costTone === 'danger' ? 'text-danger' : 'text-warning'
+            ]}>
+              {f.cost}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- Closing line that transitions to the next section -->
+    <div class="reveal mt-16 text-center">
+      <p class="text-lg text-ink-300 max-w-2xl mx-auto">
+        Die Lösung ist keine bessere Beratungs-Software.
+        Es ist <span class="text-ink-100 font-medium">strukturierte Wiederholbarkeit</span>.
+      </p>
+      <a href="#methodik" class="btn-ghost mt-4 inline-flex items-center gap-2 no-tap">
+        So sieht das aus
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <polyline points="19 12 12 19 5 12"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
