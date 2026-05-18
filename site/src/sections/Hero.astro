@@ -250,8 +250,8 @@ const isoDate = now.toISOString().slice(0, 10);
         tag.textContent = `LIVE · DE · ${iso} · ${hh}:${mm} UTC`;
       };
       update();
-      const w = window as Window & { [k: string]: unknown };
-      if (w[HERO_CLOCK_INTERVAL_KEY]) clearInterval(w[HERO_CLOCK_INTERVAL_KEY] as number);
+      const w = window as unknown as Record<string, number | undefined>;
+      if (w[HERO_CLOCK_INTERVAL_KEY]) clearInterval(w[HERO_CLOCK_INTERVAL_KEY]);
       w[HERO_CLOCK_INTERVAL_KEY] = setInterval(update, 60_000) as unknown as number;
     }
   };

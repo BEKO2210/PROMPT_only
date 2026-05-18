@@ -1,13 +1,20 @@
 ---
-// Approach — the methodology + library visualization. THE story-driving
-// section after Hero. Eight category cards transition from stacked to
-// fanned-out as the user scrolls, with progress-driven counter for
-// the total prompt count.
+// Approach — methodology + library visualisation.
 //
-// Animation strategy:
-//   - Outer scroll region of 250vh; inner panel pinned for that duration
-//   - GSAP ScrollTrigger with scrub for smooth bidirectional motion
-//   - prefers-reduced-motion and mobile: graceful static fan layout
+// Desktop (≥ lg): scroll-pinned card stack that fans out as user scrolls.
+//   - 200vh outer region (was 250vh — tightened so it doesn't drag)
+//   - GSAP ScrollTrigger with scrub for cinematic bidirectional motion
+//
+// Mobile (< lg): horizontal snap-scroll carousel.
+//   - Cards are 80vw wide each, swipe-driven (native momentum)
+//   - CSS scroll-snap for clean stop at each card
+//   - Center-focus scale via JS observer (centered card scales 1.0,
+//     others scale 0.92 with subtle horizontal offset)
+//   - Pagination dots below show position + are tappable
+//   - Edge fade-masks left + right for premium feel
+//   - Section is natural-height (NO sticky/pin) — no "hangs in place"
+//
+// Reduced-motion: static fan layout, no animations.
 
 interface Category {
   id: string;
@@ -17,15 +24,14 @@ interface Category {
   prompts: string;
 }
 
-// 8 categories summing exactly to the library's 78 active prompts
 const categories: Category[] = [
-  { id: 'workflow',  label: 'Internal Workflow',     count: 6,  color: '#58dfff', prompts: 'SHIP · MAP · HUNT · REVIEW · REFACTOR · TRIM' },
-  { id: 'strategic', label: 'Strategic Audits',      count: 5,  color: '#1ccaff', prompts: 'AUDIT · PERF · ARCH · MIGRATE · DD' },
-  { id: 'comp-gen',  label: 'Compliance (General)',  count: 11, color: '#00b3f0', prompts: 'SBOM · A11Y · API-DOC · GDPR · POSTMORTEM · SEO · …' },
-  { id: 'comp-sect', label: 'Compliance (Sector)',   count: 8,  color: '#0091cc', prompts: 'AI-ACT · DORA · HIPAA · PCI-DSS · ISO-27001 · …' },
-  { id: 'web',       label: 'Web Build & Convert',   count: 14, color: '#ff9d1c', prompts: 'LANDING · WEBSITE · CHECKOUT · CONVERSION · COPY · …' },
-  { id: 'ai-eng',    label: 'AI/LLM Engineering',    count: 5,  color: '#ffb74a', prompts: 'RAG-AUDIT · EVAL-DESIGN · FINE-TUNE · MODEL-CARD · AI-DATASET' },
-  { id: 'data',      label: 'Data & Analytics',      count: 4,  color: '#94ecff', prompts: 'ANALYTICS · DASHBOARD · METRICS · DATA-PIPELINE' },
+  { id: 'workflow',  label: 'Internal Workflow',       count: 6,  color: '#58dfff', prompts: 'SHIP · MAP · HUNT · REVIEW · REFACTOR · TRIM' },
+  { id: 'strategic', label: 'Strategic Audits',        count: 5,  color: '#1ccaff', prompts: 'AUDIT · PERF · ARCH · MIGRATE · DD' },
+  { id: 'comp-gen',  label: 'Compliance (General)',    count: 11, color: '#00b3f0', prompts: 'SBOM · A11Y · API-DOC · GDPR · POSTMORTEM · SEO · …' },
+  { id: 'comp-sect', label: 'Compliance (Sector)',     count: 8,  color: '#0091cc', prompts: 'AI-ACT · DORA · HIPAA · PCI-DSS · ISO-27001 · …' },
+  { id: 'web',       label: 'Web Build & Convert',     count: 14, color: '#ff9d1c', prompts: 'LANDING · WEBSITE · CHECKOUT · CONVERSION · COPY · …' },
+  { id: 'ai-eng',    label: 'AI/LLM Engineering',      count: 5,  color: '#ffb74a', prompts: 'RAG-AUDIT · EVAL-DESIGN · FINE-TUNE · MODEL-CARD · AI-DATASET' },
+  { id: 'data',      label: 'Data & Analytics',        count: 4,  color: '#94ecff', prompts: 'ANALYTICS · DASHBOARD · METRICS · DATA-PIPELINE' },
   { id: 'ops-mkt',   label: 'Business Ops & Marketing', count: 25, color: '#c9f5ff', prompts: 'DISCOVERY · PROPOSAL · RETAINER · NEWSLETTER · PR · …' },
 ];
 
@@ -34,19 +40,18 @@ const total = categories.reduce((s, c) => s + c.count, 0);
 
 <section
   id="methodik"
-  class="relative"
+  class="approach relative"
   data-approach
   aria-labelledby="approach-headline"
 >
-  <!-- Outer scroll region. Height controls how much scroll the pinned
-       animation consumes. 250vh = ~2 viewports of scroll for the fan-out. -->
-  <div class="approach-scroll" style="height: clamp(180vh, 250vh, 350vh)">
-    <!-- Inner sticky panel — stays in view while outer scrolls -->
+  <!-- ====================== DESKTOP (lg+) ====================== -->
+  <!-- Pinned scroll region — only rendered visually on lg+ via CSS -->
+  <div class="approach-desktop hidden lg:block" style="height: clamp(160vh, 200vh, 280vh)">
     <div class="sticky top-0 h-screen flex items-center overflow-hidden">
       <div class="container-page w-full">
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-          <!-- LEFT: text -->
+          <!-- LEFT: copy + stats -->
           <div>
             <div class="text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-3 font-medium">
               Die Methodik
@@ -71,7 +76,6 @@ const total = categories.reduce((s, c) => s + c.count, 0);
               Sample-Output und Pricing-Indikation.
             </p>
 
-            <!-- Mini stats -->
             <div class="grid grid-cols-3 gap-4 max-w-md">
               <div class="border-l-2 border-accent-500/40 pl-3">
                 <div class="text-2xl font-display text-gradient tabular-nums">{total}</div>
@@ -87,7 +91,6 @@ const total = categories.reduce((s, c) => s + c.count, 0);
               </div>
             </div>
 
-            <!-- Progress hint (desktop only — shows scroll progress through approach) -->
             <div class="hidden lg:flex items-center gap-3 mt-10">
               <div class="h-px flex-1 bg-white/10 overflow-hidden rounded-full">
                 <div
@@ -103,20 +106,17 @@ const total = categories.reduce((s, c) => s + c.count, 0);
             </div>
           </div>
 
-          <!-- RIGHT: card stack visualization -->
+          <!-- RIGHT: card stack visualisation -->
           <div
             class="relative w-full max-w-[460px] mx-auto"
             style="aspect-ratio: 4/5"
             data-approach-stack
             aria-hidden="true"
           >
-            <div
-              class="absolute inset-0"
-              style="perspective: 1400px; transform-style: preserve-3d;"
-            >
+            <div class="absolute inset-0" style="perspective: 1400px; transform-style: preserve-3d;">
               {categories.map((c, i) => (
                 <a
-                  href={`#services`}
+                  href="#services"
                   data-approach-card
                   data-index={i}
                   data-magnetic
@@ -160,7 +160,6 @@ const total = categories.reduce((s, c) => s + c.count, 0);
                     {c.prompts}
                   </footer>
 
-                  <!-- Hover-revealed CTA chevron -->
                   <span
                     class="absolute top-4 right-4 inline-flex h-8 w-8 items-center justify-center
                            rounded-full bg-white/5 text-ink-300
@@ -178,7 +177,6 @@ const total = categories.reduce((s, c) => s + c.count, 0);
               ))}
             </div>
 
-            <!-- Decorative glow behind cards -->
             <div
               class="absolute inset-0 -z-10 blur-[80px] opacity-50"
               style="background: radial-gradient(ellipse at center, rgba(0,179,240,0.35), transparent 60%);"
@@ -189,115 +187,300 @@ const total = categories.reduce((s, c) => s + c.count, 0);
       </div>
     </div>
   </div>
+
+  <!-- ====================== MOBILE (< lg) ====================== -->
+  <!-- Horizontal snap-scroll carousel — natural-height, no pinning,
+       native momentum + scroll-snap + center-focus scale. -->
+  <div class="approach-mobile lg:hidden py-section-sm">
+    <div class="container-page mb-10">
+      <div class="text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-3 font-medium reveal">
+        Die Methodik
+      </div>
+      <h2 class="text-display-md font-display tracking-tight mb-4 reveal">
+        <span class="block">
+          <span class="tabular-nums">{total}</span> Workflows in 8 Kategorien.
+        </span>
+        <span class="block text-gradient">Eine Bibliothek.</span>
+      </h2>
+      <p class="text-base text-ink-300 leading-snug max-w-md reveal">
+        Jeder Workflow ist ein production-grade Prompt mit Verifikations-Checkliste,
+        verbatim-Disclaimer und Sample-Output.
+      </p>
+    </div>
+
+    <!-- Carousel rail -->
+    <div class="relative">
+      <!-- Edge-fade masks -->
+      <div class="pointer-events-none absolute inset-y-0 left-0 w-8 z-10 bg-gradient-to-r from-ink-950 to-transparent" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-ink-950 to-transparent" aria-hidden="true"></div>
+
+      <ul
+        data-approach-mobile-rail
+        class="approach-rail flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth
+               px-[10vw] pb-4 -mx-1 list-none"
+        style="scrollbar-width: none;"
+        role="list"
+      >
+        {categories.map((c, i) => (
+          <li
+            class="approach-rail-item snap-center shrink-0 w-[80vw] max-w-[360px]"
+            data-card-index={i}
+          >
+            <a
+              href="#services"
+              data-approach-mobile-card
+              class="approach-mobile-card holo-card border-sweep ripple-host group block rounded-2xl p-6 h-full
+                     transition-transform duration-500 ease-out
+                     focus-visible:ring-accent-300 no-tap"
+              style={`
+                background: linear-gradient(135deg, ${c.color}1A 0%, rgba(11,11,22,0.92) 65%);
+                border-color: ${c.color}40;
+                min-height: 380px;
+              `}
+              aria-label={`Kategorie ${c.label}: ${c.count} Prompts — zu Services`}
+            >
+              <div class="flex items-start justify-between mb-5">
+                <div
+                  class="text-[10px] uppercase tracking-[0.2em] font-medium"
+                  style={`color: ${c.color}`}
+                >
+                  {String(i + 1).padStart(2, '0')} · von 08
+                </div>
+                <span
+                  class="inline-flex h-7 w-7 items-center justify-center rounded-full border"
+                  style={`border-color: ${c.color}66; background: ${c.color}1A;`}
+                  aria-hidden="true"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={c.color} stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                </span>
+              </div>
+
+              <h3 class="font-display text-2xl text-ink-50 leading-tight mb-4">
+                {c.label}
+              </h3>
+
+              <div
+                class="text-5xl font-display font-bold leading-none tabular-nums mb-1"
+                style={`color: ${c.color}`}
+              >
+                {c.count}
+              </div>
+              <div class="text-sm text-ink-400 mb-6 uppercase tracking-wider">
+                prompts
+              </div>
+
+              <div class="border-t border-white/10 pt-4">
+                <div class="text-[10px] uppercase tracking-wider text-ink-400 mb-2 font-medium">
+                  enthält
+                </div>
+                <p class="text-xs text-ink-300 font-mono leading-relaxed break-words">
+                  {c.prompts}
+                </p>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <!-- Pagination dots + counter -->
+      <div class="container-page mt-6 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-1.5" data-approach-mobile-dots aria-label="Kategorien-Navigation">
+          {categories.map((c, i) => (
+            <button
+              type="button"
+              data-dot-index={i}
+              class={`approach-dot rounded-full transition-all duration-300 ${i === 0 ? 'is-active' : ''}`}
+              aria-label={`Springe zu Karte ${i + 1}`}
+            ></button>
+          ))}
+        </div>
+        <div class="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-400 tabular-nums">
+          <span data-approach-mobile-current>01</span> / 08
+        </div>
+      </div>
+
+      <!-- Swipe hint (auto-fades after first interaction) -->
+      <div
+        data-approach-swipe-hint
+        class="container-page mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-ink-500 font-mono
+               transition-opacity duration-500"
+      >
+        <span>← swipe →</span>
+      </div>
+    </div>
+  </div>
 </section>
+
+<style>
+  /* Hide horizontal scrollbar on mobile rail (kept accessible via touch) */
+  .approach-rail::-webkit-scrollbar { display: none; }
+
+  /* Mobile pagination dots */
+  .approach-dot {
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .approach-dot.is-active {
+    width: 28px;
+    background: var(--accent-500, #00b3f0);
+    border-color: rgba(88, 223, 255, 0.6);
+    box-shadow: 0 0 8px rgba(0, 179, 240, 0.5);
+  }
+
+  /* Center-focus scale — JS toggles .is-focused on the card nearest
+     viewport center. Pure CSS handles the transition. */
+  .approach-mobile-card {
+    transform: scale(0.92);
+    opacity: 0.75;
+  }
+  .approach-rail-item.is-focused .approach-mobile-card {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .approach-mobile-card,
+    .approach-dot,
+    .approach-rail { transition: none !important; }
+    .approach-mobile-card { transform: none; opacity: 1; }
+  }
+</style>
 
 <script>
   (async () => {
     if (typeof window === 'undefined') return;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const root = document.querySelector('[data-approach]') as HTMLElement | null;
     if (!root) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-approach-card]'));
+    // ============ DESKTOP behaviour ============
+    const desktopMatches = window.matchMedia('(min-width: 1024px)').matches;
+    const desktopCards = Array.from(root.querySelectorAll<HTMLElement>('[data-approach-card]'));
     const progressBar = root.querySelector<HTMLElement>('[data-approach-progress]');
     const progressPct = root.querySelector<HTMLElement>('[data-approach-progress-pct]');
-    if (!cards.length) return;
 
-    const N = cards.length;
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (desktopMatches && desktopCards.length) {
+      const N = desktopCards.length;
+      const setInitial = () => {
+        desktopCards.forEach((c, i) => {
+          c.style.transform = `translate3d(0, ${i * 2}px, ${-i * 8}px) rotate(${i * -1}deg) scale(${1 - i * 0.015})`;
+          c.style.opacity = String(1 - i * 0.04);
+          c.style.zIndex = String(N - i);
+        });
+      };
+      setInitial();
 
-    // Initial state — stack all cards centred (visually appealing baseline
-    // even before any scroll occurs)
-    const setInitial = () => {
-      cards.forEach((c, i) => {
-        c.style.transform = `translate3d(0, ${i * 2}px, ${-i * 8}px) rotate(${i * -1}deg) scale(${1 - i * 0.015})`;
-        c.style.opacity = String(1 - i * 0.04);
-        c.style.zIndex = String(N - i);
+      if (reduce) {
+        desktopCards.forEach((c, i) => {
+          const t = i - (N - 1) / 2;
+          c.style.transition = 'transform 600ms ease-out, opacity 600ms ease-out';
+          c.style.transform = `translate3d(${t * 26}px, ${Math.abs(t) * 6}px, 0) rotate(${t * 4}deg)`;
+          c.style.opacity = '1';
+        });
+        if (progressBar) progressBar.style.transform = 'scaleX(1)';
+        if (progressPct) progressPct.textContent = '100 %';
+      } else {
+        try {
+          const { gsap } = await import('gsap');
+          const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+          gsap.registerPlugin(ScrollTrigger);
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: root.querySelector('.approach-desktop') as HTMLElement,
+              start: 'top top',
+              end: 'bottom bottom',
+              scrub: 1.2,
+              onUpdate: (self) => {
+                const p = Math.round(self.progress * 100);
+                if (progressBar) progressBar.style.transform = `scaleX(${self.progress})`;
+                if (progressPct) progressPct.textContent = `${p} %`;
+              },
+            },
+          });
+
+          desktopCards.forEach((card, i) => {
+            const t = i - (N - 1) / 2;
+            tl.to(card, {
+              x: t * 70,
+              y: Math.abs(t) * 14,
+              rotate: t * 8,
+              opacity: 1,
+              duration: 1,
+              ease: 'power2.out',
+            }, 0);
+          });
+        } catch (e) {
+          desktopCards.forEach((c, i) => {
+            const t = i - (N - 1) / 2;
+            c.style.transition = 'transform 800ms ease-out, opacity 600ms ease-out';
+            c.style.transform = `translate3d(${t * 26}px, ${Math.abs(t) * 6}px, 0) rotate(${t * 4}deg)`;
+            c.style.opacity = '1';
+          });
+        }
+      }
+    }
+
+    // ============ MOBILE carousel behaviour ============
+    const rail = root.querySelector<HTMLElement>('[data-approach-mobile-rail]');
+    if (!rail) return;
+
+    const items = Array.from(rail.querySelectorAll<HTMLElement>('.approach-rail-item'));
+    const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-dot-index]'));
+    const counter = root.querySelector<HTMLElement>('[data-approach-mobile-current]');
+    const hint = root.querySelector<HTMLElement>('[data-approach-swipe-hint]');
+    if (!items.length) return;
+
+    const setFocused = (idx: number) => {
+      items.forEach((it, i) => it.classList.toggle('is-focused', i === idx));
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+      if (counter) counter.textContent = String(idx + 1).padStart(2, '0');
+    };
+    setFocused(0);
+
+    // Update active card based on which is nearest the rail's centre
+    let scrollTicking = false;
+    const updateFromScroll = () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        const railRect = rail.getBoundingClientRect();
+        const center = railRect.left + railRect.width / 2;
+        let best = { idx: 0, dist: Infinity };
+        items.forEach((it, i) => {
+          const r = it.getBoundingClientRect();
+          const c = r.left + r.width / 2;
+          const d = Math.abs(c - center);
+          if (d < best.dist) best = { idx: i, dist: d };
+        });
+        setFocused(best.idx);
+        scrollTicking = false;
       });
     };
-    setInitial();
 
-    if (reduce) {
-      // Reduced-motion: spread cards in a static fan immediately
-      cards.forEach((c, i) => {
-        const t = i - (N - 1) / 2;
-        c.style.transition = 'transform 600ms ease-out, opacity 600ms ease-out';
-        c.style.transform = `translate3d(${t * 26}px, ${Math.abs(t) * 6}px, 0) rotate(${t * 4}deg)`;
-        c.style.opacity = '1';
+    rail.addEventListener('scroll', updateFromScroll, { passive: true });
+
+    // Dot tap → scroll to that card
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        items[idx]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
       });
-      if (progressBar) progressBar.style.transform = 'scaleX(1)';
-      if (progressPct) progressPct.textContent = '100 %';
-      return;
-    }
+    });
 
-    if (isMobile) {
-      // Mobile: simple stagger reveal on intersection — pinned-scroll is
-      // janky on touch devices.
-      const io = new IntersectionObserver((entries) => {
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          cards.forEach((c, i) => {
-            const t = i - (N - 1) / 2;
-            setTimeout(() => {
-              c.style.transition = 'transform 700ms cubic-bezier(0.16,1,0.3,1), opacity 500ms ease-out';
-              c.style.transform = `translate3d(${t * 18}px, ${Math.abs(t) * 4}px, 0) rotate(${t * 3.5}deg)`;
-              c.style.opacity = '1';
-            }, i * 70);
-          });
-          io.disconnect();
-        }
-      }, { threshold: 0.2 });
-      io.observe(root);
-      return;
-    }
-
-    // Desktop: GSAP ScrollTrigger with scrub for cinematic bidirectional motion
-    try {
-      const { gsap } = await import('gsap');
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger');
-      gsap.registerPlugin(ScrollTrigger);
-
-      // Build a timeline that fans cards out + updates progress UI
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: root,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 1.2,
-          onUpdate: (self) => {
-            const p = Math.round(self.progress * 100);
-            if (progressBar) progressBar.style.transform = `scaleX(${self.progress})`;
-            if (progressPct) progressPct.textContent = `${p} %`;
-          },
-        },
-      });
-
-      cards.forEach((card, i) => {
-        const t = i - (N - 1) / 2;            // -3.5 ... +3.5 for N=8
-        const lateral = t * 70;                // px translation
-        const lift = Math.abs(t) * 14;         // px vertical lift on outer cards
-        const rotation = t * 8;                // deg fan angle
-        tl.to(
-          card,
-          {
-            x: lateral,
-            y: lift,
-            rotate: rotation,
-            opacity: 1,
-            duration: 1,
-            ease: 'power2.out',
-          },
-          0
-        );
-      });
-    } catch (e) {
-      console.warn('[Approach] GSAP failed to load, using static fan fallback', e);
-      cards.forEach((c, i) => {
-        const t = i - (N - 1) / 2;
-        c.style.transition = 'transform 800ms ease-out, opacity 600ms ease-out';
-        c.style.transform = `translate3d(${t * 26}px, ${Math.abs(t) * 6}px, 0) rotate(${t * 4}deg)`;
-        c.style.opacity = '1';
-      });
-    }
+    // Fade swipe-hint after first interaction
+    const fadeHint = () => {
+      if (hint) hint.style.opacity = '0';
+      rail.removeEventListener('scroll', fadeHint);
+      rail.removeEventListener('touchstart', fadeHint);
+    };
+    rail.addEventListener('scroll', fadeHint, { once: true, passive: true });
+    rail.addEventListener('touchstart', fadeHint, { once: true, passive: true });
+    // Auto-fade after 6s anyway
+    setTimeout(fadeHint, 6000);
   })();
 </script>
