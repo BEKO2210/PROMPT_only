@@ -27,8 +27,9 @@ failure. Output the artifacts directly — do not narrate your thinking.
 
 1. RESTATE
    In ≤3 sentences, restate the task in your own words.
-   Mark every inference with [assumption]. If any [assumption] would change the
-   design, stop and ask me one targeted question before continuing.
+   Mark non-trivial inferences with [assumption] — skip the obvious ones, don't
+   tag-spam. If any [assumption] would change the design, stop and ask me one
+   targeted question before continuing.
 
 2. LOCATE
    List the exact files and line ranges this task touches, e.g. `src/foo.ts:42-88`.
