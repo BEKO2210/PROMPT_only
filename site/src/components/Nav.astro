@@ -233,89 +233,130 @@ const links: NavLink[] = [
 </style>
 
 <script is:inline>
+  // Nav script — designed to survive Astro ClientRouter view-transition
+  // swaps. The page DOM gets replaced on every navigation, so any
+  // listeners attached to specific element refs would be lost. Instead
+  // we use event delegation on `document` (and `window`) — those
+  // targets persist across swaps, so the handlers stay live.
   (() => {
     if (typeof window === 'undefined') return;
-    const nav = document.getElementById('site-nav');
-    const inner = document.getElementById('nav-inner');
-    const progress = document.getElementById('scroll-progress');
-    const toggle = document.getElementById('nav-toggle');
-    const menu = document.getElementById('mobile-menu');
-    const iconOpen = document.getElementById('icon-open');
-    const iconClose = document.getElementById('icon-close');
-    if (!nav || !inner || !progress) return;
+    if (window.__navWired) return;        // idempotent: only wire once
+    window.__navWired = true;
 
+    // ---------- Scroll-progress + glass-on-scroll ----------
+    // Re-query DOM each frame because elements get replaced on swap.
     let ticking = false;
     const onScroll = () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const ratio = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
-        progress.style.transform = `scaleX(${ratio})`;
-        if (scrollTop > 12) {
-          nav.dataset.state = 'scrolled';
-          inner.classList.add('glass', 'border-white/10');
-          inner.classList.remove('border-transparent');
-        } else {
-          nav.dataset.state = 'top';
-          inner.classList.remove('glass', 'border-white/10');
-          inner.classList.add('border-transparent');
+        const nav      = document.getElementById('site-nav');
+        const inner    = document.getElementById('nav-inner');
+        const progress = document.getElementById('scroll-progress');
+        if (nav && inner && progress) {
+          const scrollTop = window.scrollY;
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const ratio = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+          progress.style.transform = 'scaleX(' + ratio + ')';
+          if (scrollTop > 12) {
+            nav.dataset.state = 'scrolled';
+            inner.classList.add('glass', 'border-white/10');
+            inner.classList.remove('border-transparent');
+          } else {
+            nav.dataset.state = 'top';
+            inner.classList.remove('glass', 'border-white/10');
+            inner.classList.add('border-transparent');
+          }
         }
         ticking = false;
       });
     };
-    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('astro:page-load', onScroll); // initial + per-swap
+    onScroll();
 
-    const closeBtn = document.getElementById('mobile-close');
-    const missionTag = document.querySelector('[data-mobile-mission]');
+    // ---------- Mobile drawer ----------
+    const updateMissionTag = () => {
+      const tag = document.querySelector('[data-mobile-mission]');
+      if (!tag) return;
+      const d = new Date();
+      const hh = String(d.getUTCHours()).padStart(2, '0');
+      const mm = String(d.getUTCMinutes()).padStart(2, '0');
+      tag.textContent = 'LIVE · DE · ' + hh + ':' + mm + ' UTC';
+    };
 
-    if (toggle && menu && iconOpen && iconClose) {
-      const closeMenu = () => {
-        menu.classList.remove('is-open');
-        document.body.classList.remove('mobile-menu-open');
+    const openMenu = () => {
+      const menu      = document.getElementById('mobile-menu');
+      const toggle    = document.getElementById('nav-toggle');
+      const iconOpen  = document.getElementById('icon-open');
+      const iconClose = document.getElementById('icon-close');
+      if (!menu || !toggle) return;
+      menu.classList.add('is-open');
+      document.body.classList.add('mobile-menu-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Menü schließen');
+      if (iconOpen)  iconOpen.classList.add('hidden');
+      if (iconClose) iconClose.classList.remove('hidden');
+      updateMissionTag();
+      const firstLink = menu.querySelector('[data-mobile-link]');
+      if (firstLink && typeof firstLink.focus === 'function') firstLink.focus();
+    };
+
+    const closeMenu = () => {
+      const menu      = document.getElementById('mobile-menu');
+      const toggle    = document.getElementById('nav-toggle');
+      const iconOpen  = document.getElementById('icon-open');
+      const iconClose = document.getElementById('icon-close');
+      if (menu) menu.classList.remove('is-open');
+      document.body.classList.remove('mobile-menu-open');
+      if (toggle) {
         toggle.setAttribute('aria-expanded', 'false');
         toggle.setAttribute('aria-label', 'Menü öffnen');
-        iconOpen.classList.remove('hidden');
-        iconClose.classList.add('hidden');
-      };
-      const openMenu = () => {
-        menu.classList.add('is-open');
-        document.body.classList.add('mobile-menu-open');
-        toggle.setAttribute('aria-expanded', 'true');
-        toggle.setAttribute('aria-label', 'Menü schließen');
-        iconOpen.classList.add('hidden');
-        iconClose.classList.remove('hidden');
-        // Update mission tag live time on open
-        if (missionTag) {
-          const d = new Date();
-          const hh = String(d.getUTCHours()).padStart(2, '0');
-          const mm = String(d.getUTCMinutes()).padStart(2, '0');
-          missionTag.textContent = 'LIVE · DE · ' + hh + ':' + mm + ' UTC';
-        }
-        // Focus first link for keyboard nav
-        const first = menu.querySelector('[data-mobile-link]');
-        if (first) first.focus();
-      };
-      toggle.addEventListener('click', () => {
-        if (menu.classList.contains('is-open')) closeMenu(); else openMenu();
-      });
-      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-      menu.querySelectorAll('[data-mobile-link]').forEach(el => {
-        el.addEventListener('click', closeMenu);
-      });
-      // Click on backdrop area closes
-      menu.addEventListener('click', (e) => {
-        if (e.target === menu) closeMenu();
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && menu.classList.contains('is-open')) closeMenu();
-      });
-      // Close menu on view-transition swap (so it doesn't leak across pages)
-      document.addEventListener('astro:before-swap', () => {
-        if (menu.classList.contains('is-open')) closeMenu();
-      });
-    }
+      }
+      if (iconOpen)  iconOpen.classList.remove('hidden');
+      if (iconClose) iconClose.classList.add('hidden');
+    };
+
+    const isOpen = () => {
+      const menu = document.getElementById('mobile-menu');
+      return !!menu && menu.classList.contains('is-open');
+    };
+
+    // Delegated click handler — finds the hamburger, close button,
+    // drawer link, or backdrop regardless of which page's DOM is mounted.
+    document.addEventListener('click', (e) => {
+      const target = e.target;
+      if (!(target instanceof Element)) return;
+
+      // Hamburger toggle button (#nav-toggle) — accept any descendant of it too
+      if (target.closest('#nav-toggle')) {
+        if (isOpen()) closeMenu(); else openMenu();
+        return;
+      }
+      // Close button inside the drawer
+      if (target.closest('#mobile-close')) {
+        closeMenu();
+        return;
+      }
+      // Link inside drawer (closes before navigation)
+      if (target.closest('[data-mobile-link]')) {
+        closeMenu();
+        return;
+      }
+      // Backdrop click — closes if user taps the drawer surface itself
+      if (target.id === 'mobile-menu') {
+        closeMenu();
+      }
+    });
+
+    // Esc key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) closeMenu();
+    });
+
+    // Close on ClientRouter swap so drawer doesn't leak across pages
+    document.addEventListener('astro:before-swap', () => {
+      if (isOpen()) closeMenu();
+    });
   })();
 </script>
