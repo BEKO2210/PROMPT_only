@@ -1,0 +1,108 @@
+---
+import Base from '@layouts/Base.astro';
+---
+
+<Base
+  title="[Dein Name] — AI-assisted Consulting"
+  description="78 production-grade prompts. 10 redacted sample deliverables. Senior consulting work delivered in days, not weeks. Spezialisiert auf [Specialism]."
+>
+  <main id="main">
+    <!-- ============================================================
+         PHASE 1 PLACEHOLDER — Real sections come in Phase 2-6
+         This placeholder confirms the build pipeline, layout, fonts,
+         design tokens, and animation primitives all work.
+         ============================================================ -->
+
+    <section class="section">
+      <div class="container-page">
+        <!-- Eyebrow -->
+        <div class="reveal mb-6 inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm text-ink-200">
+          <span class="h-2 w-2 rounded-full bg-accent-400 animate-pulse-glow"></span>
+          Build status: Phase 1 of 7 — Foundation
+        </div>
+
+        <!-- Headline (placeholder — Phase 2 replaces with animated hero) -->
+        <h1 class="reveal text-display-2xl font-display tracking-tightest mb-6">
+          Hier entsteht
+          <span class="text-gradient">Deutschlands beste</span>
+          Consulting-Landingpage.
+        </h1>
+
+        <p class="reveal max-w-prose-tight text-xl text-ink-200 leading-snug mb-10">
+          Foundation steht: Astro 5, Tailwind v4, GSAP, View Transitions, dark-mode-first
+          design system, GitHub Actions deployment. Hero, Services, Samples, Pricing
+          und Process kommen in Phase 2–6.
+        </p>
+
+        <!-- Primary actions -->
+        <div class="reveal flex flex-wrap gap-3 mb-section">
+          <a href="https://github.com/beko2210/prompt_only" class="btn-primary no-tap">
+            Library auf GitHub
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+          <a href="#status" class="btn-secondary no-tap">
+            Build-Status
+          </a>
+        </div>
+
+        <!-- Trust strip placeholder -->
+        <div class="reveal hairline mb-8"></div>
+        <div class="reveal grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div>
+            <div class="text-display-md text-gradient font-display">78</div>
+            <div class="text-sm text-ink-300 mt-1">Production-grade Prompts</div>
+          </div>
+          <div>
+            <div class="text-display-md text-gradient font-display">10</div>
+            <div class="text-sm text-ink-300 mt-1">Redacted Sample Deliverables</div>
+          </div>
+          <div>
+            <div class="text-display-md text-gradient font-display">7</div>
+            <div class="text-sm text-ink-300 mt-1">Kanonische Disclaimer-Texte</div>
+          </div>
+          <div>
+            <div class="text-display-md text-gradient font-display">€80–170k</div>
+            <div class="text-sm text-ink-300 mt-1">Jahr-1-Bandbreite (realistisch)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Build-Status / Roadmap (visible until replaced) -->
+    <section id="status" class="section">
+      <div class="container-page">
+        <h2 class="reveal text-display-lg font-display mb-8">Build-Status</h2>
+
+        <ol class="reveal space-y-3 max-w-2xl">
+          {[
+            ['1', 'Foundation — Astro, Tailwind, Design Tokens, GitHub Actions', true],
+            ['2', 'Hero, Navigation, Trust-Strip', false],
+            ['3', 'Problem, Approach (animierte Library-Visualisierung)', false],
+            ['4', 'Services-Grid + Sample-Showcase', false],
+            ['5', 'Process-Timeline + Pricing-Tiers', false],
+            ['6', 'About, FAQ, Final-CTA, Footer', false],
+            ['7', 'Animations-Polish, Performance, A11y, SEO', false],
+          ].map(([n, label, done]) => (
+            <li class="flex items-start gap-4 group">
+              <span class:list={[
+                "shrink-0 h-7 w-7 rounded-full inline-flex items-center justify-center text-sm font-mono",
+                done ? "bg-accent-500 text-ink-950" : "glass text-ink-300"
+              ]}>
+                {done ? '✓' : n}
+              </span>
+              <span class:list={[
+                "leading-snug pt-0.5",
+                done ? "text-ink-100" : "text-ink-300"
+              ]}>{label}</span>
+            </li>
+          ))}
+        </ol>
+
+        <p class="reveal mt-10 text-sm text-ink-400 max-w-prose-tight">
+          Stack: <span class="font-mono text-ink-200">Astro 5 · Tailwind 3 · GSAP 3 · Motion 11 · View Transitions API</span>.
+          Deploy: GitHub Actions → GitHub Pages. Performance-Target: Lighthouse 95+ auf allen Achsen.
+        </p>
+      </div>
+    </section>
+  </main>
+</Base>
