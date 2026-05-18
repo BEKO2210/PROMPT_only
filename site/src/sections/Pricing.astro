@@ -1,0 +1,215 @@
+---
+// Pricing — 3 tiers using anchor design from PRICING-PAGE.md methodology:
+// highest visible price on right anchors the middle, decoy-effect makes
+// the middle 'most popular' choice feel rational. No hidden trade-offs.
+// Each line in the comparison is honestly reachable.
+
+interface Tier {
+  id: string;
+  name: string;
+  tagline: string;
+  price: string;
+  priceUnit: string;
+  bestFor: string;
+  popular?: boolean;
+  features: { ok: boolean; label: string }[];
+  cta: { label: string; href: string };
+}
+
+const tiers: Tier[] = [
+  {
+    id: 'single',
+    name: 'Single Engagement',
+    tagline: 'Ein Tier-2-Deliverable. Fokussiert. Schnell.',
+    price: 'ab €2 000',
+    priceUnit: 'pro Engagement',
+    bestFor: 'Akute Compliance- oder Audit-Anforderung mit klar definiertem Scope',
+    features: [
+      { ok: true,  label: '1× Tier-2 Deliverable (z.B. AUDIT, GDPR, A11Y, SBOM)' },
+      { ok: true,  label: 'Formaler PDF-Report + JSON-Artefakt wo applicable' },
+      { ok: true,  label: 'Executive Summary für Management' },
+      { ok: true,  label: 'Verbatim Limitations-Klausel' },
+      { ok: true,  label: '1 Review-Round inkludiert' },
+      { ok: true,  label: '5–10 Werktage Liefer-Zeit' },
+      { ok: false, label: 'Recurring Updates oder Retainer' },
+      { ok: false, label: 'Multi-Workflow-Bundle' },
+    ],
+    cta: { label: 'Discovery-Call buchen', href: '#kontakt' },
+  },
+  {
+    id: 'bundle',
+    name: 'Engagement Bundle',
+    tagline: 'Themen-Bundle aus 3–5 Workflows. Maximale Marge pro Engagement.',
+    price: '€8 000 – 40 000',
+    priceUnit: 'pro Bundle',
+    popular: true,
+    bestFor: 'Buyer mit komplettem Compliance-Pack-Bedarf · M&A · Launch',
+    features: [
+      { ok: true,  label: '3–5 Tier-2 Deliverables nach Bundle-Choice' },
+      { ok: true,  label: 'Fintech-Pack · Healthtech-Pack · AI-Startup-Pack · M&A-TDD-Pack' },
+      { ok: true,  label: 'Konsolidierte Executive Summary über alle Reports' },
+      { ok: true,  label: 'Cross-Report-Konsistenz-Check' },
+      { ok: true,  label: '2 Review-Rounds inkludiert' },
+      { ok: true,  label: '10–30 Werktage Liefer-Zeit' },
+      { ok: true,  label: 'Kick-off + Mid-Engagement-Workshop' },
+      { ok: false, label: 'Monthly recurring (separat als Retainer)' },
+    ],
+    cta: { label: 'Bundle konfigurieren', href: '#kontakt' },
+  },
+  {
+    id: 'retainer',
+    name: 'Monthly Retainer',
+    tagline: 'Recurring scope. Compliance, Updates, Re-Audits monatlich.',
+    price: '€1 500 – 5 000',
+    priceUnit: 'pro Monat',
+    bestFor: 'EU CRA / DORA recurring obligations · SBOM per release · ongoing CRO',
+    features: [
+      { ok: true,  label: 'Definierter Monats-Scope (z.B. SBOM/Release, monatlicher CRO-Test)' },
+      { ok: true,  label: 'Monatlicher Status-Report mit ROI-Snapshot' },
+      { ok: true,  label: 'Slack/Email-Support innerhalb 24h Response' },
+      { ok: true,  label: 'Quarterly review + scope-adjustment' },
+      { ok: true,  label: '6 Monate Mindestlaufzeit, dann monatlich kündbar' },
+      { ok: true,  label: '10 % Rabatt auf zusätzliche Single-Engagements' },
+      { ok: true,  label: 'Priority-Slot bei Single-Engagement-Buchung' },
+      { ok: true,  label: 'AGENT-BUILDER bot ab €500 Build + €100/mo additional' },
+    ],
+    cta: { label: 'Retainer skizzieren', href: '#kontakt' },
+  },
+];
+---
+
+<section id="preise" class="section relative">
+  <div class="container-page">
+    <!-- Header -->
+    <div class="reveal text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-3 font-medium">
+      Preise
+    </div>
+    <h2 class="reveal text-display-lg font-display tracking-tight max-w-4xl mb-6">
+      Drei Tiers.
+      <span class="text-gradient">Keine versteckten Kosten.</span>
+    </h2>
+    <p class="reveal text-lg text-ink-300 max-w-2xl leading-snug mb-12">
+      Anker-basierte Pricing-Ranges spiegeln Marktrealität — top-of-range
+      für komplexe Engagements, low-end für klar abgegrenzten Scope. Jede
+      Limitierung ist explizit, kein Kleingedrucktes.
+    </p>
+
+    <!-- 3-tier grid -->
+    <div class="grid lg:grid-cols-3 gap-6 lg:gap-5 items-stretch">
+      {tiers.map((t) => (
+        <article
+          class:list={[
+            'reveal relative rounded-3xl border p-6 lg:p-7 flex flex-col transition-all duration-500',
+            t.popular
+              ? 'border-accent-400/60 bg-gradient-to-b from-accent-500/10 to-ink-900/80 backdrop-blur-xl shadow-glow-accent lg:scale-[1.03] z-10'
+              : 'border-white/10 bg-ink-900/50 backdrop-blur-xl hover:border-white/20'
+          ]}
+        >
+          <!-- 'Most popular' badge -->
+          {t.popular && (
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full bg-accent-500 px-3 py-1 text-[10px] uppercase tracking-[0.15em] font-semibold text-ink-950">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Most popular
+            </div>
+          )}
+
+          <!-- Header: name + tagline -->
+          <header class="mb-5">
+            <h3 class="font-display text-2xl text-ink-50 leading-tight mb-2">{t.name}</h3>
+            <p class="text-sm text-ink-300 leading-snug">{t.tagline}</p>
+          </header>
+
+          <!-- Price -->
+          <div class="mb-6 pb-6 border-b border-white/10">
+            <div class="text-3xl lg:text-4xl font-display font-semibold text-ink-50 tabular-nums leading-none">
+              {t.price}
+            </div>
+            <div class="text-xs text-ink-400 mt-1.5">{t.priceUnit}</div>
+          </div>
+
+          <!-- Best for -->
+          <div class="mb-5">
+            <div class="text-[10px] uppercase tracking-[0.15em] text-ink-400 mb-1.5 font-medium">Best für</div>
+            <p class="text-sm text-ink-200 leading-snug">{t.bestFor}</p>
+          </div>
+
+          <!-- Features list -->
+          <ul class="space-y-2.5 mb-7 grow">
+            {t.features.map(f => (
+              <li class="flex items-start gap-2.5 text-sm">
+                {f.ok ? (
+                  <svg class="shrink-0 mt-0.5 text-success" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                ) : (
+                  <svg class="shrink-0 mt-0.5 text-ink-500" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                )}
+                <span class:list={[f.ok ? 'text-ink-200' : 'text-ink-500 line-through decoration-ink-700']}>
+                  {f.label}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <!-- CTA -->
+          <a
+            href={t.cta.href}
+            class:list={[
+              'inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold text-sm transition-all duration-300 no-tap focus-visible:ring-accent-300',
+              t.popular
+                ? 'bg-accent-500 text-ink-950 hover:bg-accent-400 hover:shadow-glow-accent active:scale-[0.98]'
+                : 'bg-white/5 text-ink-100 border border-white/10 hover:bg-white/10 hover:border-white/20 active:scale-[0.98]'
+            ]}
+          >
+            {t.cta.label}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <!-- Guarantee / risk-reversal strip -->
+    <div class="reveal mt-12 glass rounded-2xl p-6 lg:p-8 max-w-4xl mx-auto">
+      <div class="grid sm:grid-cols-3 gap-6 text-center sm:text-left">
+        <div class="flex sm:items-start gap-3 flex-col sm:flex-row items-center">
+          <div class="shrink-0 h-10 w-10 rounded-full bg-success/15 border border-success/30 flex items-center justify-center text-success">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <div class="font-semibold text-ink-50 text-sm">Fixed-fee Pricing</div>
+            <div class="text-xs text-ink-300 mt-0.5">Anker-Ranges, keine Stundensätze über Cap</div>
+          </div>
+        </div>
+        <div class="flex sm:items-start gap-3 flex-col sm:flex-row items-center">
+          <div class="shrink-0 h-10 w-10 rounded-full bg-success/15 border border-success/30 flex items-center justify-center text-success">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <div class="font-semibold text-ink-50 text-sm">Sample-First Sales</div>
+            <div class="text-xs text-ink-300 mt-0.5">Du siehst Deliverable-Shape vor Vertragsabschluss</div>
+          </div>
+        </div>
+        <div class="flex sm:items-start gap-3 flex-col sm:flex-row items-center">
+          <div class="shrink-0 h-10 w-10 rounded-full bg-success/15 border border-success/30 flex items-center justify-center text-success">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <div class="font-semibold text-ink-50 text-sm">50/50 Payment Terms</div>
+            <div class="text-xs text-ink-300 mt-0.5">50 % bei Signature · 50 % bei Final-Acceptance</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer note -->
+    <p class="reveal mt-8 text-center text-xs text-ink-400 max-w-2xl mx-auto">
+      Alle Preise zzgl. ges. USt. EU-Reverse-Charge wo applicable.
+      Pricing-Bandbreiten reflektieren Engagement-Komplexität — nicht Verhandlungsspielraum.
+    </p>
+  </div>
+</section>

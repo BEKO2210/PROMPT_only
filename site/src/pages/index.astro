@@ -7,6 +7,8 @@ import Problem from '@sections/Problem.astro';
 import Approach from '@sections/Approach.astro';
 import Services from '@sections/Services.astro';
 import Samples from '@sections/Samples.astro';
+import Process from '@sections/Process.astro';
+import Pricing from '@sections/Pricing.astro';
 ---
 
 <Base
@@ -22,24 +24,26 @@ import Samples from '@sections/Samples.astro';
     <Approach />
     <Services />
     <Samples />
+    <Process />
+    <Pricing />
 
     <!-- ============================================================
-         Phase 5 adds: Process Timeline + Pricing Tiers
          Phase 6 adds: About + FAQ + Final-CTA + Footer
          Phase 7: animation polish, perf, a11y, SEO, prod build test
          ============================================================ -->
 
-    <section id="prozess" class="section">
+    <section id="faq" class="section">
       <div class="container-page">
         <div class="reveal mb-4 inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-xs text-ink-300">
           <span class="h-1.5 w-1.5 rounded-full bg-accent-400 animate-pulse-glow"></span>
-          Build status · Phase 4/7 shipped — + Services + Sample Showcase
+          Build status · Phase 5/7 shipped — + Process + Pricing
         </div>
-        <h2 class="reveal text-display-lg font-display mb-4">Phase 5 — Prozess + Preise folgt.</h2>
+        <h2 class="reveal text-display-lg font-display mb-4">Phase 6 — FAQ + Final-CTA + Footer folgt.</h2>
         <p class="reveal text-lg text-ink-300 max-w-prose-tight">
-          Phase 5 zeigt scroll-driven Process-Timeline (Discovery → Proposal → Deliver → Handover)
-          und Pricing-Tiers mit Anker-Design.
-          Phase 6 schließt mit About + FAQ + Final-CTA + Footer.
+          Phase 6 schließt die Seite: About-Block mit Library-Stats-Count-up,
+          FAQ-Accordion mit 6–8 Buying-Blockers, Final-CTA mit Cal-Embed-Slot,
+          Footer mit Legal + Kontakt + Sitemap.
+          Phase 7 ist Animations-Polish + Perf + A11y + SEO + Production-Test.
         </p>
       </div>
     </section>
