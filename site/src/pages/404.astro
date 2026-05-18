@@ -1,0 +1,64 @@
+---
+import Base from '@layouts/Base.astro';
+import Nav from '@components/Nav.astro';
+import Footer from '@components/Footer.astro';
+
+const links = [
+  { label: 'Startseite',  href: import.meta.env.BASE_URL },
+  { label: 'Services',    href: `${import.meta.env.BASE_URL}#services` },
+  { label: 'Samples',     href: `${import.meta.env.BASE_URL}#samples` },
+  { label: 'Kontakt',     href: `${import.meta.env.BASE_URL}#kontakt` },
+  { label: 'Impressum',   href: `${import.meta.env.BASE_URL}impressum` },
+];
+---
+
+<Base
+  title="Seite nicht gefunden — Belkis Aslani"
+  description="Die angeforderte Seite existiert nicht."
+  noIndex={true}
+>
+  <Nav />
+
+  <main id="main" class="pt-28 pb-section min-h-[80svh] flex items-center">
+    <div class="container-page text-center">
+      <!-- Big 404 -->
+      <div class="font-display text-[clamp(8rem,20vw,16rem)] font-bold leading-none tracking-tightest text-gradient mb-4 select-none">
+        404
+      </div>
+
+      <h1 class="text-display-lg font-display tracking-tight mb-4">
+        Diese Seite existiert nicht.
+      </h1>
+
+      <p class="text-lg text-ink-300 max-w-md mx-auto leading-snug mb-10">
+        Vielleicht ein verschobener Link, ein Tippfehler oder eine
+        gelöschte Seite. Hier sind die wahrscheinlichen Anlaufstellen:
+      </p>
+
+      <!-- Helpful links -->
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        {links.map((l, i) => (
+          <a
+            href={l.href}
+            class:list={[
+              i === 0 ? 'btn-primary' : 'btn-secondary',
+              'no-tap'
+            ]}
+          >
+            {l.label}
+          </a>
+        ))}
+      </div>
+
+      <!-- Fun detail: small 'still useful' note -->
+      <p class="mt-12 text-xs text-ink-500 max-w-prose-tight mx-auto">
+        Falls du über einen externen Link hierher kamst: Bitte schick
+        eine kurze E-Mail an
+        <a href="mailto:belkis.aslani@gmail.com" class="text-accent-300 hover:text-accent-200">
+          belkis.aslani@gmail.com</a> — ich richte einen Redirect ein.
+      </p>
+    </div>
+  </main>
+
+  <Footer />
+</Base>

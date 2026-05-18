@@ -200,3 +200,48 @@
   .stack > * + *    { margin-top: 1rem;   }
   .stack-lg > * + * { margin-top: 2rem;   }
 }
+
+/* ===========================================================================
+   PRINT — clean readable layout for legal pages (Impressum, Datenschutz)
+   when users print or save as PDF
+   =========================================================================== */
+@media print {
+  /* Force light theme; ink black on paper white */
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    color-scheme: light !important;
+  }
+
+  /* Hide decorative chrome */
+  header, footer, .glass, [data-process], [data-approach],
+  nav[aria-label="Hauptnavigation"], #nav-toggle, #scroll-progress,
+  .animate-marquee, .animate-pulse-glow, .animate-float,
+  .reveal { opacity: 1 !important; transform: none !important; }
+
+  /* Strip backgrounds that won't render usefully */
+  body > .pointer-events-none { display: none !important; }
+
+  /* Make links visible in print with their URL */
+  article a[href]:not([href^="#"])::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #555;
+  }
+
+  /* Comfortable typography */
+  article { max-width: none; font-size: 11pt; line-height: 1.5; color: #000; }
+  article h1 { font-size: 24pt; color: #000; margin-bottom: 12pt; }
+  article h2 { font-size: 14pt; color: #000; margin-top: 20pt; margin-bottom: 8pt; }
+  article h3 { font-size: 12pt; color: #000; margin-top: 14pt; margin-bottom: 6pt; }
+  article p, article ul, article ol { color: #222; margin-bottom: 8pt; }
+
+  /* Avoid awkward page breaks */
+  h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+  p, li { break-inside: avoid; page-break-inside: avoid; }
+
+  /* Pin footer with print URL/date */
+  @page {
+    margin: 18mm 16mm;
+  }
+}

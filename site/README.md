@@ -81,15 +81,74 @@ GitHub repo → Settings → Pages → Build and deployment → Source: **GitHub
 
 ## Build phases (incremental shipping)
 
-The landing page is built in 7 phases. Each phase is a clean commit:
+The landing page was built in 7 phases. Each phase is a clean commit:
 
 - [x] **Phase 1** — Foundation (Astro setup, design tokens, layout, deploy)
-- [ ] **Phase 2** — Hero, Navigation, Trust-Strip
-- [ ] **Phase 3** — Problem + Approach (with animated library visualization)
-- [ ] **Phase 4** — Services Grid + Sample Showcase
-- [ ] **Phase 5** — Process Timeline + Pricing Tiers
-- [ ] **Phase 6** — About + FAQ + Final CTA + Footer
-- [ ] **Phase 7** — Animation polish + Performance + A11y + SEO
+- [x] **Phase 2** — Hero, Navigation, Trust-Strip
+- [x] **Phase 3** — Problem + Approach (scroll-driven library visualization)
+- [x] **Phase 4** — Services Grid (9) + Sample Showcase (10 + filter)
+- [x] **Phase 5** — Process Timeline + Pricing Tiers (anchor design)
+- [x] **Phase 6** — About + FAQ + Final CTA + Footer + Impressum + Datenschutz
+- [x] **Phase 7** — JSON-LD ProfessionalService schema + OG image + 404 + manifest + print stylesheet
+
+## Production launch checklist
+
+Before pointing real customers at the site:
+
+- [ ] **Repo Settings → Pages → Source: GitHub Actions** (one-time setup)
+- [ ] Run `cd site && npm install` locally once to generate
+  `package-lock.json` and commit it (speeds CI from ~30s to ~10s
+  per build via `npm ci` + cache)
+- [ ] Verify deployed URL works at
+  `https://beko2210.github.io/PROMPT_only/`
+- [ ] Test OG preview rendering via
+  [opengraph.dev](https://www.opengraph.dev/) or post to Slack/LinkedIn
+- [ ] Optional: convert `public/og-default.svg` → `og-default.png`
+  via [cloudconvert.com](https://cloudconvert.com/svg-to-png) or
+  `npx svg-to-img` if you want maximum cross-platform OG-rendering
+  compatibility (Twitter, older clients sometimes prefer raster)
+- [ ] Test Lighthouse scores at deployed URL via
+  [pagespeed.web.dev](https://pagespeed.web.dev/) — target ≥95 on all
+- [ ] Test mobile rendering on real device (your phone)
+- [ ] Test `prefers-reduced-motion` by enabling in OS settings
+- [ ] Test keyboard navigation (Tab through every interactive element)
+- [ ] Test screen-reader pass on `index` + one legal page
+- [ ] Validate JSON-LD structured data at
+  [search.google.com/test/rich-results](https://search.google.com/test/rich-results)
+- [ ] Submit sitemap to Google Search Console:
+  `https://beko2210.github.io/PROMPT_only/sitemap-index.xml`
+- [ ] (Optional) Submit to Bing Webmaster Tools too
+
+## Phase 7 — what shipped
+
+- **JSON-LD @graph** with ProfessionalService + Person + WebSite
+  schemas (Google rich-results target; Schema.org compliant)
+- **OG image** (`public/og-default.svg`) — 1200×630 brand artwork
+  with BA monogram, gradient wordmark, headline, framework strip
+- **PWA manifest** (`public/manifest.webmanifest`) — installable as
+  standalone app, theme-coloured
+- **404 page** (`pages/404.astro`) — branded, helpful, links to
+  primary destinations + offers redirect setup via email
+- **Print stylesheet** for legal pages — clean black-on-white
+  layout when users print or save Impressum / Datenschutz as PDF
+  with link URLs surfaced inline
+- **Enhanced OG metadata** — site_name, image:alt, twitter:image:alt
+  for richer link previews
+
+## Custom domain (optional, post-launch)
+
+1. Add a `site/public/CNAME` file containing your domain (e.g.
+   `consulting.aslani.audit` or `belkis-aslani.de`)
+2. In GitHub repo Settings → Pages, set the custom domain
+3. Update `astro.config.mjs`:
+   ```js
+   site: 'https://your.domain.com',
+   base: '/',
+   ```
+4. Configure your DNS provider (A records → 185.199.108–111.153,
+   or CNAME → `beko2210.github.io`)
+5. Update `manifest.webmanifest` `start_url` and `scope` to `/`
+6. Update `robots.txt` sitemap URL
 
 ## Design system
 
