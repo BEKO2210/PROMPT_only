@@ -222,9 +222,9 @@ const { size = 480, label = 'Audit-Core: kompiliert die Library zu Reports' } = 
     }
   </style>
 
-  <!-- Floating audit panels — orbit the core (desktop only; on mobile
-       they'd collide with the orb fallback + screen edge) -->
-  <div class="hero-core-panels pointer-events-none absolute inset-0 hidden md:block">
+  <!-- Floating audit panels — orbit the core (lg+ only; on tablets
+       and below the panels overlap the orb + viewport edges) -->
+  <div class="hero-core-panels pointer-events-none absolute inset-0 hidden lg:block">
     <div class="float-panel absolute" style="top: 8%;  right: -4%; animation-delay: -1s;">
       <span class="text-danger">●</span> AUD-001 · IDOR detected
     </div>
