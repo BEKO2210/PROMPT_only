@@ -63,6 +63,25 @@ Markdown to PDF directly.
 | [`OBSERVABILITY.md`](./OBSERVABILITY.md) | Telemetry audit ranked by debug-time saved + cost optimisation | **€3 000 – 12 000** | Teams drowning in alerts or blind during incidents |
 | [`DEPENDENCY-UPGRADE.md`](./DEPENDENCY-UPGRADE.md) | Phased major-version upgrade plan with usage analysis | **€2 000 – 15 000** | Stuck on EOL versions; React/Node/Python/Spring/Rails upgrades |
 
+### Web — Build & Convert
+
+| Prompt | Deliverable | Realistic price | Buyer |
+|---|---|---|---|
+| [`LANDING-PAGE.md`](./LANDING-PAGE.md) | Conversion landing page (HTML + Tailwind + copy + A/B backlog) | **€500 – 3 000** / page | Founders launching offers; PMs running campaigns |
+| [`WEBSITE-FULL.md`](./WEBSITE-FULL.md) | Complete multi-page marketing site (Astro/Next.js/HTML) | **€2 000 – 15 000** | SMBs, scaleups, rebrands |
+| [`PRICING-PAGE.md`](./PRICING-PAGE.md) | Pricing page with anchor strategy + FAQ + comparison | **€500 – 2 500** | Anyone whose pricing page is losing money |
+| [`DOCS-SITE.md`](./DOCS-SITE.md) | Developer docs site (Diátaxis structure: tutorials / how-to / reference / explanation) | **€2 000 – 15 000** | Technical products, SDKs, APIs |
+| [`PRODUCT-PAGE.md`](./PRODUCT-PAGE.md) | E-commerce product page with structured data + JSON-LD for rich results | **€300 – 1 500** / page (bulk: €2 k–10 k for 10–50 pages) | E-commerce, DTC brands |
+| [`CONVERSION-AUDIT.md`](./CONVERSION-AUDIT.md) | CRO audit with test backlog ranked by expected lift × traffic ÷ effort | **€1 500 – 7 500** | Sites with traffic but weak conversion |
+| [`COPY-AUDIT.md`](./COPY-AUDIT.md) | Voice + clarity + specificity audit with rewrites | **€1 000 – 5 000** | Sites whose copy doesn't match positioning |
+| [`DESIGN-AUDIT.md`](./DESIGN-AUDIT.md) | Visual + UX audit with optional design-system extraction | **€1 000 – 5 000** | Pre-rebrand or post-stitched-design state |
+| [`TRUST-AUDIT.md`](./TRUST-AUDIT.md) | Trust-signal audit (testimonials, badges, founder visibility, fraud-risk findings) | **€500 – 2 500** | B2B sites where trust gaps lose deals |
+| [`CHECKOUT-AUDIT.md`](./CHECKOUT-AUDIT.md) | E-commerce checkout flow audit with revenue-quantified fixes | **€1 500 – 7 500** | Stores with cart abandonment > 70% |
+| [`CTA-OPTIMIZER.md`](./CTA-OPTIMIZER.md) | Site-wide CTA audit with placement + copy + A/B suggestions | **€500 – 2 500** | Sites with weak primary-CTA discipline |
+| [`FORM-OPTIMIZER.md`](./FORM-OPTIMIZER.md) | Every form on a site reviewed for field count, mobile UX, validation | **€500 – 2 500** | Lead gen, signup, checkout flows |
+| [`ONBOARDING-AUDIT.md`](./ONBOARDING-AUDIT.md) | First-time user experience audit with time-to-AHA analysis | **€1 500 – 7 500** | SaaS with high signup-to-activation drop |
+| [`COMPETITOR-TEARDOWN.md`](./COMPETITOR-TEARDOWN.md) | Competitor deep teardown with steal-and-avoid playbook | **€1 000 – 5 000** | Founders + marketing teams pre-launch / pre-pivot |
+
 ### Compliance — Sector-specific (high-margin)
 
 | Prompt | Deliverable | Realistic price | Regulatory hook |
@@ -97,6 +116,12 @@ side-hustle case studies, McKinsey 2026 State of AI).
 | [`CASE-STUDY.md`](./CASE-STUDY.md) | Anonymised case study in 3 formats (long, short, social) after every engagement | One case study = 12+ months of inbound; €0 marginal cost |
 | [`RELEASE-NOTES.md`](./RELEASE-NOTES.md) | Customer-facing changelog + in-app banner + email + blog from git history | Replaces 1–3 h per release; for clients **€500 – 2 000** per release-comms pack |
 | [`PITCH.md`](./PITCH.md) | Investor / sales pitch deck as Marp/Reveal Markdown with speaker notes | For clients **€2 000 – 10 000** per deck; for own use saves 5–15 h per pitch |
+| [`SEO-CONTENT.md`](./SEO-CONTENT.md) | Single SEO article from a target keyword (intent-matched, source-cited) | **€200 – 800** per article; recurring **€1 500 – 5 000/mo** for 10–25 articles |
+| [`EMAIL-SEQUENCE.md`](./EMAIL-SEQUENCE.md) | Cold outreach / nurture / onboarding / re-engagement sequence + reply playbook | **€1 000 – 5 000** per sequence |
+| [`AD-COPY.md`](./AD-COPY.md) | Multi-platform ad copy (Google + Meta + LinkedIn + TikTok) with creative brief | **€500 – 2 000** per campaign |
+| [`SOCIAL-CALENDAR.md`](./SOCIAL-CALENDAR.md) | Monthly social calendar (pillars, posts per platform, engagement playbook) | **€500 – 2 500/mo** recurring per brand |
+| [`NEWSLETTER.md`](./NEWSLETTER.md) | Weekly / monthly newsletter from your engagement work (compounding inbound) | **€300 – 1 500** per issue; weekly retainer **€1 200 – 6 000/mo** |
+| [`YOUTUBE-SCRIPT.md`](./YOUTUBE-SCRIPT.md) | Long-form YouTube script + package + production notes | **€500 – 2 500** per script; weekly retainer **€2 000 – 10 000/mo** |
 
 ---
 
