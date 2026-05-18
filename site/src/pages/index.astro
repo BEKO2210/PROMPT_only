@@ -3,6 +3,7 @@ import Base from '@layouts/Base.astro';
 import Nav from '@components/Nav.astro';
 import Footer from '@components/Footer.astro';
 import SceneProgress from '@components/SceneProgress.astro';
+import FrameworkStrip from '@components/FrameworkStrip.astro';
 
 import Hero from '@sections/Hero.astro';
 import TrustStrip from '@sections/TrustStrip.astro';
@@ -29,6 +30,13 @@ const HOME_SCENES = [
 
   <main id="main">
     <Hero />
+
+    <!-- Full-bleed framework-strip between Hero and TrustStrip — own row,
+         edge-to-edge, never overlaps copy -->
+    <div class="border-y border-white/8 bg-ink-vacuum/60 py-5">
+      <FrameworkStrip tone="bold" />
+    </div>
+
     <TrustStrip />
     <Problem />
 

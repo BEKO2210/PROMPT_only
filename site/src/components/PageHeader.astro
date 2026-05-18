@@ -1,33 +1,83 @@
 ---
-// PageHeader — consistent hero strip for sub-pages (Leistungen, Methodik
-// etc). Smaller than the home Hero. Eyebrow + display title + lede.
+// PageHeader — cinematic mission-control hero strip for sub-pages.
+// Slimmer than the home Hero (no Three.js orb), but still branded:
+//   - Mission-style number "SCENE / 0X" eyebrow
+//   - Hairline scanline that sweeps once on first paint
+//   - Decorative orbs + mission-grid
+//   - Cinematic 3-layer reveal on entrance (matches home)
+
 interface Props {
   eyebrow: string;
   title: string;
   lede?: string;
   align?: 'left' | 'center';
+  /** Optional 2-digit scene number; defaults to "00" */
+  number?: string;
+  /** Override the accent tone for the orbs */
+  tone?: 'cyan' | 'amber';
 }
-const { eyebrow, title, lede, align = 'left' } = Astro.props;
+
+const {
+  eyebrow,
+  title,
+  lede,
+  align = 'left',
+  number = '00',
+  tone = 'cyan',
+} = Astro.props;
+
+const orbColor = tone === 'amber'
+  ? 'bg-amber-500/12'
+  : 'bg-accent-500/15';
+const orbColor2 = tone === 'amber'
+  ? 'bg-accent-500/8'
+  : 'bg-amber-500/8';
 ---
 
-<section class="relative pt-32 lg:pt-40 pb-section-sm overflow-hidden">
-  <!-- Decorative orbs (small, behind content) -->
+<section class="page-header relative pt-32 lg:pt-40 pb-section-sm overflow-hidden surface-vacuum">
+  <!-- Mission-grid overlay -->
+  <div class="absolute inset-0 mission-grid opacity-60 pointer-events-none -z-10" aria-hidden="true"></div>
+
+  <!-- Decorative orbs -->
   <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-    <div class="absolute -top-20 -left-20 h-[400px] w-[400px] rounded-full bg-accent-500/15 blur-[120px]"></div>
-    <div class="absolute top-10 right-0 h-[300px] w-[300px] rounded-full bg-amber-500/10 blur-[100px]"></div>
+    <div class={`absolute -top-24 -left-16 h-[460px] w-[460px] rounded-full ${orbColor} blur-[130px]`}></div>
+    <div class={`absolute top-8 right-0 h-[340px] w-[340px] rounded-full ${orbColor2} blur-[120px]`}></div>
   </div>
 
-  <div class={`container-page ${align === 'center' ? 'text-center' : ''}`}>
-    <div class={`reveal text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-4 font-medium ${align === 'center' ? 'mx-auto' : ''}`}>
-      {eyebrow}
+  <!-- Scanline (one-shot sweep on first paint) -->
+  <div class="hero-scanline" aria-hidden="true"></div>
+
+  <div class={`container-page relative ${align === 'center' ? 'text-center' : ''}`}>
+    <!-- Mission-control header strip -->
+    <div class={`reveal flex items-center gap-4 mb-7 ${align === 'center' ? 'justify-center' : ''}`}>
+      <span class="font-mono text-[10px] text-accent-300 tracking-[0.25em] tabular-nums">
+        SCENE / {number}
+      </span>
+      <span class="h-px flex-1 max-w-[160px] bg-gradient-to-r from-accent-500/40 via-white/10 to-transparent" aria-hidden="true"></span>
+      <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-300">
+        {eyebrow}
+      </span>
     </div>
-    <h1 class="reveal text-display-xl font-display tracking-tightest text-ink-50 mb-6 max-w-4xl">
+
+    <h1 class="reveal text-display-xl font-display tracking-tightest leading-[1.06] text-ink-50 mb-6 max-w-4xl pb-[0.06em]">
       {title}
     </h1>
+
     {lede && (
       <p class={`reveal text-lg lg:text-xl text-ink-300 leading-snug max-w-2xl ${align === 'center' ? 'mx-auto' : ''}`}>
         {lede}
       </p>
+    )}
+
+    <!-- Subtle scroll hint (left-aligned only — center pages get cleaner footer) -->
+    {align === 'left' && (
+      <div class="reveal mt-12 flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-ink-500 font-mono">
+        <span class="inline-block h-px w-8 bg-ink-500/40"></span>
+        scroll
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
     )}
   </div>
 </section>

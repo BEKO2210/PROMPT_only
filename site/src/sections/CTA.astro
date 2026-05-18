@@ -2,6 +2,15 @@
 // CTA — Final conversion section. The page's last chance.
 // Two paths: book a discovery call (primary) or email direct (secondary).
 // Calendly / Cal.com embed slot reserved; mailto fallback always works.
+//
+// UI/UX polish: live-availability proof bar above headline, ripple-host
+// on both action cards, btn-magnetic shine sweep on primary, consistent
+// data-magnetic on both cards (touch-disabled handled by premium.ts).
+
+const now = new Date();
+const hour = now.getUTCHours();
+// 'Heute verfügbar' between roughly 7-21 CET (~6-20 UTC)
+const isAvailable = hour >= 6 && hour < 20;
 ---
 
 <section id="kontakt" class="section relative overflow-hidden">
@@ -13,6 +22,21 @@
 
   <div class="container-page">
     <div class="max-w-4xl mx-auto text-center">
+      <!-- Live-availability proof bar -->
+      <div class="reveal inline-flex items-center gap-2.5 mb-6 rounded-full
+                  glass border border-white/10 px-4 py-2
+                  text-[11px] font-mono uppercase tracking-[0.18em]">
+        <span class={`relative flex h-2 w-2`}>
+          <span class={`absolute inset-0 rounded-full ${isAvailable ? 'bg-success animate-ping' : 'bg-amber-400'} opacity-75`}></span>
+          <span class={`relative h-2 w-2 rounded-full ${isAvailable ? 'bg-success' : 'bg-amber-400'}`}></span>
+        </span>
+        <span class={isAvailable ? 'text-success' : 'text-amber-400'}>
+          {isAvailable ? 'Heute verfügbar' : 'Antwort morgen'}
+        </span>
+        <span class="text-ink-500">·</span>
+        <span class="text-ink-300">Erstgespräch kostenfrei</span>
+      </div>
+
       <!-- Eyebrow -->
       <div class="reveal text-[11px] uppercase tracking-[0.2em] text-accent-400 mb-4 font-medium">
         Lass uns reden
@@ -37,7 +61,7 @@
           data-magnetic
           data-magnetic-strength="0.25"
           data-magnetic-radius="160"
-          class="group relative overflow-hidden rounded-2xl bg-accent-500 text-ink-950 px-6 py-5 font-semibold text-base
+          class="btn-magnetic ripple-host group relative overflow-hidden rounded-2xl bg-accent-500 text-ink-950 px-6 py-5 font-semibold text-base
                  transition-all duration-300 hover:bg-accent-400 hover:shadow-glow-accent hover:-translate-y-0.5
                  active:scale-[0.98] no-tap focus-visible:ring-accent-300"
         >
@@ -63,9 +87,12 @@
         <a
           href="https://github.com/beko2210/PROMPT_only"
           rel="noopener"
-          class="group relative overflow-hidden rounded-2xl bg-white/5 text-ink-100 border border-white/10 px-6 py-5 font-semibold text-base
+          data-magnetic
+          data-magnetic-strength="0.18"
+          data-magnetic-radius="140"
+          class="btn-magnetic ripple-host group relative overflow-hidden rounded-2xl bg-white/5 text-ink-100 border border-white/10 px-6 py-5 font-semibold text-base
                  transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:-translate-y-0.5
-                 active:scale-[0.98] no-tap"
+                 active:scale-[0.98] no-tap focus-visible:ring-accent-300"
         >
           <div class="flex items-center justify-center gap-2">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
