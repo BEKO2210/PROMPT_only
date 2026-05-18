@@ -28,10 +28,14 @@ Two tiers:
 
 ## Tier 2 — Sellable deliverables
 
-Each of these produces a formal Markdown report with Executive Summary,
-findings, methodology, and a verbatim Limitations & Disclaimer section.
-Pandoc converts to PDF directly. All include disclaimers calibrated to
-keep liability where it belongs.
+Each of these produces a formal Markdown report (and where useful, a
+machine-readable artefact alongside it: SBOM JSON, OpenAPI YAML, Postman
+collection, Article 30 RoPA). All include an Executive Summary, evidenced
+findings, methodology, and a verbatim Limitations & Disclaimer section
+calibrated to keep liability where it belongs. Pandoc converts the
+Markdown to PDF directly.
+
+### Strategic & technical
 
 | Prompt | Deliverable | Realistic price | Buyer |
 |---|---|---|---|
@@ -40,6 +44,16 @@ keep liability where it belongs.
 | [`ARCH.md`](./ARCH.md) | Architecture Dossier (C4 + Mermaid + ADRs + data flows) | **€3 000 – 15 000** | CTOs preparing for ISO 27001, audits, onboarding at scale |
 | [`MIGRATE.md`](./MIGRATE.md) | Phased Migration Roadmap with effort ranges + rollback per phase | **€5 000 – 30 000** | Anyone facing a stack change (Python 2→3, monolith→services, on-prem→cloud) |
 | [`DD.md`](./DD.md) | Technical Due Diligence (R/A/G ratings, deal-term recommendations) | **€10 000 – 100 000+** | PE / VC / strategic acquirers; M&A counsel |
+
+### Compliance & operations
+
+| Prompt | Deliverable | Realistic price | Regulatory hook / buyer |
+|---|---|---|---|
+| [`SBOM.md`](./SBOM.md) | CycloneDX 1.5 SBOM JSON + CVE / license / supply-chain analysis | **€2 000 – 8 000** / release | EU Cyber Resilience Act (Dec 2027); US EO 14028 (federal contractors today) |
+| [`A11Y.md`](./A11Y.md) | WCAG 2.2 Conformance Report with remediation code | **€1 000 – 5 000** | EU Accessibility Act (enforceable since June 2025); US Section 508 |
+| [`API-DOC.md`](./API-DOC.md) | OpenAPI 3.1 spec + Postman collection + Markdown reference | **€1 000 – 5 000** / API | Every startup with an undocumented public API |
+| [`GDPR.md`](./GDPR.md) | DSGVO assessment: PII inventory + data-flow map + Article 30 RoPA | **€2 000 – 10 000** | Every EU-facing controller / processor; especially Schrems-II exposure |
+| [`POSTMORTEM.md`](./POSTMORTEM.md) | Blameless incident RCA (timeline, root cause, SMART action items) | **€1 000 – 5 000** / incident | Enterprise SLAs requiring RCAs after SEV1 / SEV2; SRE practice |
 
 ---
 
