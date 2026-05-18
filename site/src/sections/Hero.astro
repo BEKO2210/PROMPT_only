@@ -13,6 +13,7 @@ import ThreeHeroCore from '@components/ThreeHeroCore.astro';
 import FrameworkStrip from '@components/FrameworkStrip.astro';
 import CinematicHeading from '@components/CinematicHeading.astro';
 import MagneticButton from '@components/MagneticButton.astro';
+import LiquidBg from '@components/LiquidBg.astro';
 
 const baseUrl = import.meta.env.BASE_URL;
 
@@ -39,17 +40,23 @@ const isoDate = now.toISOString().slice(0, 10);
   class="surface-vacuum mission-grid relative min-h-[100svh] flex items-center pt-28 pb-section-sm overflow-hidden"
   aria-labelledby="hero-headline"
 >
-  <!-- Decorative vacuum + ambient glow -->
-  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+  <!-- Liquid WebGL background — domain-warped noise shader, reacts to
+       cursor + scroll. Hidden until mount; CSS gradient + grid show
+       behind on no-WebGL / reduced-motion. -->
+  <LiquidBg z={-10} tone="cyan" />
+
+  <!-- Decorative vacuum + ambient glow (fallback layer; sits between
+       liquid shader and content) -->
+  <div class="pointer-events-none absolute inset-0 -z-[9]" aria-hidden="true">
     <div
-      class="absolute top-[5%] left-[12%] h-[520px] w-[520px] rounded-full bg-accent-500/14 blur-[140px] animate-float"
+      class="absolute top-[5%] left-[12%] h-[520px] w-[520px] rounded-full bg-accent-500/10 blur-[140px] animate-float"
       style="animation-duration: 14s"
     ></div>
     <div
-      class="absolute bottom-[5%] right-[10%] h-[460px] w-[460px] rounded-full bg-accent-400/8 blur-[140px] animate-float"
+      class="absolute bottom-[5%] right-[10%] h-[460px] w-[460px] rounded-full bg-accent-400/6 blur-[140px] animate-float"
       style="animation-duration: 18s; animation-delay: -4s"
     ></div>
-    <svg class="absolute inset-0 w-full h-full opacity-[0.04] mix-blend-overlay" aria-hidden="true">
+    <svg class="absolute inset-0 w-full h-full opacity-[0.03] mix-blend-overlay" aria-hidden="true">
       <filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter>
       <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
     </svg>
@@ -58,27 +65,27 @@ const isoDate = now.toISOString().slice(0, 10);
   <!-- Scanline on first paint -->
   <div class="hero-scanline" aria-hidden="true"></div>
 
-  <!-- Top mission-status tag -->
+  <!-- Top mission-status tag — desktop only; on mobile this would
+       collide with the nav + eyebrow. Bottom-positioned so the Nav has
+       its own clean lane above. -->
   <div
     data-hero-anim="0"
-    class="opacity-0 absolute top-24 left-6 lg:left-12 z-10 flex flex-col gap-1.5"
+    class="opacity-0 absolute bottom-6 left-6 lg:left-12 z-10 hidden md:flex flex-col gap-1.5 pointer-events-none"
   >
     <span class="mission-tag">
       <span data-mission-status>LIVE · DE · {isoDate}</span>
     </span>
-    <span class="font-mono text-[10px] text-ink-500 tracking-[0.15em] uppercase">
-      Belkis Aslani · Mission Control
-    </span>
   </div>
 
-  <!-- Brand corner stamp (top right) -->
+  <!-- Brand corner stamp — desktop large only (lg+); below nav with
+       comfortable clearance so it never overlaps the Nav CTA -->
   <div
     data-hero-anim="0"
-    class="opacity-0 absolute top-24 right-6 lg:right-12 z-10 hidden md:flex items-center gap-3"
+    class="opacity-0 absolute bottom-6 right-6 lg:right-12 z-10 hidden lg:flex items-center gap-3 pointer-events-none"
   >
-    <div class="text-right">
-      <div class="font-mono text-[10px] text-accent-300 tracking-[0.2em] uppercase">78 / 9 / 10</div>
-      <div class="font-mono text-[10px] text-ink-500 tracking-[0.15em] uppercase">Workflows / Services / Samples</div>
+    <div class="text-right font-mono text-[10px] uppercase tracking-[0.18em] leading-snug">
+      <div class="text-accent-300">78 / 9 / 10</div>
+      <div class="text-ink-500">Workflows · Services · Samples</div>
     </div>
   </div>
 
@@ -100,12 +107,13 @@ const isoDate = now.toISOString().slice(0, 10);
           78 Workflows · 10 Samples · Production-Grade
         </div>
 
-        <!-- Cinematic headline -->
+        <!-- Cinematic headline — text-display-xl (max 80px) keeps three
+             lines on-page at lg without wrapping to 6+ rows -->
         <CinematicHeading
           as="h1"
           id="hero-headline"
           lines={HEADLINE}
-          size="text-display-2xl"
+          size="text-display-xl"
           class="mb-7"
         />
 

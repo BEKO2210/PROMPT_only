@@ -484,6 +484,83 @@
     .framework-track { animation: none; }
   }
 
+  /* Border-Sweep — cyan glanz-streifen läuft EINMAL um den Card-Border
+     on hover. Pure CSS, GPU-only. Combines well with .holo-card and
+     .card-spotlight. */
+  .border-sweep {
+    position: relative;
+    isolation: isolate;
+  }
+  .border-sweep::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(
+      from var(--sweep-from, 0deg) at 50% 50%,
+      transparent 0%,
+      transparent 75%,
+      rgba(88, 223, 255, 0.65) 85%,
+      rgba(255, 255, 255, 0.5) 92%,
+      rgba(88, 223, 255, 0.65) 96%,
+      transparent 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+  .border-sweep:hover::after {
+    opacity: 1;
+    animation: border-sweep-rotate 1.4s var(--ease-cinematic) 1 forwards;
+  }
+  @keyframes border-sweep-rotate {
+    from { --sweep-from: 0deg;   }
+    to   { --sweep-from: 360deg; }
+  }
+  /* CSS @property registration so conic-gradient angle can transition.
+     Falls back to instant change in browsers without @property support. */
+  @property --sweep-from {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  /* Click-Ripple — SVG burst inserted at click position by JS.
+     Container needs position: relative + overflow: hidden. */
+  .ripple-host {
+    position: relative;
+    overflow: hidden;
+  }
+  .ripple-dot {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle,
+      rgba(88, 223, 255, 0.55) 0%,
+      rgba(88, 223, 255, 0.25) 35%,
+      transparent 70%);
+    transform: translate(-50%, -50%) scale(0);
+    animation: ripple-fade 700ms var(--ease-cinematic) forwards;
+    mix-blend-mode: screen;
+    z-index: 5;
+  }
+  @keyframes ripple-fade {
+    0%   { transform: translate(-50%, -50%) scale(0);   opacity: 0.95; }
+    60%  { opacity: 0.6; }
+    100% { transform: translate(-50%, -50%) scale(3);   opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .border-sweep:hover::after { animation: none; opacity: 0; }
+    .ripple-dot { animation: none; display: none; }
+  }
+
   /* Floating audit panels — glass mini-pills around hero core */
   .float-panel {
     @apply inline-flex items-center gap-2 font-mono text-[10px]

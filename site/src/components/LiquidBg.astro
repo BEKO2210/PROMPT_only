@@ -1,0 +1,105 @@
+---
+// LiquidBg — full-bleed WebGL fragment-shader background.
+// Mount via [data-liquid-bg] on the parent; canvas absolute-positions
+// itself behind content. Falls back to nothing (existing CSS bg shows
+// through) when WebGL unavailable or prefers-reduced-motion.
+
+interface Props {
+  /** z-index for the canvas. Default -1 (behind content) */
+  z?: number;
+  /** Tone preset — picks color stops */
+  tone?: 'cyan' | 'amber' | 'mixed';
+}
+
+const { z = -1, tone = 'cyan' } = Astro.props;
+---
+
+<canvas
+  data-liquid-bg-canvas
+  data-tone={tone}
+  class="liquid-bg absolute inset-0 w-full h-full pointer-events-none"
+  style={`z-index: ${z}`}
+  aria-hidden="true"
+></canvas>
+
+<style>
+  .liquid-bg {
+    /* Hidden until WebGL successfully mounts */
+    opacity: 0;
+    transition: opacity 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .liquid-bg.is-mounted { opacity: 1; }
+</style>
+
+<script>
+  import { mountLiquidBg, type LiquidBgConfig } from '../lib/liquid-bg';
+
+  const TONES: Record<string, LiquidBgConfig> = {
+    cyan: {
+      colors: [
+        [0.004, 0.008, 0.030],
+        [0.000, 0.180, 0.310],
+        [0.345, 0.875, 1.000],
+      ],
+      freq: 1.6,
+      cursor: 0.12,
+      intensity: 0.95,
+    },
+    amber: {
+      colors: [
+        [0.010, 0.008, 0.020],
+        [0.250, 0.110, 0.040],
+        [1.000, 0.620, 0.180],
+      ],
+      freq: 1.4,
+      cursor: 0.10,
+      intensity: 0.85,
+    },
+    mixed: {
+      colors: [
+        [0.004, 0.008, 0.030],
+        [0.090, 0.140, 0.260],
+        [0.560, 0.880, 1.000],
+      ],
+      freq: 1.4,
+      cursor: 0.14,
+      intensity: 0.92,
+    },
+  };
+
+  type Handle = { destroy: () => void } | null;
+  const handles = new WeakMap<HTMLCanvasElement, Handle>();
+
+  const init = () => {
+    document.querySelectorAll<HTMLCanvasElement>('[data-liquid-bg-canvas]').forEach((canvas) => {
+      if (handles.has(canvas)) return;
+      const tone = canvas.dataset.tone || 'cyan';
+      const start = () => {
+        const h = mountLiquidBg(canvas, TONES[tone] ?? TONES.cyan);
+        if (h) {
+          handles.set(canvas, h);
+          canvas.classList.add('is-mounted');
+        } else {
+          // No WebGL or reduced-motion — leave invisible, CSS bg shows
+          handles.set(canvas, null);
+        }
+      };
+      if ('requestIdleCallback' in window) {
+        (window as Window & typeof globalThis).requestIdleCallback(start, { timeout: 600 });
+      } else {
+        setTimeout(start, 200);
+      }
+    });
+  };
+
+  const tearDown = () => {
+    document.querySelectorAll<HTMLCanvasElement>('[data-liquid-bg-canvas]').forEach((c) => {
+      handles.get(c)?.destroy();
+      handles.delete(c);
+    });
+  };
+
+  init();
+  document.addEventListener('astro:after-swap', init);
+  document.addEventListener('astro:before-swap', tearDown);
+</script>

@@ -79,8 +79,9 @@ const { size = 480, label = 'Audit-Core: kompiliert die Library zu Reports' } = 
           fill="rgba(255,255,255,0.18)" filter="url(#hcBlur)"/>
   </svg>
 
-  <!-- Floating audit panels — orbit the core, glass + holographic -->
-  <div class="hero-core-panels pointer-events-none absolute inset-0">
+  <!-- Floating audit panels — orbit the core (desktop only; on mobile
+       they'd collide with the orb fallback + screen edge) -->
+  <div class="hero-core-panels pointer-events-none absolute inset-0 hidden md:block">
     <div class="float-panel absolute" style="top: 8%;  right: -4%; animation-delay: -1s;">
       <span class="text-danger">●</span> AUD-001 · IDOR detected
     </div>

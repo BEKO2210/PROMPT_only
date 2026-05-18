@@ -45,13 +45,13 @@ const weightToClass = (w: CinematicHeadingLine['weight']) =>
 
 <Tag
   id={id}
-  class={`cinematic-heading ${size} font-display tracking-tightest leading-[1.02] ${extraClass}`}
+  class={`cinematic-heading ${size} font-display tracking-tightest leading-[1.08] ${extraClass}`}
 >
   {lines.map((line: CinematicHeadingLine, i: number) => (
     <span
       data-split-reveal
       data-hero-anim={i + 1}
-      class={`block ${accentToClass(line.accent)} ${weightToClass(line.weight)}`}
+      class={`block pb-[0.08em] ${accentToClass(line.accent)} ${weightToClass(line.weight)}`}
       style={`transition-delay: ${i * 80}ms`}
     >
       {line.text}
