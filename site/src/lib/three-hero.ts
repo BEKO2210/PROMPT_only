@@ -124,11 +124,24 @@ const FRAG = /* glsl */ `
   varying float vNoise;
 
   void main() {
+    // Virtual light source — sits above-left-front of the sphere.
+    // Gives the orb proper 3D shading (not a flat circle).
+    vec3 lightDir = normalize(vec3(-0.45, 0.65, 0.85));
+    float diffuse = max(dot(vNormal, lightDir), 0.0);
+
+    // Specular highlight — Phong-style, tight glossy hotspot
+    vec3 reflectDir = reflect(-lightDir, vNormal);
+    float spec = pow(max(dot(reflectDir, vViewDir), 0.0), 24.0);
+
     // Fresnel — bright at grazing angles
     float fres = pow(1.0 - max(dot(vNormal, vViewDir), 0.0), 2.5);
 
     // Deep core color modulated by noise (gives volume feel)
     vec3 core = mix(uColorCore, uColorAccent, smoothstep(-0.4, 0.6, vNoise));
+
+    // Apply diffuse shading: high ambient + soft lit (sphere reads as
+    // a glowing planet, not a half-shadowed rock)
+    core = core * (0.65 + 0.55 * diffuse);
 
     // Add fresnel rim in cyan-white
     vec3 rim = uColorRim * fres * 1.8;
@@ -139,7 +152,10 @@ const FRAG = /* glsl */ `
       sin(chromeAngle * 5.0 + uTime * 0.4) * 0.5 + 0.5);
     vec3 chrome = vec3(0.7, 0.9, 1.0) * chromeSweep * 0.25;
 
-    vec3 col = core + rim + chrome;
+    // Phong specular hotspot — bright white-cyan dot where light hits
+    vec3 specular = vec3(1.0, 1.0, 1.1) * spec * 0.85;
+
+    vec3 col = core + rim + chrome + specular;
 
     // Slight gamma lift
     col = pow(col, vec3(0.92));
@@ -206,19 +222,22 @@ export async function mountHeroCore(
   renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
 
   // Core mesh
-  const geometry = new THREE.IcosahedronGeometry(1.4, 4);
+  // Smooth sphere (widthSegments=64, heightSegments=48) — no visible
+  // facets even at large display size. Icosahedron at subdivision 4
+  // showed octagonal silhouette on narrow desktops.
+  const geometry = new THREE.SphereGeometry(1.4, 64, 48);
 
   const material: ShaderMaterial = new THREE.ShaderMaterial({
     vertexShader: VERT,
     fragmentShader: FRAG,
     uniforms: {
       uTime:        { value: 0 },
-      uAmp:         { value: 0.08 },
-      uFreq:        { value: 1.2 },
+      uAmp:         { value: 0.04 },
+      uFreq:        { value: 1.4 },
       uMouse:       { value: new THREE.Vector2(0, 0) },
-      uColorCore:   { value: new THREE.Color('#001e3c') },
-      uColorRim:    { value: new THREE.Color('#58dfff') },
-      uColorAccent: { value: new THREE.Color('#00b3f0') },
+      uColorCore:   { value: new THREE.Color('#0a3d6a') },
+      uColorRim:    { value: new THREE.Color('#7feaff') },
+      uColorAccent: { value: new THREE.Color('#1ccaff') },
     },
   });
 
@@ -226,7 +245,7 @@ export async function mountHeroCore(
   scene.add(mesh);
 
   // Halo (outer expanded sphere, additive blended)
-  const haloGeo = new THREE.IcosahedronGeometry(1.85, 2);
+  const haloGeo = new THREE.SphereGeometry(1.85, 32, 24);
   const haloMat = new THREE.ShaderMaterial({
     vertexShader: HALO_VERT,
     fragmentShader: HALO_FRAG,
