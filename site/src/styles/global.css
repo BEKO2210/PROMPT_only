@@ -754,6 +754,38 @@ html.cursor-custom * {
 }
 
 /* ===========================================================================
+   MOBILE / TOUCH performance guards — kill expensive decorations on
+   touch devices. Samsung S23 Ultra and similar Android phones can
+   trigger 'Page Unresponsive' dialogs from the cumulative cost of:
+   - permanent conic-gradient rotations (chrome-sweep)
+   - hero-scanline vertical sweep loop
+   - mission-tag pulse + float-panel oscillation
+   - backdrop-filter: blur(20px) saturate(160%) stacking
+   These add up even when off-screen. On touch we disable them — the
+   liquid-bg is already off (see liquid-bg.ts touch-guard) and Lenis
+   is also off (see premium.ts touch-guard).
+   =========================================================================== */
+@media (hover: none), (pointer: coarse) {
+  /* Decorative chrome-sweep rotates forever — kill on touch */
+  .chrome-sweep::before,
+  .hero-scanline,
+  .float-panel,
+  .mission-tag::before {
+    animation: none !important;
+  }
+  /* Reduce backdrop-blur cost — Samsung Android struggles with stacking */
+  .holo-card,
+  .glass {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+  /* Off-screen sections — let browser skip rendering until they enter */
+  section, footer, header { content-visibility: auto; contain-intrinsic-size: 800px; }
+  /* But: keep the live hero + first-fold visible always */
+  #hero, header, nav, [data-hero-core] { content-visibility: visible; }
+}
+
+/* ===========================================================================
    MAGNETIC BUTTONS — markers only; behavior in premium.ts
    =========================================================================== */
 [data-magnetic] {
