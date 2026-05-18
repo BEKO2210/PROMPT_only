@@ -3,6 +3,34 @@
 Material changes to the library. Per-prompt versioning lives at the
 bottom of each prompt file (in a `## Version` section).
 
+## 2026-05-18 — Five more sample outputs (top-margin Tier-2 prompts)
+
+Doubled the sample inventory from 5 to 10. New samples chosen for
+demand-driving impact (the audit identified samples as the single
+highest-impact remaining gap):
+
+- `samples/AUDIT-sample.md` — Security & code-quality report,
+  €5.8k engagement, 3 Critical / 7 High / 18 Medium findings on
+  fictional B2B SaaS "Pivot Logistics"
+- `samples/PERF-sample.md` — Performance audit on fictional DTC
+  e-commerce "Vellum Commerce": p95 1850ms → 420ms with measured
+  ROI ~€250k/year, €7.2k engagement
+- `samples/ARCH-sample.md` — Architecture dossier for fictional
+  EU neobank "Banque Atlantique": full C4 in Mermaid, 2 sample
+  ADRs, data flow for SEPA transfer, €11k engagement
+- `samples/SBOM-sample.md` — CycloneDX 1.5 SBOM + report for
+  fictional edge-compute "TidalEdge IoT": 287 components, 18
+  CVEs triaged, supply-chain signals, €3.4k/release + €18k annual
+- `samples/AI-ACT-sample.md` — EU AI Act conformity for fictional
+  HR-tech "Aurora Talent": HIGH-RISK classification under Annex
+  III §4, 11-gap remediation roadmap with article citations,
+  €9.5k + €18k follow-on
+
+Samples README restructured by tier with engagement-fee
+indication per sample. Library now demonstrates deliverable shape
+for both the broad Tier-2 (AUDIT, PERF, ARCH, DD) and the
+high-margin compliance (SBOM, AI-ACT, GDPR, HIPAA-style) classes.
+
 ## 2026-05-18 — Operational playbook (CONSULTANT-PLAYBOOK.md)
 
 Added the operational layer the library was missing: how to actually
