@@ -69,3 +69,29 @@ HARD RULES
 Every future task in this repo starts with a primed agent instead of one that
 burns 5–15 tool calls re-discovering the layout. One MAP run amortises across
 every subsequent session.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For codebases you'll work in once — discovery overhead doesn't amortise
+- When an architecture document already exists — use that as your map, don't regenerate
+- For tiny codebases (< 50 files) — `grep` directly is faster
+- For codebases changing rapidly daily — the map stales faster than it's useful
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] §7 MAP block is ≤ 500 tokens (count it; don't estimate)
+- [ ] Every file path in §7 exists (verify with `ls` or `git ls-files`)
+- [ ] Every dependency in §4 appears in the project's actual package manifest
+- [ ] §6 NON-OBVIOUS items sourced from code or commits — none invented
+- [ ] Total tool calls used ≤ 20 (or gaps marked `[unknown]` rather than fabricated)
+- [ ] Map pasted at top of a fresh session lets the next agent skip re-exploration

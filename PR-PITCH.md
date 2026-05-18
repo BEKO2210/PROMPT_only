@@ -193,3 +193,30 @@ A press release + per-journalist pitch emails + follow-up sequence
 ready to send. The honest angle-test alone saves clients from
 sending dead-on-arrival pitches that burn future journalist
 relationships.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- When §1 angle test fails — no angle = no pitch (refuse to send; protects future journalist relationships)
+- For pitches with false or inflated claims — fraud-class risk
+- During news cycles dominated by larger story — your pitch gets buried; wait
+- For embargoed content without an actual embargo agreement from the journalist
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] §1 angle test passed honestly (no rationalising a weak angle into a strong one)
+- [ ] Every pitch references TWO specific recent articles by the journalist (with URLs)
+- [ ] No AI-writing tells: em-dashes, "delve", "unleash", "leverage", "rapidly evolving", "in today's landscape"
+- [ ] All quotes verbatim from SPOKESPERSON input (never fabricated)
+- [ ] Embargo dates respected without exception (breaking embargo is reputation destruction)
+- [ ] Response in TARGET_OUTLETS language (most journalists prefer their working language)
+- [ ] Follow-up sequence stops at 3 touches (more = harassment, damages relationship)

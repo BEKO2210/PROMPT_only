@@ -80,3 +80,30 @@ Phantom-fixes (patches for bugs the agent never reproduced) are the dominant
 failure mode of agentic debugging. §2 makes them impossible; §5 PROBE makes
 "I think it's because..." accountable; §8 prevents the same bug from
 re-shipping next quarter.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- When you don't have a reproducible bug yet — clarify the symptom first, then HUNT
+- For feature requests disguised as bugs ("would be nice if…") — use SHIP instead
+- For UX confusion that isn't an actual defect — use CONVERSION-AUDIT
+- For performance regressions — use PERF (different methodology, measurement-driven)
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] §2 REPRO command actually run; output pasted is real (not described)
+- [ ] §4 CAUSE describes the **mechanism** (why it happens), not the symptom (what happens)
+- [ ] §5 PROBE added, run, and output pasted — falsifying §4 before any fix
+- [ ] §6 FIX is minimal — no nearby cleanups, no defensive code for cases this bug didn't expose
+- [ ] §7 RE-REPRO command from §2 was run again post-fix; output is green
+- [ ] §8 REGRESSION test added; fails on pre-fix code AND passes on post-fix
+- [ ] If §5 PROBE contradicted §4 twice, the agent stopped and asked instead of guessing again

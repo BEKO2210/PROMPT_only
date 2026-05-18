@@ -201,3 +201,30 @@ A 30–60 page DORA readiness report with a draft Register of Information
 table the entity can publish to their supervisor. Most banks and
 fintechs are still partially compliant; the Article 28 register is the
 hardest artefact to produce and the one supervisors ask for first.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For non-EU financial entities — DORA scope is EU financial sector + critical ICT providers only
+- For entities clearly outside DORA scope (e.g. asset managers below regulatory thresholds)
+- When client hasn't named NCA (competent authority) and entity category under Art. 2 — clarify first
+- For TLPT planning specifically — that requires TIBER-EU accredited testers, not this prompt
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] §1 entity classification under Art. 2 precise (not "financial entity" — name the specific category)
+- [ ] §5 third-party register draft is a real tabular Register of Information matching RTS format (not narrative)
+- [ ] §3 incident reporting timelines (4h / 72h / 1 month) flagged where current capability cannot meet them
+- [ ] Every IMPLEMENTED claim cites evidence (code, config, policy reference)
+- [ ] §8 proportionality applied honestly (microenterprise status under Art. 16 only claimed if quantitatively justified)
+- [ ] §10 LIMITATIONS verbatim per [`_LEGAL/COMPLIANCE-NOT-LEGAL-ADVICE.md`](./_LEGAL/COMPLIANCE-NOT-LEGAL-ADVICE.md)
+- [ ] Response in language of ENTITY input (German for DE banks, French for FR, etc.)

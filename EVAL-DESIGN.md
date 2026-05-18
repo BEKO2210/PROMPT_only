@@ -194,3 +194,30 @@ A complete evaluation framework: golden set file, eval runner spec,
 CI integration plan, operating model. As a retainer (€500-2 000/month),
 maintain the golden set with production data and run quarterly
 calibration against human eval.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For ad-hoc model comparison — design eval requires commitment to ongoing framework
+- Before exhausting prompt-engineering improvements — see [`FINE-TUNE-PLAN.md`](./FINE-TUNE-PLAN.md) §3 decision tree
+- When client lacks stakeholder buy-in to maintain golden set — eval rots without an owner
+- For business-outcome measurement (conversion, retention lift) — different methodology entirely
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] Initial golden set is a real JSONL file the client loads into pipeline (not a template)
+- [ ] Safety eval is binary pass / fail with `blocker: true` flag — never averaged into composite scores
+- [ ] Each quality dimension reports its own pass-rate (no rolled-up "85% good" scores)
+- [ ] LLM-as-judge usage is justified per dimension, not blanket-applied
+- [ ] §10 LIMITATIONS present
+- [ ] Operating model names who owns the golden set (without an owner, the eval fails)
+- [ ] Regression suite distinguishes fast (PR-blocking, 50–200 items) from full (nightly / weekly)

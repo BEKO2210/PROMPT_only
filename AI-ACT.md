@@ -204,3 +204,30 @@ verdict that anchors every other section. Regulators and notified
 bodies expect article-level grounding — this format gives it to them.
 First mover advantage is significant: most consultancies are still
 ramping up on this regulation.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For non-EU-deployed AI systems — different regulatory regimes apply (US: NIST AI RMF; UK: emerging; China: separate)
+- For systems classified PROHIBITED under §2 — stop assessment, escalate to legal; cannot be placed on EU market
+- When client hasn't engaged legal counsel for High-Risk classification — Art. 6 + Annex III interpretation requires it
+- For pure research / lab prototype systems not approaching deployment — premature
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] §2 CLASSIFICATION cites the relevant AI Act article (e.g. "Art. 6 + Annex III §4 Employment")
+- [ ] §7 PROHIBITED-PRACTICE GATE run even when §2 looked clear (feature creep is common failure mode)
+- [ ] Every IMPLEMENTED claim in §4–§5 cites code or documentation evidence
+- [ ] §11 LIMITATIONS verbatim per [`_LEGAL/COMPLIANCE-NOT-LEGAL-ADVICE.md`](./_LEGAL/COMPLIANCE-NOT-LEGAL-ADVICE.md)
+- [ ] Penalty exposure in Executive Summary cites Art. 99 amounts correctly (€35M/7% for prohibited; €15M/3% for high-risk)
+- [ ] Foundation model / GPAI obligations addressed in §6 if applicable
+- [ ] Classification verdict (PROHIBITED / HIGH-RISK / LIMITED / MINIMAL) prominent in Executive Summary

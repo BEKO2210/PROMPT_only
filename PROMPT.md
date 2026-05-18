@@ -100,3 +100,30 @@ Most agent failures are not bad code — they are bad framing of the task:
 Every row above is real engineering time you'd otherwise spend reviewing,
 reverting, or debugging. Front-loading them is the cheapest place to spend
 tokens in the whole loop.
+
+---
+
+## Version
+
+`v1.3` — refined through three rounds of external model review (Kimi 2.6, Gemini, Google). See [`CHANGELOG-LIBRARY.md`](./CHANGELOG-LIBRARY.md) for the design decisions.
+
+---
+
+## When NOT to use this prompt
+
+- For exploratory or research questions — SHIP demands a concrete deliverable, not a discussion
+- When you don't have shell / filesystem access — SHIP requires real execution in §8
+- For multi-turn collaborative work — SHIP is single-shot delivery
+- When the "task" is actually a discussion about approach — chat about it first, then SHIP the chosen approach
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] §1–§7 produced BEFORE any file edit (no edits until the artefacts exist)
+- [ ] Every §2 `file:line` citation resolves to a real location in the codebase
+- [ ] §3 root cause describes the **mechanism** (why), not the symptom (what)
+- [ ] §4 plan has no new abstractions, no new files unless unavoidable, no defensive code for impossible cases
+- [ ] §7 verification command appears in §8 with its REAL output (paste of terminal, not summary)
+- [ ] If §8 failed, §3 was revisited (not patched around)
+- [ ] §1–§7 combined ≤ 40 lines

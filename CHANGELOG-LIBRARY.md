@@ -1,7 +1,38 @@
 # CHANGELOG — PROMPT_only library
 
 Material changes to the library. Per-prompt versioning lives at the
-top of each prompt file (planned, not yet rolled out).
+bottom of each prompt file (in a `## Version` section).
+
+## 2026-05-18 — A-tier quality hardening (Quality gates + Versioning + When NOT to use)
+
+Applied to the 20 highest-stakes prompts (the A-tier from
+`LIBRARY-AUDIT.md`):
+
+SHIP, HUNT, MAP, DD, GDPR, AI-ACT, DORA, PCI-DSS, HIPAA, ISO-27001,
+POSTMORTEM, RAG-AUDIT, EVAL-DESIGN, FINE-TUNE-PLAN, PROMPT-SECURITY,
+AGENT-BUILDER, PROPOSAL, RETAINER, CHECKOUT-AUDIT, PR-PITCH.
+
+Each now ships with three new sections at end of file:
+
+1. **`## Version`** — explicit version tag (mostly v1.0; SHIP at v1.3
+   reflecting three rounds of external review)
+2. **`## When NOT to use this prompt`** — 4 explicit negative-indication
+   bullets pointing users to the right alternative prompt or to walk
+   away from the engagement entirely
+3. **`## Quality gate — verify before treating as done`** — 6–7 checkbox
+   verification items the user runs on the agent's output before
+   delivering. Each checklist item references the prompt's specific
+   hard rules and the canonical disclaimer file from `_LEGAL/`
+
+The Quality Gate is the highest-leverage addition: it gives buyers a
+concrete way to verify they got the deliverable they paid for, and
+gives the user / consultant a clear hand-off check before shipping
+to a client.
+
+The Version + When NOT sections close two of the "Bottom 10 problems"
+identified in LIBRARY-AUDIT.md. The Quality Gate closes a third.
+
+
 
 ## 2026-05-18 — Pruning, samples, disclaimer extraction (Option A from audit)
 

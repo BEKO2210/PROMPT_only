@@ -205,3 +205,30 @@ mapped to the OWASP LLM Top 10. The appendix payload library becomes
 the client's regression eval-set — they re-run it after every system
 prompt change. First-mover positioning in this niche commands premium
 pricing because few competitors have a methodology yet.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For non-LLM applications — wrong threat model; use [`AUDIT.md`](./AUDIT.md)
+- For systems with no user-input surface — no prompt injection possible
+- When live system isn't accessible for testing — purely static review is much weaker; document this constraint
+- For provider-model-extraction attacks (e.g. distilling GPT-4 weights) — out of scope
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] Every "VULNERABLE" verdict includes a working PoC payload + the actual model response
+- [ ] §13 indirect prompt injection tested for any RAG / agent / web-fetch system
+- [ ] LLM07 assumes the system prompt WILL leak — analysis focuses on what's exposed in it
+- [ ] §17 appendix payloads are non-destructive (no destructive payloads sent to live systems)
+- [ ] §18 LIMITATIONS per [`_LEGAL/AUDIT-DISCLAIMER.md`](./_LEGAL/AUDIT-DISCLAIMER.md) + [`_LEGAL/SECURITY-NOT-PENTEST.md`](./_LEGAL/SECURITY-NOT-PENTEST.md)
+- [ ] Foundation-model version captured (provider updates can invalidate results)
+- [ ] Eval set deliverable formatted for the client's ongoing regression suite

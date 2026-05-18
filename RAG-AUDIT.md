@@ -180,3 +180,30 @@ plus a ranked fix roadmap. The retrieval-metrics section alone
 typically reveals 2–5 fixable issues (better chunking, reranker,
 hybrid search) that lift answer quality 20–50% with no LLM swap
 required.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For pure-prompt LLM applications without retrieval — use [`EVAL-DESIGN.md`](./EVAL-DESIGN.md) instead
+- For RAG systems still in prototype with no golden set — build the 30+ item golden set first (use EVAL-DESIGN)
+- For pure research / experimental RAG without production users — methodology calibrated for production systems
+- For embedding-model selection alone — narrower than full audit; specialised benchmark suffices
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] §5 retrieval metrics computed on a real ≥ 30-item golden set with human-validated expected documents
+- [ ] Every retrieval metric (recall@k, MRR, nDCG) backed by actual measurement, not estimate
+- [ ] Cost-per-query computed transparently with provider-pricing line items
+- [ ] §9 end-to-end quality includes a measured hallucination rate
+- [ ] §10 recommendations ranked by quality-lift × ease (not by personal interest)
+- [ ] §11 LIMITATIONS per [`_LEGAL/AUDIT-DISCLAIMER.md`](./_LEGAL/AUDIT-DISCLAIMER.md) + [`_LEGAL/ESTIMATES-NOT-GUARANTEES.md`](./_LEGAL/ESTIMATES-NOT-GUARANTEES.md)
+- [ ] If §5 shows retrieval as root cause, LLM is not blamed (and vice versa)

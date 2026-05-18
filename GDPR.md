@@ -182,3 +182,30 @@ A formal RoPA they can put in front of a Datenschutzbehörde plus a
 gap-list their DPO can action. The Schrems-II third-country transfer
 analysis alone justifies the engagement for most SaaS clients shipping
 data to US AI providers without an SCC review.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For non-EU / non-UK applications — DSGVO + GDPR + UK GDPR scope only; US / Canada / APAC differ
+- For full DPIA per Art. 35 (high-risk processing) — this is a code-based assessment, NOT a DPIA
+- When client lacks legal counsel — output must be adopted by qualified DPO before regulatory submission
+- For pure B2C contexts without B2B controllers — verify the ROLE input is correctly set
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] Every PII field in §2 cites `file:line` — verify each citation resolves
+- [ ] No retention gap silently passed — every storage location without retention logic explicitly flagged
+- [ ] Schrems-II analysis (§7) includes every visible US-bound integration (`grep` for known US SaaS to verify completeness)
+- [ ] Article 30 RoPA template filled in (not blank placeholder); DPO contact marked `[client to fill]` if not in code
+- [ ] §10 LIMITATIONS verbatim per [`_LEGAL/COMPLIANCE-NOT-LEGAL-ADVICE.md`](./_LEGAL/COMPLIANCE-NOT-LEGAL-ADVICE.md)
+- [ ] US-AI-provider exposure prominent in Executive Summary (not buried in §7)
+- [ ] Response language matches client jurisdiction (German for DACH; reports go to BfDI / national DPAs in their language)

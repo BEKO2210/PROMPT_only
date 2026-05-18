@@ -199,3 +199,30 @@ A 15–25 page audit with revenue-quantified fixes. At a €100k/month
 GMV store, recovering 5% of abandoned carts is €5k/month — multiple
 fixes typically stack to 8–15% combined lift. Engagement ROI in the
 first 1–2 months post-implementation is the standard pitch.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For products not yet selling — premature; use [`CONVERSION-AUDIT.md`](./CONVERSION-AUDIT.md) for broader funnel
+- For mobile-app in-app-purchase checkouts — different platform constraints (App Store / Play Store IAP)
+- For pure subscription billing without cart — different friction surface
+- When you lack analytics access — limits baseline accuracy materially; document constraint
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] Every fix has expected % lift AND monthly € value at client's GMV (not just %)
+- [ ] Walked DESKTOP + MOBILE and GUEST + ACCOUNT-HOLDER paths separately (4 walks minimum)
+- [ ] Field-count claims verified by actual counting (not estimated)
+- [ ] Payment-method findings region-specific (DE: SEPA/Klarna; NL: iDEAL; BE: Bancontact; etc.)
+- [ ] Above-fold mobile audit included (LCP target, tap targets ≥ 48px, viewport overflow)
+- [ ] §10 LIMITATIONS per [`_LEGAL/AUDIT-DISCLAIMER.md`](./_LEGAL/AUDIT-DISCLAIMER.md) + [`_LEGAL/ESTIMATES-NOT-GUARANTEES.md`](./_LEGAL/ESTIMATES-NOT-GUARANTEES.md)
+- [ ] Revenue lifts as ranges (best/likely/worst), never point values

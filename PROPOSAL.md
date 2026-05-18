@@ -187,3 +187,30 @@ sub-€25k engagements. Pandoc renders to a branded PDF. The T&C clauses
 specifically address AI-assisted methodology, which the typical 2025
 boilerplate proposal does not — and which is the question every modern
 buyer asks before signing.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For contracts sent TO you (MSA / SOW / NDA / DPA) — use [`CONTRACT-REVIEW.md`](./CONTRACT-REVIEW.md)
+- For pure time-and-materials engagements with no deliverable — different format
+- Before completing [`DISCOVERY.md`](./DISCOVERY.md) — proposal anchored on guess weakens close rate
+- For pricing well above your delivery experience — credibility risk; bring in a partner first
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] Zero invented credentials, certifications, prior clients, team members (verify against SIGNATURE input)
+- [ ] Pricing anchored: value paragraph BEFORE the price line (never opens §6 with a number)
+- [ ] Every §5 deliverable has concrete name + format (not vague "report on findings")
+- [ ] §11 T&Cs verbatim with substitutions only — soften only after legal review in your jurisdiction
+- [ ] §10 NEXT STEPS = exactly 3 numbered actions, each ≤ 15 words
+- [ ] §11.6 AI-assisted-methodology clause present (modern buyers ask about this)
+- [ ] Response in language of DISCOVERY input

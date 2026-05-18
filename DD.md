@@ -205,3 +205,30 @@ A 25–60 page report investment committees actually read. R/A/G dashboard
 on page 2, evidenced findings throughout, explicit deal-term
 recommendations, and an interview list for management. The Limitations
 page is what makes the engagement defensible — never ship without it.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For pre-seed companies with < 6 months of code history — too thin to assess credibly
+- For non-acquisition contexts where the deliverable doesn't need R/A/G ratings — use AUDIT + ARCH instead
+- When you don't have committed-code repo access — DD is code-grounded; without it the report is speculation
+- For contested deals where legal counsel is already heavily engaged — coordinate with them first; don't issue parallel analysis
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] Every R/A/G rating cites code, commit log output, or dependency-manifest evidence
+- [ ] Every 🔴 RED rating includes an Evidence paragraph with `file:line` or command output
+- [ ] §12 LIMITATIONS verbatim per [`_LEGAL/MA-DD-DISCLAIMER.md`](./_LEGAL/MA-DD-DISCLAIMER.md), unmodified
+- [ ] Items not visible in repo flagged `[not visible in repo — requires management interview]` (never invented)
+- [ ] Executive Summary ≤ 400 words, plain language (no jargon)
+- [ ] Liability cap consistent with the underlying engagement agreement
+- [ ] R/A/G dashboard is on page 2 (skimmable for investment committee)

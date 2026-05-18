@@ -179,3 +179,30 @@ A 20–40 page assessment that maps cleanly to OCR audit protocol
 expectations. The BAA-status table alone often justifies the engagement
 — most clients have AI/SaaS integrations without verified BAAs and
 don't know it.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For non-US healthcare contexts — GDPR / NHS Digital / Canada PIPEDA differ materially; use the right tool
+- For full HIPAA risk analysis per §164.308(a)(1)(ii)(A) — that requires organisational scope and interviews; this is the technical-safeguards subset
+- When client uncertain whether they're a Covered Entity or Business Associate — clarify role before scoping
+- For 42 CFR Part 2 substance-use-disorder records — stricter regime, separate engagement
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] Every PHI claim in §2 cites `file:line`
+- [ ] SAD-equivalent (PHI stored in violation of minimum-necessary) surfaced in Executive Summary as CRITICAL
+- [ ] §7 BAA status `NO_BAA_AVAILABLE` for any PHI-receiving service flagged RED
+- [ ] §10 LIMITATIONS verbatim per [`_LEGAL/COMPLIANCE-NOT-LEGAL-ADVICE.md`](./_LEGAL/COMPLIANCE-NOT-LEGAL-ADVICE.md)
+- [ ] Response in English (HIPAA is US-specific; reports submitted to US OCR / counsel)
+- [ ] Special-category PHI (mental health, genetic, substance use) flagged separately if present
+- [ ] Breach notification (60-day) timeline understood and addressed in §8

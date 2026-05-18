@@ -170,3 +170,30 @@ an RCA document (enterprise contracts often require one within 5
 business days of any SEV1). Internally, it becomes the team's prevention
 backlog. The blameless framing is non-negotiable: it is what makes
 honest postmortems possible, which is what makes them valuable.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For incidents where root cause is genuinely external (e.g. cloud-provider regional outage with no in-house fault) — file a vendor postmortem reference instead
+- For near-misses without customer impact — those deserve a different, lighter ceremony
+- During an ongoing incident — POSTMORTEM is post-resolution; firefight first, write after
+- When evidence is destroyed or missing — flag the gap; do not fabricate timeline entries to fill it
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] No individual names anywhere in the report — roles only ("on-call engineer", "release captain")
+- [ ] Every timeline entry cites a real source (log file:line, alert ID, PR number, chat message timestamp)
+- [ ] §3 ROOT CAUSE doesn't contain "human error" or "engineer mistake" — those are symptoms; system conditions are the cause
+- [ ] §7 action items each have OWNER ROLE + DATE + MEASURABLE done-criterion (no "do better next time")
+- [ ] Evidence gaps explicitly noted (`between 14:23 and 14:41 no logs available`) — not silently bridged
+- [ ] Customer-impact numbers grounded in measurable data (revenue, ticket count, affected users)
+- [ ] §9 disclaimer present

@@ -209,3 +209,30 @@ scope-reduction section frequently shows a path from SAQ-D (300+
 controls) to SAQ-A (22 controls) by moving the merchant to a hosted
 payment page — that single recommendation can save the client more
 than the engagement fee.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For systems not touching cardholder data — confirm with §2 inventory before scoping the engagement
+- For full ROC attestation — that requires a QSA (Qualified Security Assessor), not this prompt
+- When client uncertain of their SAQ level — clarify first; SAQ scope drives requirement set
+- For PCI 3DS, PCI 3DS SDK, or PCI PIN scope — different standards, separate engagements
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] §2 inventory cites `file:line` for every PAN or SAD touchpoint
+- [ ] SAD storage post-authorisation surfaced in Executive Summary as CRITICAL (it's a PCI-DSS show-stopper)
+- [ ] §3 SCOPE REDUCTION analysis run — even when scope looks fixed (highest-ROI section)
+- [ ] §5 v4.0.1 future-dated items checked (mandatory 31 March 2025)
+- [ ] §7 compensating controls only documented when stated requirement is genuinely infeasible
+- [ ] §10 LIMITATIONS verbatim per [`_LEGAL/COMPLIANCE-NOT-LEGAL-ADVICE.md`](./_LEGAL/COMPLIANCE-NOT-LEGAL-ADVICE.md)
+- [ ] SAQ-D → SAQ-A reduction path explicitly considered (if applicable, it's transformative)

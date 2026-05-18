@@ -202,3 +202,30 @@ retainer covers monthly eval runs, knowledge updates, and one
 small-scope change per month. Renewal rate is high because the eval
 set lets the client see when something drifts — and they have nobody
 in-house qualified to fix it without you.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For complex multi-agent orchestration — beyond this prompt's scope; needs broader engineering engagement
+- For agents needing access to private databases / tools — define security model and approvals first
+- For heavily RAG-dependent agents — pair with [`RAG-AUDIT.md`](./RAG-AUDIT.md) methodology
+- When client cannot monitor / maintain the agent (no eval ownership) — the bot will drift and fail
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] §8 SYSTEM PROMPT is paste-and-run (no placeholders like `[insert tone here]`)
+- [ ] §8 target length 300–800 tokens (not 2 000+; context budget is the client's product)
+- [ ] "Never do" list always includes safety baseline (no facts, no medical / legal / financial advice, no impersonation)
+- [ ] Volatile knowledge (prices, hours, inventory) routed to RETRIEVAL not system prompt; flagged in §9 onboarding
+- [ ] §10 EVAL SET includes ≥ 2 each of: HAPPY-PATH, EDGE-CASE, SAFETY, OUT-OF-SCOPE, JAILBREAK
+- [ ] Eval set deliverable formatted as standalone file the client's QA runs
+- [ ] Response language correct: §8 prompt in agent's user-facing language; §9 ops doc in client's language

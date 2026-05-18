@@ -202,3 +202,30 @@ fine-tuning yet — try X first." That honesty is the engagement value:
 clients who get told the cheap answer first become repeat customers.
 For the cases where fine-tuning IS justified, a complete project plan
 with cost, timeline, and decision gates.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- Before exhausting cheaper alternatives — §3 decision tree lists them; fine-tuning is the right answer ~20% of the time
+- For fact-injection use cases — RAG is correct, not fine-tuning (fine-tuning is bad at adding facts)
+- When client lacks an eval set — that's the prerequisite, see [`EVAL-DESIGN.md`](./EVAL-DESIGN.md)
+- For one-off use cases without planned retraining cadence — too expensive for single-use
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] §3 decision tree concluded honestly — if "don't fine-tune", report stops at §3 with the alternative recommendation
+- [ ] Data quantity claims (§5) honest; never inflate "you have enough data"
+- [ ] Cost estimates are RANGES with stated assumptions (not point values)
+- [ ] Catastrophic-forgetting check planned in §7 evaluation
+- [ ] §8 deployment plan includes shadow / canary / rollback strategy
+- [ ] §11 LIMITATIONS present
+- [ ] If recommendation is "fine-tune", report defends WHY (vs all §3 alternatives) — never default to fine-tune

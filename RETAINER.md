@@ -161,3 +161,30 @@ knowing what they bought. One report per month — delivered on the same
 date — solves that. The €100 of agent time it takes to produce protects
 a €1 000–5 000 monthly fee, and the §6 Recommendations field is the
 single most effective upsell channel in a retainer relationship.
+
+---
+
+## Version
+
+`v1.0` — initial release.
+
+---
+
+## When NOT to use this prompt
+
+- For project-based engagements with defined end — use [`STATUS-REPORT.md`](./STATUS-REPORT.md) during execution instead
+- For one-time deliverables — RETAINER is for recurring scope only
+- For clients with insufficient activity to genuinely report on — better to upsell more scope first
+- For relationships entering renewal negotiation — that needs a different framing entirely
+
+---
+
+## Quality gate — verify before treating as done
+
+- [ ] §2 activity ties to real ACTIVITY_LOG entries (no invented work)
+- [ ] §3 metrics ties to real METRICS_SOURCE numbers (no invented metrics)
+- [ ] Quiet months presented honestly as "monitoring confirmed clean state" — never padded with fluff
+- [ ] §6 recommendations are OUT-OF-SCOPE items (never billing twice for in-scope work)
+- [ ] §7 ROI uses conservative estimates with stated reasoning (overstating destroys credibility one bad month)
+- [ ] Delivered same day each month (cadence reliability matters more than depth)
+- [ ] Response in CLIENT input language
