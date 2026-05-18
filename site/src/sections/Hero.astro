@@ -189,12 +189,24 @@ const isoDate = now.toISOString().slice(0, 10);
 <script>
   // Hero entrance — stagger reveal of all [data-hero-anim] elements.
   // Mission-status-tag clock auto-updates every 60 s.
-  (async () => {
+  //
+  // CRITICAL: Astro's ClientRouter does NOT re-execute scripts on
+  // view-transition swap. So we register an astro:after-swap listener
+  // at module load that re-runs the entrance whenever we land back on
+  // a page containing a Hero. Without this, navigating Logo → Home
+  // (or any other → Home via ClientRouter) leaves [data-hero-anim]
+  // elements stuck at opacity:0 — the hero appears completely blank.
+
+  const HERO_CLOCK_INTERVAL_KEY = '__heroClock';
+
+  const runHeroEntrance = async () => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const els = Array.from(document.querySelectorAll<HTMLElement>('[data-hero-anim]'))
       .sort((a, b) => Number(a.dataset.heroAnim) - Number(b.dataset.heroAnim));
 
-    if (reduce || !els.length) {
+    if (!els.length) return;
+
+    if (reduce) {
       els.forEach((el) => (el.style.opacity = '1'));
     } else {
       try {
@@ -212,7 +224,7 @@ const isoDate = now.toISOString().slice(0, 10);
             clearProps: 'filter,transform',
           }
         );
-      } catch (e) {
+      } catch {
         els.forEach((el, i) => {
           el.style.transition = `opacity 600ms ease-out ${i * 80}ms, transform 600ms ease-out ${i * 80}ms`;
           el.style.opacity = '1';
@@ -220,7 +232,14 @@ const isoDate = now.toISOString().slice(0, 10);
       }
     }
 
-    // Live mission clock
+    // Hard safety: in case GSAP import hangs, force visible at 1.5s
+    setTimeout(() => {
+      els.forEach((el) => {
+        if (getComputedStyle(el).opacity === '0') el.style.opacity = '1';
+      });
+    }, 1500);
+
+    // Live mission clock — single interval per page session.
     const tag = document.querySelector<HTMLElement>('[data-mission-status]');
     if (tag) {
       const update = () => {
@@ -231,7 +250,16 @@ const isoDate = now.toISOString().slice(0, 10);
         tag.textContent = `LIVE · DE · ${iso} · ${hh}:${mm} UTC`;
       };
       update();
-      setInterval(update, 60_000);
+      const w = window as Window & { [k: string]: unknown };
+      if (w[HERO_CLOCK_INTERVAL_KEY]) clearInterval(w[HERO_CLOCK_INTERVAL_KEY] as number);
+      w[HERO_CLOCK_INTERVAL_KEY] = setInterval(update, 60_000) as unknown as number;
     }
-  })();
+  };
+
+  // Initial paint
+  runHeroEntrance();
+
+  // Every ClientRouter view-transition swap — re-run if the swapped-in
+  // page contains a Hero. Pure additive: no risk on pages without one.
+  document.addEventListener('astro:after-swap', runHeroEntrance);
 </script>
